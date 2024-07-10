@@ -1,12 +1,16 @@
 // routing here ?
 
+import SavedAccountCard from "./components/SavedAccountCard"
+import transferSVG from './assets/arrow-up-down.svg'
+import ServiceCard from "./components/ServiceCard"
+
 // import { useState } from 'react'
 
 function App() {
   return (
-    <>
-      <h1 className="text-lg font-bold underline text-center">Hello world!</h1> 
-
+    <>  
+      <SavedAccountCard name='Max' image=""/>
+      <ServiceCard serviceName="Transfer" image={transferSVG} />
     </>
   )
 }

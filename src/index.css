@@ -2,3 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    body {
+        font-family: Calibri, sans-serif;
+    }
+}
+
+@layer components {
+    .helper-box {
+        border: 1px dashed red;  /* Dashed red border */
+        background-color: rgba(255, 0, 0, 0.1);  /* Light red background */
+        padding: 5px;  /* Small padding */
+        margin: 5px;  /* Small margin */
+    }
+
+    .dash-card {
+        @apply flex flex-col justify-center content-center w-28 h-27.5 gap-2.5 rounded-xl border py-3 px-4.25;
+    }
+
+    .dash-card:hover {
+        @apply cursor-pointer;
+    }
+
+    .avatar {
+        @apply h-12.5 w-12.5 rounded-full flex justify-center content-center bg-no-repeat bg-center p-5;
+        background-size: 2.1875rem;
+    }
+}
