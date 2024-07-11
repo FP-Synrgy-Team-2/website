@@ -1,12 +1,15 @@
 // routing here ?
 // import { useState } from 'react'
 
-import DashboardMain from "./components/DashboardMain"
+import Banner from "./components/Banner"
+import SavedAccounts from "./components/SavedAccounts"
+
 
 function App() {
   return (
     <div className="h-screen w-screen">  
-      <DashboardMain />
+      <Banner />
+      <SavedAccounts />
     </div>
   )
 }

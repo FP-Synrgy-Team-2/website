@@ -21,7 +21,7 @@
     }
 
     .dash-banner {
-        @apply flex h-40 mt-15 p-8.75 bg-no-repeat bg-center bg-contain bg-bottom;
+        @apply flex h-50.75 w-155 p-8.75 bg-no-repeat bg-center bg-contain bg-bottom;
         background-color: #F0F5FF;
     }
 
