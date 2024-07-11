@@ -8,7 +8,7 @@ type ServiceCardProps = {
 
 const ServiceCard: FC<ServiceCardProps> = ({ serviceName, image }) => {
     return (
-        <DashboardCard image={image} text={serviceName} size='1.875rem' />
+        <DashboardCard image={image} text={serviceName} size='1.875rem' alt={`${serviceName} service's icon`} />
     )
 }
 

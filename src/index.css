@@ -4,6 +4,8 @@
 
 @layer base {
     body {
+        padding: 0px;
+        margin: 0px;
         font-family: Calibri, sans-serif;
     }
 }
@@ -12,20 +14,23 @@
     .helper-box {
         border: 1px dashed red;  /* Dashed red border */
         background-color: rgba(255, 0, 0, 0.1);  /* Light red background */
-        padding: 5px;  /* Small padding */
-        margin: 5px;  /* Small margin */
+    }
+
+    .dash-avatar {
+        @apply overflow-hidden w-12.5 h-12.5 rounded-full flex justify-center bg-no-repeat bg-center;
+    }
+
+    .dash-banner {
+        @apply flex h-40 mt-15 p-8.75 bg-no-repeat bg-center bg-contain bg-bottom;
+        background-color: #F0F5FF;
     }
 
     .dash-card {
         @apply flex flex-col justify-center content-center w-28 h-27.5 gap-2.5 rounded-xl border py-3 px-4.25;
     }
 
-    .dash-card:hover {
-        @apply cursor-pointer;
-    }
-
-    .avatar {
-        @apply h-12.5 w-12.5 rounded-full flex justify-center content-center bg-no-repeat bg-center p-5;
-        background-size: 2.1875rem;
+    .dash-main {
+        @apply flex justify-center w-81/160 h-full;
+        background-color: #FAFAFA;
     }
 }

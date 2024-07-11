@@ -9,7 +9,7 @@ type SavedAccountCardProps = {
 
 const SavedAccountCard: FC<SavedAccountCardProps> = ({ name, image }) => {
     return (
-        <DashboardCard image={image ? image : personSvg} text={name} size={image ? 'contain' : '2.1875rem'}/>
+        <DashboardCard image={image ? image : personSvg} text={name} size={image ? '3.125rem' : '2.1875rem'} alt={`${name}'s avatar`}/>
     )
 }
 
