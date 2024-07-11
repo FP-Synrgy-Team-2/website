@@ -10,7 +10,7 @@ const DashboardMain = () => {
     return (
         <div className="dash-main">
             <div className="w-161 flex flex-col content-center gap-11.25">
-                <Banner />
+                <Banner  />
                 <div className="flex flex-col gap-5">
                     <p className="text-ac-dark-grey text-sm font-medium">Rekening Tersimpan</p>
                     <div className="flex flex-wrap gap-5">

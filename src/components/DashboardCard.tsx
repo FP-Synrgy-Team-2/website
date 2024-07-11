@@ -24,8 +24,3 @@ const DashboardCard: FC<DashboardCardProps> = ({ text, image, alt, size }) => {
 }
 
 export default DashboardCard
-
-// style={{ 
-//     backgroundImage: `url(${image})`,
-//     backgroundSize: size
-// }}

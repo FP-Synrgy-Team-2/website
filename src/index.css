@@ -26,7 +26,11 @@
     }
 
     .dash-card {
-        @apply flex flex-col justify-center content-center w-28 h-27.5 gap-2.5 rounded-xl border py-3 px-4.25;
+        @apply flex flex-col justify-center content-center w-25 h-27.5 gap-2.5 rounded-xl border py-3 px-4.25;
+    }
+
+    .dash-card:hover, .dash-card:focus {
+        @apply border-opacity-100 border-pr-blue shadow;
     }
 
     .dash-main {
