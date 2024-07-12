@@ -6,7 +6,6 @@
     body {
         padding: 0px;
         margin: 0px;
-        font-family: Calibri, sans-serif;
     }
 }
 
@@ -47,4 +46,9 @@
         @apply flex justify-center w-81/160 h-full;
         background-color: #FAFAFA;
     }
+}
+
+* {
+    font-family: 'Calibri', sans-serif;
+    box-sizing: border-box;
 }
