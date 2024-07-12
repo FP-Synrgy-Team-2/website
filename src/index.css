@@ -39,7 +39,7 @@
     }
 
     .dash-card:hover, .dash-card:focus {
-        @apply border-opacity-100 border-pr-blue shadow cursor-pointer;
+        @apply border-opacity-100 border-primary-blue shadow cursor-pointer;
     }
 
     .dash-main {

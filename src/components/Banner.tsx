@@ -26,7 +26,7 @@ const Banner = () => {
         (
             <div className="dash-banner" role='banner' style={{ backgroundImage: `url(${bannerSVG})` }}>
                 <div className="flex flex-col w-85 self-center gap-3.75">
-                    <p className="text-ac-dark-grey font-medium">{bannerContents.title}</p>
+                    <p className="text-dark-grey font-medium">{bannerContents.title}</p>
                     <p className="text-xl font-normal">{bannerContents.subtitle}</p>
                 </div>
             </div>

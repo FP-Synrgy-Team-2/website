@@ -19,6 +19,7 @@ export default {
         'success': '#12D79C',
         'warning': '#FFB831',
 
+        'dark-grey': '#5D5D5D',
         'light-grey': '#F5F5F5',
         'grey': '#8E8E8E',
       },
@@ -69,6 +70,8 @@ export default {
         '8.75': '2.1875rem'
       }
     },
+
+    // Ubah setting tailwind yang mobile-first approach ke desktop-first approach
     screens: {
       xl: { max: "1279px" },
       // => @media (max-width: 1279px) { ... }
