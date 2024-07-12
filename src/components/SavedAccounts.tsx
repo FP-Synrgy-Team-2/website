@@ -16,7 +16,13 @@ const SavedAccounts = () => {
         {name: 'Oscar', image: ''},
         {name: 'Kevin', image: ''},
         {name: 'Stanley', image: ''},
-        {name: 'Chloe', image: '/images/vite.svg'}
+        {name: 'Chloe', image: '/images/vite.svg'},
+        {name: 'Dwight', image: ''},
+        {name: 'Violet', image: ''},
+        {name: 'Caitlyn', image: ''},
+        {name: 'Leslie', image: ''},
+        {name: 'Franklin', image: ''},
+        {name: 'Bofa', image: ''}
     ]    
 
     useEffect(() => {
@@ -28,17 +34,17 @@ const SavedAccounts = () => {
     }, [])
       
     return (
-        <div className="w-55 flex flex-col gap-4.5">
-            <p className="text-xl">REKENING TERSIMPAN</p>
-            <div className="flex flex-wrap justify-between gap-y-5">
+        <section className="flex flex-col gap-4.5" id='saved-accounts'>
+            <h2 className="text-xl">REKENING TERSIMPAN</h2>
+            <ul className="flex h-full flex-wrap justify-between gap-y-5 overflow-y-scroll snap-y snap-mandatory">
                 {accounts.length != 0 ? 
                     accounts.map((a, i) => (
-                        <SavedAccountCard image={a.image} name={a.name} key={i} />
+                        <SavedAccountCard image={a.image} name={a.name} key={i} index={i + 1} />
                     )) : 
                     <Skeleton className="rounded-xl h-27.5 w-25" containerClassName="flex flex-wrap justify-between w-full gap-y-5" count={6}/>
                 }
-            </div>
-        </div>
+            </ul>
+        </section>
     )
 }
 

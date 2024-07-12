@@ -1,7 +1,9 @@
+import SavedAccounts from "../components/SavedAccounts";
+
 function Dashboard(){
     return (
         <>  
-            <h1>Dashboard</h1>
+            <SavedAccounts />
         </>
     )
 }

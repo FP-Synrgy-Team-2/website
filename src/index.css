@@ -11,6 +11,16 @@
 }
 
 @layer components {
+    #saved-accounts {
+        @apply w-55 h-104;
+    }
+
+    #saved-accounts > ul {
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+    }
+
     .helper-box {
         border: 1px dashed red;  /* Dashed red border */
         background-color: rgba(255, 0, 0, 0.1);  /* Light red background */
@@ -26,11 +36,11 @@
     }
 
     .dash-card {
-        @apply flex flex-col justify-center content-center w-25 h-27.5 gap-2.5 rounded-xl border py-3 px-4.25;
+        @apply flex flex-col justify-center content-center w-25 h-27.5 rounded-xl border py-3 px-4.25 gap-2.5;
     }
 
     .dash-card:hover, .dash-card:focus {
-        @apply border-opacity-100 border-pr-blue shadow;
+        @apply border-opacity-100 border-pr-blue shadow cursor-pointer;
     }
 
     .dash-main {

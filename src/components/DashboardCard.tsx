@@ -4,22 +4,23 @@ type DashboardCardProps = {
     text: string,
     image: string,
     alt: string,
-    size: '3.125rem' | '2.1875rem' | '1.875rem' 
+    size: '3.125rem' | '2.1875rem' | '1.875rem',
+    index: number
 }
 
-const DashboardCard: FC<DashboardCardProps> = ({ text, image, alt, size }) => {
+const DashboardCard: FC<DashboardCardProps> = ({ text, image, alt, size, index }) => {
     const onClick = () => {
         console.log('clicked!')
     }
 
     return (
-        <button className="dash-card border-opacity-10 border-black" onClick={() => onClick()}>
-            <div className="dash-avatar self-center bg-pr-light-blue">
+        <li className="snap-center snap-normal dash-card border-opacity-10 border-black text-center text-ac-dark-grey" onClick={() => onClick()} tabIndex={index}>
+            <figure className="dash-avatar self-center bg-pr-light-blue">
                 <img src={image} className="self-center" alt={alt} style={{ height: size, width: size }} />
-            </div>
-
-            <p className="text-center w-full text-ac-dark-grey">{text}</p>
-        </button>
+            </figure>
+            
+            {text}
+        </li>
     )
 }
 
