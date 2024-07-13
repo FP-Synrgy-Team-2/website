@@ -4,6 +4,7 @@ import DashboardLayouts from "./layouts/DashboardLayouts"
 import SwaggerUIComponent from "./components/SwaggerUI"
 
 import {
+  ApiCall,
   Dashboard, Login,
   Confirmation,
   New,
@@ -35,6 +36,7 @@ function App() {
         </Route>
 
         <Route path="/api">
+          <Route path="example" element={<ApiCall />}></Route>
           <Route path="docs" element={<SwaggerUIComponent />} />
         </Route>
 
