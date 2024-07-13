@@ -19,10 +19,12 @@ const SavedAccounts = () => {
         {name: 'Chloe', image: '/images/vite.svg'},
         {name: 'Dwight', image: ''},
         {name: 'Violet', image: ''},
+        {name: 'Darryl', image: ''},
         {name: 'Caitlyn', image: ''},
         {name: 'Leslie', image: ''},
         {name: 'Franklin', image: ''},
-        {name: 'Bofa', image: ''}
+        {name: 'Ron', image: ''},
+        {name: 'Donna', image: ''}
     ]    
 
     useEffect(() => {
@@ -34,7 +36,7 @@ const SavedAccounts = () => {
     }, [])
       
     return (
-        <section className="flex flex-col gap-4.5" id='saved-accounts'>
+        <section className="flex flex-col gap-4.5 mt-2.5" id='saved-accounts' aria-label="Dafter Rekening Tersimpan">
             <h2 className="text-xl">REKENING TERSIMPAN</h2>
             <ul className="flex h-full flex-wrap justify-between gap-y-5 overflow-y-scroll snap-y snap-mandatory">
                 {accounts.length != 0 ? 

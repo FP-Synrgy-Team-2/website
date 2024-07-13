@@ -5,7 +5,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 type BannerContents = {
     title: string, 
-    subtitle: string
+    subtitle: string,
+    ariaLabel: string
 }
 
 const Banner = () => {
@@ -15,7 +16,8 @@ const Banner = () => {
         const fetch = async () => {
             setTimeout(() => setBannerContents({
                 title: 'Lakukan transaksi sekarang!',
-                subtitle: 'Nikmati kemudahan transaksi menggunakan internet banking'
+                subtitle: 'Nikmati kemudahan transaksi menggunakan internet banking',
+                ariaLabel: 'Banner aplikasi Jangkau'
             }), 3000)
         }
 
@@ -24,12 +26,12 @@ const Banner = () => {
 
     return bannerContents ?
         (
-            <div className="dash-banner" role='banner' style={{ backgroundImage: `url(${bannerSVG})` }}>
-                <div className="flex flex-col w-85 self-center gap-3.75">
-                    <p className="text-dark-grey font-medium">{bannerContents.title}</p>
+            <section className="dash-banner" role='banner' style={{ backgroundImage: `url(${bannerSVG})` }} aria-label={bannerContents.ariaLabel} >
+                <article className="flex flex-col w-85 self-center gap-3.75">
+                    <h2 className="text-dark-grey font-medium">{bannerContents.title}</h2>
                     <p className="text-xl font-normal">{bannerContents.subtitle}</p>
-                </div>
-            </div>
+                </article>
+            </section>
         ) :
         (<Skeleton className='h-50.75 w-155' />)
 }

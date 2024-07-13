@@ -10,14 +10,21 @@
 }
 
 @layer components {
+    #dashboard-main {
+        @apply w-full h-screen pr-20 pl-8.25 py-12.5 flex flex-col gap-21.5 bg-no-repeat bg-right-bottom bg-contain;
+    }
+
     #saved-accounts {
         @apply w-55 h-104;
     }
 
     #saved-accounts > ul {
-        ::-webkit-scrollbar {
-            width: 0px;
-        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    #saved-accounts > ul::-webkit-scrollbar {
+        display: none;
     }
 
     .helper-box {
