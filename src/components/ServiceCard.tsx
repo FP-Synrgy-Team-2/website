@@ -9,7 +9,7 @@ type ServiceCardProps = {
 
 const ServiceCard: FC<ServiceCardProps> = ({ serviceName, image, index }) => {
     return (
-        <DashboardCard image={image} text={serviceName} size='1.875rem' alt={`${serviceName} service's icon`} index={index} />
+        <DashboardCard image={image} text={serviceName} size='1.875rem' alt={`${serviceName} service's icon`} index={index} ariaLabel={`Akses layanan ${serviceName}`}/>
     )
 }
 

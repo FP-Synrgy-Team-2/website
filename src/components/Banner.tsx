@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import bannerSVG from '../assets/banner.svg'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import SkeletonWrapper from './SkeletonWrapper'
 
 type BannerContents = {
     title: string, 
@@ -18,7 +19,7 @@ const Banner = () => {
                 title: 'Lakukan transaksi sekarang!',
                 subtitle: 'Nikmati kemudahan transaksi menggunakan internet banking',
                 ariaLabel: 'Banner aplikasi Jangkau'
-            }), 3000)
+            }), 5000)
         }
 
         fetch()
@@ -33,7 +34,7 @@ const Banner = () => {
                 </article>
             </section>
         ) :
-        (<Skeleton className='h-50.75 w-155' />)
+        (<Skeleton className='h-50.75 w-155' wrapper={SkeletonWrapper}  />)
 }
 
 export default Banner
