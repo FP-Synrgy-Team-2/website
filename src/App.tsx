@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router-dom"
 import DashboardLayouts from "./layouts/DashboardLayouts"
+
+import SwaggerUIComponent from "./components/SwaggerUI"
+
 import {
   Dashboard, Login,
   Confirmation,
@@ -30,6 +33,11 @@ function App() {
             <Route path="receipt" element={<Receipt />} />
           </Route>
         </Route>
+
+        <Route path="/api">
+          <Route path="docs" element={<SwaggerUIComponent />} />
+        </Route>
+
       </Routes>
     </>
   )

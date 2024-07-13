@@ -1,0 +1,255 @@
+openapi: 3.0.0
+info:
+  title: API Contract - Jangkau
+  version: 1.0.0
+  description: API for Jangkau Application
+paths:
+  /auth:
+    post:
+      summary: Menambahkan pengguna baru
+      requestBody:
+        description: Data pengguna baru yang akan ditambahkan.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login Berhasil!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+  /users/{id}:
+    get:
+      summary: Mendapatkan informasi user berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User tidak ditemukan
+  /bank-accounts:
+    get:
+      summary: Mendapatkan daftar semua bank account
+      responses:
+        '200':
+          description: Daftar pengguna berhasil diambil.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+  /bank-accounts/{user_id}:
+    get:
+      summary: Mendapatkan informasi bank account user berdasarkan User ID
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: ID user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bank Account ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '404':
+          description: Bank Account tidak ditemukan
+  /bank-accounts/{account_number}:
+    get:
+      summary: Mendapatkan informasi bank account user berdasarkan nomor rekening
+      parameters:
+        - name: account_number
+          in: path
+          required: true
+          description: Nomor rekening
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bank Account ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '404':
+          description: Bank Account tidak ditemukan
+  /transaction:
+    post:
+      summary: Melakukan transfer
+      requestBody:
+        description: Data transaksi ditambahkan
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transaksi Berhasil!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Bad Request
+  /transaction/{transaction_id}:
+     get:
+      summary: Mendapatkan informasi transaksi berdasarkan Transaction ID
+      parameters:
+        - name: transaction_id
+          in: path
+          required: true
+          description: id transaksi
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaksi ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Bank Account tidak ditemukan
+  /saved-accounts:
+    get:
+      summary: Mendapatkan daftar semua bank account yang disimpan
+      responses:
+        '200':
+          description: Data berhasil diambil.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavedAccount'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        full_name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: johndoe@example.com
+        phone_number:
+          type: string
+          example: '08223456766567'
+      required:
+        - full_name
+        - email
+        - phone_number
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: johndoe123
+        password:
+          type: string
+          example: JohndoeEE23
+      required:
+        - username
+        - password
+    BankAccount:
+      type: object
+      properties:
+        owner_name:
+          type: string
+          example: John Doe
+        account_number:
+          type: string
+          example: '8923445590'
+        type:
+          type: string
+          example: Tabunganku
+        balance:
+          type: integer
+          example: 5450567
+      required:
+        - owner_name
+        - account_number
+        - type
+        - balance
+    SavedAccount:
+      type: object
+      properties:
+        owner_name:
+          type: string
+          example: John Doe
+        account_number:
+          type: string
+          example: '8923445590'
+      required:
+        - owner_name
+        - account_number
+    TransferRequest:
+      type: object
+      properties:
+        rekening_sumber:
+          type: string
+          example: '8923445590'
+        rekening_tujuan:
+          type: string
+          example: '8923445589'
+        amount:
+          type: integer
+          example: 540000
+        transaction_date:
+          type: string
+          example: '2024-07-12 08:26:37'
+        note:
+          type: string
+          example: Uang kos
+        is_saved:
+          type: boolean
+          example: false
+      required:
+        - rekening_sumber
+        - rekening_tujuan
+        - amount
+        - transaction_date
+    Transaction:
+      type: object
+      properties:
+        rekening_sumber:
+          type: string
+          example: '8923445590'
+        rekening_tujuan:
+          type: string
+          example: '8923445589'
+        amount:
+          type: integer
+          example: 540000
+        transaction_date:
+          type: string
+          example: '2024-07-12 08:26:37'
+        note:
+          type: string
+          example: Uang kos
+      required:
+        - rekening_sumber
+        - rekening_tujuan
+        - amount
+        - transaction_date
