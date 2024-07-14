@@ -1,6 +1,6 @@
 function NavbarLogo() {
     return (
-        <img className="navbar-brand" src="/images/logo.png" alt="Logo Jangkau" />
+        <img className="navbar-brand" src="/images/logo.png" alt="Icon jangkau by BCA" />
     )
 }
 
