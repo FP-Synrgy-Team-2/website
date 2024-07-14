@@ -14,6 +14,7 @@ import {
     Saved,
     TransferPage,
 } from "./pages"
+import Protected from "./components/Protected"
 
 function App() {
     return (

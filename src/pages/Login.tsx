@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -173,7 +172,6 @@ function Login() {
                     <Navigate to="/dashboard" />
                 )
             }
-
         </>
     )
 }
