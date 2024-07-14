@@ -11,6 +11,9 @@ export default {
         'neutral-02': '#F5F5F5',
         'neutral-03': '#B3B3B3',
         'neutral-09': '#1C1C1E',
+
+        'body-white': '#FAFAFA',
+
         'primary-blue': '#0066AE',
         'primary-dark-blue': '#0A3967',
         'primary-light-blue': '#E4EDFF',
