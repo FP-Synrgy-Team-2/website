@@ -6,6 +6,7 @@ import SwaggerUIComponent from "./components/SwaggerUI"
 import {
   ApiCall,
   Dashboard, Login,
+  History,
   Confirmation,
   New,
   Pin,
@@ -33,6 +34,12 @@ function App() {
             <Route path="pin" element={<Pin />} />
             <Route path="receipt" element={<Receipt />} />
           </Route>
+
+          <Route path="history">
+            <Route index element={<History />} />
+          </Route>
+
+
         </Route>
 
         <Route path="/api">
