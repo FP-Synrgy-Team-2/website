@@ -51,13 +51,13 @@ function Transfer(){
                 <h1 className="my-5 text-lg-display">Transfer</h1>
                 <h2 className="my-5 text-sm-display">Rekening tujuan</h2>
                 <Link to={'/transfer/new'} className="flex gap-[6px] px-4 py-3 bg-primary-blue rounded-2xl border-[0.5px] border-grey text-neutral-01 text-xs-display w-full">
-                    <img src="images/plus-circle.svg" alt="" />
+                    <img src="images/icons/plus-circle.svg" alt="" />
                     Input Baru
                 </Link>
                 <h2 className="text-sm-display my-3">Atau pilih dari daftar rekening tersimpan</h2>
                 <button onClick={() => setShowDropdown(!showDropdown)} className="bg-transparent border-[0.5px] border-grey rounded-[20px] px-4 py-6 w-full flex justify-between text-xs-display text-grey items-center">
                     Pilih nomor rekening yang tersimpan
-                    <img src="images/arrow_drop_down_big.svg" alt="" className={`duration-100 ease-in-out transition-transform ${showDropdown ? 'rotate-180' : ''}`}/>
+                    <img src="images/icons/arrow_drop_down_big.svg" alt="" className={`duration-100 ease-in-out transition-transform ${showDropdown ? 'rotate-180' : ''}`}/>
                 </button>
                 {showDropdown && (
                     <div className="scrollbar my-4 flex flex-wrap rounded-[20px] bg-neutral-01 border-[0.5px] border-grey divide-y-[1px] divide-grey max-h-[437px] overflow-y-auto">
