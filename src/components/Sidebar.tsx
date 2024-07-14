@@ -1,4 +1,4 @@
-import NavbarLogo from '../../components/NavbarLogo';
+import NavbarLogo from './NavbarLogo';
 import { Link, useLocation } from "react-router-dom";
 
 interface NavbarType {
