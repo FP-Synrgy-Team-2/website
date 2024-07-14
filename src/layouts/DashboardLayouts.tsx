@@ -3,14 +3,14 @@ import Sidebar from "./components/Sidebar";
 
 function DashboardLayouts() {
     return (
-        <>
-            <aside className="basis-1/6 container">
+        <div className="flex">
+            <aside className="basis-1/6 container flex flex-col h-screen px-3 pt-5 pb-16">
                 <Sidebar />
             </aside>
-            <div className="basis-5/6 container">
+            <main className="basis-5/6 container bg-body-white min-h-screen ps-8 pt-5">
                 <Outlet />
-            </div>
-        </>
+            </main>
+        </div>
     )
 }
 
