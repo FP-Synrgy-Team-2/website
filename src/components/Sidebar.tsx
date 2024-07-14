@@ -59,10 +59,11 @@ function Sidebar() {
                     return (
                         <Link to={item.link} key={index}
                             className={`sidebar-item flex gap-5 items-center p-3 rounded-md 
-                                ${item.className ? item.className : ''}
-                                ${isActive ? 'bg-primary-blue text-white' : 'hover:bg-primary-dark-blue hover:text-white'} `}>
-                            <img src={item.icon} alt={item.alt} className={`${isActive ? 'img-white ' : ''}`} />
-                            <span>{item.name}</span>
+                                ${isActive ? 'bg-primary-blue text-white' : 'hover:bg-primary-dark-blue hover:text-white'} ${item.className ? item.className : ''}`}
+                            aria-label={"Tombol " + item.name}
+                        >
+                            <img src={item.icon} aria-hidden={true} className={`${isActive ? 'img-white ' : ''}`} />
+                            <span aria-hidden={true}>{item.name}</span>
                         </Link>
                     )
                 })}
