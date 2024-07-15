@@ -11,6 +11,9 @@ export default {
         'neutral-02': '#F5F5F5',
         'neutral-03': '#B3B3B3',
         'neutral-09': '#1C1C1E',
+
+        'body-white': '#FAFAFA',
+
         'primary-blue': '#0066AE',
         'primary-dark-blue': '#0A3967',
         'primary-light-blue': '#E4EDFF',
@@ -41,6 +44,13 @@ export default {
         'sm-body': ['14px', { lineHeight: '20px', letterSpacing: '0' }],
         'xs-body': ['12px', { lineHeight: '16px', letterSpacing: '0' }],
       },
+      height: {
+        '42': '10.5rem'
+      },
+      width: {
+        '42': '10.5rem',
+        '140': '35rem'
+      }
     },
   },
   plugins: [],
