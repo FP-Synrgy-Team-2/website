@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "axios": "^1.7.2",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-label": "^2.1.0",
     "class-variance-authority": "^0.7.0",
