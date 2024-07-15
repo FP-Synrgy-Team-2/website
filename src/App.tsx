@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import DashboardLayouts from "./layouts/DashboardLayouts"
 
-import SwaggerUIComponent from "./components/SwaggerUI"
+import { SwaggerUIComponent, Protected } from './components'
 
 import {
   ApiCall,
@@ -24,22 +24,47 @@ function App() {
         <Route path="/logout" />
 
         <Route path="" element={<DashboardLayouts />}>
-          <Route path="dashboard" element={< Dashboard />} />
-
+          <Route path="dashboard" element={
+            <Protected>
+              <Dashboard />
+            </Protected>
+          } />
           <Route path="transfer">
-            <Route index element={<TransferPage />} />
-            <Route path="new" element={<New />} />
-            <Route path="saved" element={<Saved />} />
-            <Route path="confirm" element={<Confirmation />} />
-            <Route path="pin" element={<Pin />} />
-            <Route path="receipt" element={<Receipt />} />
+            <Route index element={
+              <Protected>
+                <TransferPage />
+              </Protected>
+            } />
+            <Route path="new" element={
+              <Protected>
+                <New />
+              </Protected>
+            } />
+            <Route path="saved" element={
+              <Protected>
+                <Saved />
+              </Protected>
+            } />
+            <Route path="confirm" element={
+              <Protected>
+                <Confirmation />
+              </Protected>
+            } />
+            <Route path="pin" element={
+              <Protected>
+                <Pin />
+              </Protected>
+            } />
+            <Route path="receipt" element={
+              <Protected>
+                <Receipt />
+              </Protected>
+            } />
           </Route>
 
           <Route path="history">
             <Route index element={<History />} />
           </Route>
-
-
         </Route>
 
         <Route path="/api">
