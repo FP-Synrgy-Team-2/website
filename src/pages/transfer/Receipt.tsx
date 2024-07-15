@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable prettier/prettier */
 import { useParams } from 'react-router-dom';
 import { NavbarLogo } from '../../components';
@@ -102,6 +103,14 @@ function Receipt() {
             </div>
         </>
     );
+=======
+function Receipt() {
+  return (
+    <div>
+      <h1>Receipt</h1>
+    </div>
+  );
+>>>>>>> 8b0d6cb (feat: fix formatting)
 }
 
 export default Receipt;

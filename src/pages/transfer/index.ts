@@ -5,11 +5,4 @@ import Confirmation from './Confirmation';
 import Receipt from './Receipt';
 import Saved from './Saved';
 
-export {
-    TransferPage,
-    New,
-    Pin,
-    Confirmation,
-    Receipt,
-    Saved,
-}
+export { TransferPage, New, Pin, Confirmation, Receipt, Saved };
