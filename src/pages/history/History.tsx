@@ -1,7 +1,5 @@
-function History(){
-    return (
-        <h1>History</h1>
-    )
+function History() {
+  return <h1>History</h1>;
 }
 
-export default History
+export default History;

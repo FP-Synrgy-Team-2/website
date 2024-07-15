@@ -1,11 +1,12 @@
-import { Route, Routes } from "react-router-dom"
-import DashboardLayouts from "./layouts/DashboardLayouts"
+import { Route, Routes } from 'react-router-dom';
+import DashboardLayouts from './layouts/DashboardLayouts';
 
-import SwaggerUIComponent from "./components/SwaggerUI"
+import SwaggerUIComponent from './components/SwaggerUI';
 
 import {
   ApiCall,
-  Dashboard, Login,
+  Dashboard,
+  Login,
   History,
   Confirmation,
   New,
@@ -13,7 +14,7 @@ import {
   Receipt,
   Saved,
   TransferPage,
-} from "./pages"
+} from './pages';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route path="/logout" />
 
         <Route path="" element={<DashboardLayouts />}>
-          <Route path="dashboard" element={< Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
 
           <Route path="transfer">
             <Route index element={<TransferPage />} />
@@ -38,18 +39,15 @@ function App() {
           <Route path="history">
             <Route index element={<History />} />
           </Route>
-
-
         </Route>
 
         <Route path="/api">
           <Route path="example" element={<ApiCall />}></Route>
           <Route path="docs" element={<SwaggerUIComponent />} />
         </Route>
-
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -3,49 +3,47 @@
 @tailwind utilities;
 
 @layer components {
-    .modal {
-        @apply flex flex-col justify-center h-screen w-screen fixed z-0 top-0 left-0 bg-white gap-12;
-    }
+  .modal {
+    @apply fixed left-0 top-0 z-0 flex h-screen w-screen flex-col justify-center gap-12 bg-white;
+  }
 }
 
 @layer utilities {
-    .scrollbar {
+  .scrollbar {
     /* width */
     &::-webkit-scrollbar {
-        width: 2px;
+      width: 2px;
     }
 
     /* Track */
     &::-webkit-scrollbar-track {
-        background: #f1f1f1;
+      background: #f1f1f1;
     }
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 5px;
+      background: #888;
+      border-radius: 5px;
     }
 
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover {
-        background: #555;
+      background: #555;
     }
+  }
 }
-
-}
-
 
 * {
-    font-family: "Calibri", sans-serif;
-    box-sizing: border-box;
+  font-family: 'Calibri', sans-serif;
+  box-sizing: border-box;
 }
 
 .navbar-brand {
-    max-width: 150px;
+  max-width: 150px;
 }
 
 .sidebar-item:hover img,
 .img-white {
-    filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
-        hue-rotate(131deg) brightness(111%) contrast(99%);
+  filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
+    hue-rotate(131deg) brightness(111%) contrast(99%);
 }

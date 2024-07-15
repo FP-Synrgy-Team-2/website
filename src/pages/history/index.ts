@@ -1,2 +1,2 @@
-import History from "./History";
+import History from './History';
 export { History };

@@ -1,10 +1,10 @@
-import {FC} from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 type BreadCrumbProps = {
-    breadcrumbs: { label: string; path?: string }[];
-}
-const Breadcrumbs : FC<BreadCrumbProps> = ({ breadcrumbs }) => {
+  breadcrumbs: { label: string; path?: string }[];
+};
+const Breadcrumbs: FC<BreadCrumbProps> = ({ breadcrumbs }) => {
   return (
     <div className="text-4xl font-normal">
       {breadcrumbs.map((breadcrumb, index) => (
