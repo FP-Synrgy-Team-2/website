@@ -19,54 +19,24 @@ function App() {
   return (
     <>
       <Routes>
-        <Route index element={<DashboardLayouts />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
 
-        <Route path="" element={<DashboardLayouts />}>
-          <Route path="dashboard" element={
-            <Protected>
-              <Dashboard />
-            </Protected>
-          } />
+        <Route path="" element={
+          <Protected>
+            <DashboardLayouts />
+          </Protected>
+        }>
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="transfer">
-            <Route index element={
-              <Protected>
-                <TransferPage />
-              </Protected>
-            } />
-            <Route path="new" element={
-              <Protected>
-                <New />
-              </Protected>
-            } />
-            <Route path="saved" element={
-              <Protected>
-                <Saved />
-              </Protected>
-            } />
-            <Route path="confirm" element={
-              <Protected>
-                <Confirmation />
-              </Protected>
-            } />
-            <Route path="pin" element={
-              <Protected>
-                <Pin />  
-              </Protected>
-            } />
-            <Route path="receipt" element={
-              <Protected>
-                <Receipt />
-              </Protected>
-            } />
+            <Route index element={<TransferPage />} />
+            <Route path="new" element={<New />} />
+            <Route path="saved" element={<Saved />} />
+            <Route path="confirm" element={<Confirmation />} />
+            <Route path="pin" element={<Pin /> } />
+            <Route path="receipt" element={<Receipt />} />
           </Route>
-
-          <Route path="history" element={
-            <Protected>
-              <History />
-            </Protected>
-          } />
+          <Route path="history" element={<History />} />
         </Route>
 
         <Route path="/api">

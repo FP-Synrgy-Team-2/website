@@ -163,7 +163,7 @@ function Login() {
                                                 <path fillRule="evenodd" clipRule="evenodd" d="M3.05332 7.59748C2.5 8.37731 2.5 9.48175 2.5 11.6906C2.5 14.6358 2.5 16.1084 3.23776 17.1482C3.49808 17.5151 3.81843 17.8354 4.18531 18.0957C5.22509 18.8335 6.69768 18.8335 9.64286 18.8335H10.3571C13.3023 18.8335 14.7749 18.8335 15.8147 18.0957C16.1816 17.8354 16.5019 17.5151 16.7622 17.1482C17.5 16.1084 17.5 14.6358 17.5 11.6906C17.5 9.48175 17.5 8.37731 16.9467 7.59748C16.7514 7.32232 16.5112 7.08205 16.236 6.88681C15.4562 6.3335 14.3517 6.3335 12.1429 6.3335H7.85714C5.64826 6.3335 4.54381 6.3335 3.76399 6.88681C3.48882 7.08205 3.24856 7.32232 3.05332 7.59748ZM10 12.6668C10.2761 12.6668 10.5 12.443 10.5 12.1668C10.5 11.8907 10.2761 11.6668 10 11.6668C9.72386 11.6668 9.5 11.8907 9.5 12.1668C9.5 12.443 9.72386 12.6668 10 12.6668ZM12.5 12.1668C12.5 13.192 11.883 14.073 11 14.4588V16.3335H9V14.4588C8.11705 14.073 7.5 13.192 7.5 12.1668C7.5 10.7861 8.61929 9.66683 10 9.66683C11.3807 9.66683 12.5 10.7861 12.5 12.1668Z" fill="#0066AE"/>
                                             </svg>
                                         </div>
-                                        <div className="absolute top-0 right-2.5 flex items-center h-[55px]">
+                                        <div className="absolute top-0 right-2.5 z-10 flex items-center h-[55px]">
                                             <button type="button" onClick={toggleShowPswd} aria-label="tombol tampilkan password">
                                                 <EyeSvg inputType={inputType} />
                                             </button>
@@ -173,12 +173,13 @@ function Login() {
                                 </div>
                             </div>
                             <button type="submit" aria-label="tombol masuk" className="
+                                z-10
                                 flex justify-center items-center
                                 h-[60px]
-                                border border-black border-opacity-40
+                                border border-black hover:border-primary-dark-blue border-opacity-40 hover:opacity-100
                                 rounded-[5px]
-                                bg-primary-dark-blue
-                                text-xl-body font-bold text-primary-light-blue
+                                bg-primary-dark-blue hover:bg-primary-light-blue
+                                text-xl-body font-bold text-primary-light-blue hover:text-primary-dark-blue
                             ">
                                 Masuk
                             </button>
