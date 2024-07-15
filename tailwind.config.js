@@ -44,6 +44,13 @@ export default {
         'sm-body': ['14px', { lineHeight: '20px', letterSpacing: '0' }],
         'xs-body': ['12px', { lineHeight: '16px', letterSpacing: '0' }],
       },
+      height: {
+        '42': '10.5rem'
+      },
+      width: {
+        '42': '10.5rem',
+        '140': '35rem'
+      }
     },
   },
   plugins: [],
