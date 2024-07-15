@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components";
 
 function DashboardLayouts() {
+
     return (
         <div className="flex">
             <aside className="basis-1/6 container flex flex-col h-screen px-3 pt-5 pb-16">

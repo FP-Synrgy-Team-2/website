@@ -52,7 +52,7 @@ function App() {
             } />
             <Route path="pin" element={
               <Protected>
-                <Pin />
+                <Pin />  
               </Protected>
             } />
             <Route path="receipt" element={
@@ -62,9 +62,11 @@ function App() {
             } />
           </Route>
 
-          <Route path="history">
-            <Route index element={<History />} />
-          </Route>
+          <Route path="history" element={
+            <Protected>
+              <History />
+            </Protected>
+          } />
         </Route>
 
         <Route path="/api">
