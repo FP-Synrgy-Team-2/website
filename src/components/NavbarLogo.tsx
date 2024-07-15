@@ -4,7 +4,7 @@ interface NavbarLogoProps {
 
 function NavbarLogo({className}: NavbarLogoProps) {
     return (
-        <img className={`navbar-brand ${className}`} src="/images/logo.png" alt="Icon jangkau by BCA" />
+        <img className={`navbar-brand ${className}`} src="/images/logo.webp" alt="Icon jangkau by BCA" />
     )
 }
 
