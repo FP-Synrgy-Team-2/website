@@ -48,21 +48,21 @@ function Transfer() {
   return (
     <main className="container mx-auto bg-neutral-50 px-11 py-14">
       <section className="w-1/2">
-        <h1 className="my-5 text-lg-display">Transfer</h1>
-        <h2 className="my-5 text-sm-display">Rekening tujuan</h2>
+        <h1 className="my-5 text-lg-body">Transfer</h1>
+        <h2 className="my-5 text-sm-body">Rekening tujuan</h2>
         <Link
           to={'/transfer/new'}
-          className="flex w-full gap-[6px] rounded-2xl border-[0.5px] border-grey bg-primary-blue px-4 py-3 text-xs-display text-neutral-01"
+          className="flex w-full items-center gap-[6px] rounded-2xl border-[0.5px] border-grey bg-primary-blue px-4 py-3 text-xs-body text-neutral-01"
         >
-          <img src="images/icons/plus-circle.svg" alt="" />
+          <img src="images/icons/plus-circle.svg" alt="" width={'16px'} />
           Input Baru
         </Link>
-        <h2 className="my-3 text-sm-display">
+        <h2 className="my-3 text-sm-body">
           Atau pilih dari daftar rekening tersimpan
         </h2>
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex w-full items-center justify-between rounded-[20px] border-[0.5px] border-grey bg-transparent px-4 py-6 text-xs-display text-grey"
+          className="flex w-full items-center justify-between rounded-[20px] border-[0.5px] border-grey bg-transparent px-4 py-4 text-xs-body text-grey"
         >
           Pilih nomor rekening yang tersimpan
           <img
@@ -72,7 +72,7 @@ function Transfer() {
           />
         </button>
         {showDropdown && (
-          <div className="scrollbar my-4 flex max-h-[437px] flex-wrap divide-y-[1px] divide-grey overflow-y-auto rounded-[20px] border-[0.5px] border-grey bg-neutral-01">
+          <div className="scrollbar my-4 flex max-h-80 flex-wrap divide-y-[1px] divide-grey overflow-y-auto rounded-[20px] border-[0.5px] border-grey bg-neutral-01">
             {savedAccounts ? (
               savedAccounts.map((account, idx) => (
                 <button
@@ -82,8 +82,8 @@ function Transfer() {
                   className="flex w-full flex-wrap gap-1 px-4 py-6 text-start"
                   key={idx}
                 >
-                  <p className="w-full text-lg-body">{account.owner_name}</p>
-                  <p className="w-full text-lg-body text-grey">
+                  <p className="w-full text-xs-body">{account.owner_name}</p>
+                  <p className="w-full text-xs-body text-grey">
                     {account.account_number}
                   </p>
                 </button>
