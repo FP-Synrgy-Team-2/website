@@ -71,9 +71,42 @@
           position: absolute !important;
         }
     }
+
+    .scrollbar {
+        /* width */
+        &::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    }
 }
 
 * {
-    font-family: 'Calibri', sans-serif;
+    font-family: "Calibri", sans-serif;
     box-sizing: border-box;
+}
+
+.navbar-brand {
+    max-width: 150px;
+}
+
+.sidebar-item:hover img,
+.img-white {
+    filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
+        hue-rotate(131deg) brightness(111%) contrast(99%);
 }
