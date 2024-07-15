@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .modal {
+        @apply flex flex-col justify-center h-screen w-screen fixed z-0 top-0 left-0 bg-white gap-12;
+    }
+}
+
 @layer utilities {
     .scrollbar {
     /* width */
