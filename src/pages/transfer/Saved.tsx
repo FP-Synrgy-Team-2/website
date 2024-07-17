@@ -1,8 +1,14 @@
 import { useLocation } from 'react-router-dom';
 import { SavedAccount } from '../../types/saved-accounts';
+import { useEffect } from 'react';
 
 function Saved() {
   const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.state);
+  }, []);
+
   return (
     <div>
       <h1>Saved</h1>
