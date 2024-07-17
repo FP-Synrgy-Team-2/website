@@ -27,6 +27,14 @@ const SavedAccounts = () => {
     { name: 'Donna', image: '' },
   ];
 
+  const generateRandom10Digits = () => {
+    let randomDigits = '';
+    for (let i = 0; i < 10; i++) {
+      randomDigits += Math.floor(Math.random() * 10).toString();
+    }
+    return parseInt(randomDigits);
+  };
+
   useEffect(() => {
     const populate = async () => {
       setTimeout(() => setAccounts(data), 3000);
@@ -45,7 +53,12 @@ const SavedAccounts = () => {
       <ul className="flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll">
         {accounts.length != 0 ? (
           accounts.map((a, i) => (
-            <SavedAccountCard image={a.image} name={a.name} key={i} />
+            <SavedAccountCard
+              image={a.image}
+              name={a.name}
+              key={i}
+              accountNumber={generateRandom10Digits()}
+            />
           ))
         ) : (
           <Skeleton

@@ -6,13 +6,25 @@ import { useNavigate } from 'react-router-dom';
 type SavedAccountCardProps = {
   name: string;
   image: string;
+  accountNumber: number;
 };
 
-const SavedAccountCard: FC<SavedAccountCardProps> = ({ name, image }) => {
+const SavedAccountCard: FC<SavedAccountCardProps> = ({
+  name,
+  image,
+  accountNumber,
+}) => {
   const navigate = useNavigate();
 
   const onClickFn = () => {
-    navigate('/transfer/saved');
+    navigate('/transfer/saved', {
+      state: {
+        account: {
+          owner_name: name,
+          account_number: accountNumber,
+        },
+      },
+    });
   };
 
   return (
