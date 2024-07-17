@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -13,6 +14,7 @@ export default {
         'neutral-09': '#1C1C1E',
 
         'body-white': '#FAFAFA',
+        'body-blue': '#F3F7FF',
 
         'primary-blue': '#0066AE',
         'primary-dark-blue': '#0A3967',
