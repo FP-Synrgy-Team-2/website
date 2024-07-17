@@ -9,18 +9,26 @@ function Saved() {
   const location = useLocation();
   const account = location.state?.account as SavedAccount;
 
-  const [nominal, setNominal] = useState('');
-  const [catatan, setCatatan] = useState('');
-  const [simpanRekening, setSimpanRekening] = useState(false);
+  const [formData, setFormData] = useState({
+    nominal: '',
+    catatan: '',
+    simpanRekening: false,
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = event.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
 
   const handleSubmit = () => {
     if (account) {
       const dataTransfer = {
         ownerName: account.owner_name,
         accountNumber: account.account_number,
-        nominal,
-        catatan,
-        simpanRekening,
+        ...formData,
       };
 
       console.log('Data Transfer:', dataTransfer);
@@ -67,29 +75,34 @@ function Saved() {
       <div className="mt-3">
         <Label className="text-xl">Nominal Transfer</Label>
         <Input
+          name="nominal"
           placeholder="******"
-          value={nominal}
-          onChange={(e) => setNominal(e.target.value)}
+          type="text"
+          value={formData.nominal}
+          onChange={handleChange}
         />
       </div>
 
       <div className="mt-3">
         <Label className="text-xl">Catatan (Optional)</Label>
         <Input
+          name="catatan"
           placeholder="Tambahkan catatan"
-          value={catatan}
-          onChange={(e) => setCatatan(e.target.value)}
+          type="text"
+          value={formData.catatan}
+          onChange={handleChange}
         />
       </div>
 
       <div className="mt-3 flex gap-1">
         <input
+          name="simpanRekening"
           type="checkbox"
           id="check"
-          checked={simpanRekening}
-          onChange={(e) => setSimpanRekening(e.target.checked)}
+          checked={formData.simpanRekening}
+          onChange={handleChange}
         />
-        <label htmlFor="check">Simpan Rekening</label>
+        <Label htmlFor="check" children="Simpan Rekening" />
       </div>
 
       <div className="mt-3">
