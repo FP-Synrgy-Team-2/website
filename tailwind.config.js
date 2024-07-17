@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -13,6 +14,7 @@ export default {
         'neutral-09': '#1C1C1E',
 
         'body-white': '#FAFAFA',
+        'body-blue': '#F3F7FF',
 
         'primary-blue': '#0066AE',
         'primary-dark-blue': '#0A3967',
@@ -22,6 +24,9 @@ export default {
         'success': '#12D79C',
         'warning': '#FFB831',
 
+        'muted-black': '#262626',
+
+        'dark-grey': '#5D5D5D',
         'light-grey': '#F5F5F5',
         'grey': '#8E8E8E',
       },
@@ -32,12 +37,12 @@ export default {
         'regular': 400,
       },
       fontSize: {
-        '2xl-display': ['72px', { lineHeight: '96px', letterSpacing: '-0.025em' }],
-        'xl-display': ['60px', { lineHeight: '72px', letterSpacing: '-0.025em' }],
-        'lg-display': ['48px', { lineHeight: '60px', letterSpacing: '-0.025em' }],
-        'md-display': ['36px', { lineHeight: '45px', letterSpacing: '-0.025em' }],
-        'sm-display': ['30px', { lineHeight: '40px', letterSpacing: '0' }],
-        'xs-display': ['24px', { lineHeight: '32px', letterSpacing: '0' }],
+        '2xl-display': ['60px', { lineHeight: '96px', letterSpacing: '-0.025em' }],
+        'xl-display': ['48px', { lineHeight: '72px', letterSpacing: '-0.025em' }],
+        'lg-display': ['36px', { lineHeight: '60px', letterSpacing: '-0.025em' }],
+        'md-display': ['30px', { lineHeight: '45px', letterSpacing: '-0.025em' }],
+        'sm-display': ['24px', { lineHeight: '40px', letterSpacing: '0' }],
+        'xs-display': ['20px', { lineHeight: '32px', letterSpacing: '0' }],
         'xl-body': ['20px', { lineHeight: '28px', letterSpacing: '0' }],
         'lg-body': ['18px', { lineHeight: '28px', letterSpacing: '0' }],
         'md-body': ['16px', { lineHeight: '24px', letterSpacing: '0' }],
