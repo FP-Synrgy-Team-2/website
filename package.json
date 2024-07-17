@@ -20,6 +20,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
+    "react-loading-skeleton": "^3.4.0",
     "react-router-dom": "^6.24.1",
     "tailwind-merge": "^2.4.0",
     "zod": "^3.23.8",
@@ -27,6 +28,7 @@
     "swagger-ui-react": "^5.17.14"
   },
   "devDependencies": {
+    "@stoplight/prism-cli": "^5.8.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/swagger-ui-react": "^4.18.3",

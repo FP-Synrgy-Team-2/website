@@ -49,14 +49,58 @@ export default {
         'sm-body': ['14px', { lineHeight: '20px', letterSpacing: '0' }],
         'xs-body': ['12px', { lineHeight: '16px', letterSpacing: '0' }],
       },
-      height: {
-        '42': '10.5rem'
+      gap: {
+        '3.75': '0.9375rem',
+        '4.5': '1.125rem',
+        '11.25': '2.8125rem',
+        '21.5': '5.375rem',
+        '27.5': '6.875rem'
+      },
+      margin: {
+        '15': '3.75rem'
       },
       width: {
+        '12.5': '3.125rem',
+        '25': '6.25rem',
         '42': '10.5rem',
-        '140': '35rem'
+        '55': '13.75rem',
+        '85': '21.25rem',
+        '140': '35rem',
+        '155': '38.75rem',
+        '161': '40.25rem',
+        '182.5': '45.625rem',
+        '265': '66.25rem',
+        '81/160': '50.625%'
+      },
+      height: {
+        '12.5': '3.125rem',
+        '27.5': '6.875rem',
+        '42': '10.5rem',
+        '50.75': '12.6875rem',
+        '104': '26rem'
+      },
+      padding: {
+        '4.25': '1.0625rem',
+        '8.25': '2.0625rem',
+        '8.75': '2.1875rem',
+        '12.5': '3.125rem',
       }
     },
+
+    // Ubah setting tailwind yang mobile-first approach ke desktop-first approach
+    screens: {
+      xl: { max: "1279px" },
+      // => @media (max-width: 1279px) { ... }
+
+      lg: { max: "1023px" },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: "767px" },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: "639px" },
+      // => @media (max-width: 639px) { ... }
+    }
   },
   plugins: [],
 };
