@@ -2,7 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
 @layer components {
+  #dashboard-main {
+    @apply flex h-screen w-full flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
+  }
+
+  #saved-accounts {
+    @apply h-104 w-55;
+  }
+
+  #saved-accounts > ul {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  #saved-accounts > ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .helper-box {
+    border: 1px dashed red; /* Dashed red border */
+    background-color: rgba(255, 0, 0, 0.1); /* Light red background */
+  }
+
+  .dash-avatar {
+    @apply flex h-12.5 w-12.5 justify-center overflow-hidden rounded-full bg-center bg-no-repeat;
+  }
+
+  .dash-banner {
+    @apply flex h-50.75 w-155 bg-contain bg-bottom bg-no-repeat p-8.75;
+    background-color: #f0f5ff;
+  }
+
+  .dash-card {
+    @apply flex h-27.5 w-25 flex-col content-center justify-center gap-2.5 rounded-xl border px-4.25 py-3;
+  }
+
+  .dash-card:hover,
+  .dash-card:focus {
+    @apply cursor-pointer border-2 border-primary-dark-blue border-opacity-100 shadow;
+  }
+
+  .dash-main {
+    @apply flex h-full w-81/160 justify-center;
+    background-color: #fafafa;
+  }
+
   .modal {
     @apply fixed left-0 top-0 z-0 flex h-screen w-screen flex-col justify-center gap-12 bg-white;
   }
@@ -51,7 +103,7 @@
   background-size: 100%;
 }
 
-.receipt-label{
+.receipt-label {
   @apply text-muted-black;
 }
 
