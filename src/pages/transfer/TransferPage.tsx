@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SavedAccount } from '../../types/saved-accounts';
+import { Breadcrumbs } from '@/components';
 
 function Transfer() {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -29,6 +30,9 @@ function Transfer() {
     },
   ];
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location.pathname);
 
   // WHEN THE API IS READY
   // const fetchSavedAccounts = async () => {
@@ -48,9 +52,14 @@ function Transfer() {
   return (
     <main className="container mx-auto bg-neutral-50 px-11 py-14">
       <section className="w-1/2">
-        <h1 className="my-5 text-lg-body" aria-label="Transfer">
+        {/* <h1 className="my-5 text-lg-body" aria-label="Transfer">
           Transfer
-        </h1>
+        </h1> */}
+        <Breadcrumbs
+          breadcrumbs={[
+            { label: location.pathname.split('/')[1], path: location.pathname },
+          ]}
+        />
         <h2 className="my-5 text-sm-body" aria-label="Rekening tujuan">
           Rekening tujuan
         </h2>
