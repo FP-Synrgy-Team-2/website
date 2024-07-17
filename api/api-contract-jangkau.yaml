@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for Jangkau Application
 paths:
-  /auth:
+  /api/auth:
     post:
       summary: Menambahkan pengguna baru
       requestBody:
@@ -23,7 +23,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Bad Request
-  /pin-validation:
+  /api/bank-accounts/pin-validation:
     post:
       summary: Melakukan validasi pin
       requestBody:
@@ -42,7 +42,7 @@ paths:
                 $ref: '#/components/schemas/BankAccount'
         '400':
           description: Bad Request
-  /users/{id}:
+  /api/users/{id}:
     get:
       summary: Mendapatkan informasi user berdasarkan ID
       parameters:
@@ -61,7 +61,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User tidak ditemukan
-  /bank-accounts:
+  /api/bank-accounts:
     get:
       summary: Mendapatkan daftar semua bank account
       responses:
@@ -73,7 +73,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BankAccount'
-  /bank-accounts/{user_id}:
+  /api/bank-accounts/{user_id}:
     get:
       summary: Mendapatkan informasi bank account user berdasarkan User ID
       parameters:
@@ -92,7 +92,7 @@ paths:
                 $ref: '#/components/schemas/BankAccount'
         '404':
           description: Bank Account tidak ditemukan
-  /bank-accounts/{account_number}:
+  /api/bank-accounts/{account_number}:
     get:
       summary: Mendapatkan informasi bank account user berdasarkan nomor rekening
       parameters:
@@ -111,7 +111,7 @@ paths:
                 $ref: '#/components/schemas/BankAccount'
         '404':
           description: Bank Account tidak ditemukan
-  /transaction:
+  /api/transactions:
     post:
       summary: Melakukan transfer
       requestBody:
@@ -130,7 +130,7 @@ paths:
                 $ref: '#/components/schemas/Transaction'
         '400':
           description: Bad Request
-  /transaction/{transaction_id}:
+  /api/transaction/{transaction_id}:
      get:
       summary: Mendapatkan informasi transaksi berdasarkan Transaction ID
       parameters:
@@ -149,7 +149,7 @@ paths:
                 $ref: '#/components/schemas/Transaction'
         '404':
           description: Bank Account tidak ditemukan
-  /saved-accounts/{account-id}:
+  /api/saved-accounts/{account-id}:
     get:
       summary: Mendapatkan daftar semua bank account yang disimpan
       parameters:
