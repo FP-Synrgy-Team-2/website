@@ -38,12 +38,23 @@
   box-sizing: border-box;
 }
 
-.navbar-brand {
-  max-width: 150px;
-}
-
 .sidebar-item:hover img,
 .img-white {
   filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
     hue-rotate(131deg) brightness(111%) contrast(99%);
+}
+
+#receipt {
+  background-image: url('/images/transfer/bottom.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100%;
+}
+
+.receipt-label{
+  @apply text-muted-black;
+}
+
+.receipt-value {
+  @apply text-dark-grey;
 }
