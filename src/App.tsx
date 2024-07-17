@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { Route, Routes } from "react-router-dom"
 import DashboardLayouts from "./layouts/DashboardLayouts"
+import ReceiptLayouts from "./layouts/ReceiptLayouts"
 
 import { SwaggerUIComponent, Protected } from './components'
 
@@ -33,10 +35,18 @@ function App() {
             <Route path="new" element={<New />} />
             <Route path="saved" element={<Saved />} />
             <Route path="confirm" element={<Confirmation />} />
-            <Route path="pin" element={<Pin /> } />
+            <Route path="pin" element={<Pin />} />
             <Route path="receipt" element={<Receipt />} />
           </Route>
           <Route path="history" element={<History />} />
+        </Route>
+
+        <Route path="transfer/receipt" element={
+          <Protected>
+            <ReceiptLayouts />
+          </Protected>
+        }>
+          <Route path=":id" element={<Receipt />} />
         </Route>
 
         <Route path="/api">
@@ -49,4 +59,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
