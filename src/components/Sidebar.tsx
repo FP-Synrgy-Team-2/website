@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NavbarLogo from "./NavbarLogo";
@@ -69,7 +70,7 @@ function Sidebar() {
                         <Link
                             to={item.link}
                             key={index}
-                            className={`sidebar-item flex items-center gap-5 rounded-md p-3 text-xs-display ${
+                            className={`sidebar-item flex items-center gap-5 rounded-md p-3 body-md ${
                                 isActive
                                     ? 'bg-primary-blue text-white'
                                     : 'hover:bg-primary-dark-blue hover:text-white'
@@ -82,7 +83,7 @@ function Sidebar() {
                                 className={`${isActive ? 'img-white' : ''}`}
                             />
                             <span
-                                className="text-xs-display"
+                                className="body-md"
                                 aria-hidden={true}
                             >
                                 {item.name}
@@ -93,14 +94,14 @@ function Sidebar() {
 
                 <button
                     onClick={handleLogout}
-                    className={`sidebar-item flex items-center gap-5 rounded-md p-3 text-xs-display hover:bg-danger hover:text-white`}
+                    className={`sidebar-item flex items-center gap-5 rounded-md p-3 body-md hover:bg-danger hover:text-white`}
                 >
                     <img
                         src="/images/icons/arrow-right.svg"
                         alt="Logo Keluar"
                         aria-hidden={true}
                     />
-                    <span className="text-xs-display" aria-hidden={true}>
+                    <span className="body-md" aria-hidden={true}>
                         Keluar
                     </span>
                 </button>
