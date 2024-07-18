@@ -44,7 +44,6 @@ function Saved() {
       };
 
       console.log('Data Transfer:', dataTransfer);
-      alert('Transfer Berhasil');
       navigate('/transfer/confirm', { state: dataTransfer });
     } else {
       alert('Tidak ada data rekening tujuan.');

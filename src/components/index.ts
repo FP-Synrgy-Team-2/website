@@ -22,6 +22,8 @@ import ServiceCard from '@/components/Dashboard/ServiceCard';
 import CardSaldo from '@/components/Dashboard/CardSaldo';
 import TableMutasi from '@/components/Dashboard/TableMutasi';
 
+import Invoice from '@/components/Transfer/Invoice';
+
 export {
   Banner,
   Breadcrumbs,
@@ -31,6 +33,7 @@ export {
   Form,
   Input,
   Label,
+  Invoice,
   ModalBase,
   ModalFail,
   ModalSuccess,

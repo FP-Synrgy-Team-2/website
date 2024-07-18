@@ -15,7 +15,7 @@ import {
   Pin,
   Receipt,
   Saved,
-  Invoice,
+  DownloadInvoice,
   TransferPage,
   Error404,
 } from './pages';
@@ -75,7 +75,7 @@ function App() {
             </Protected>
           }
         >
-          <Route path=":id" element={<Invoice />} />
+          <Route path=":id" element={<DownloadInvoice />} />
         </Route>
 
         <Route path="/api">

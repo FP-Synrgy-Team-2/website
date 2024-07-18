@@ -1,11 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Button } from '@/components';
 
 function Confirmation() {
+  const navigate = useNavigate();
   const breadcrumbs = [
     { label: 'Transfer', path: 'transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
     { label: 'Konfirmasi Transaksi', path: '/transfer/confirm' },
   ];
+
+  const handleClick = () => {
+    navigate('/transfer/pin', {
+      replace: true,
+      state: { from: '/transfer/new' },
+    });
+  };
   return (
     <div>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -59,7 +68,11 @@ function Confirmation() {
             Kembali
           </Button>
           <div>
-            <Button color="primary-dark-blue" className="">
+            <Button
+              color="primary-dark-blue"
+              className=""
+              onClick={handleClick}
+            >
               <div className="flex gap-[10px]">
                 <p className="">Kirim</p>
                 <div className="mt-0.5 self-center">

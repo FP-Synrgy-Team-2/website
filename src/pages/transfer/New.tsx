@@ -29,7 +29,6 @@ function TransferForm() {
 
   const onSubmit: SubmitHandler<FormData> = (formData) => {
     console.log('Data Transfer:', formData);
-    alert('Transfer Berhasil');
     navigate('/transfer/confirm', { state: formData });
   };
 
