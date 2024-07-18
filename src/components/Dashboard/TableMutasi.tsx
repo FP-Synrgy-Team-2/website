@@ -1,5 +1,5 @@
 import React from 'react';
-import sortArrow from '../../assets/icons/Sort_arrow.png';
+import sortArrow from '@/assets/icons/Sort_arrow.png';
 
 const TableMutasi: React.FC = () => {
   function formatNumber(num: number): string {

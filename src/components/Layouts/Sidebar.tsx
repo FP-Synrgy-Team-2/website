@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import NavbarLogo from './NavbarLogo';
+import { NavbarLogo } from '@/components';
 
 interface NavbarType {
   name: string;

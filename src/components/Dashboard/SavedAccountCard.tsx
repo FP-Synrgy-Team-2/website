@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import personSvg from '../assets/person-fill.svg';
+import personSvg from '@/assets/person-fill.svg';
 import DashboardCard from './DashboardCard';
 import { useNavigate } from 'react-router-dom';
 

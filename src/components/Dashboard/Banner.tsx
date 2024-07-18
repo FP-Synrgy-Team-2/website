@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import bannerSVG from '../assets/banner.svg';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -11,6 +10,7 @@ type BannerContents = {
 
 const Banner = () => {
   const [bannerContents, setBannerContents] = useState<BannerContents>();
+  const bannerSVG = 'images/banner.svg';
 
   useEffect(() => {
     const fetch = async () => {
