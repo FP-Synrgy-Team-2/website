@@ -32,6 +32,8 @@ const FormContent = <T extends FieldValues>(
   );
 };
 
-const Form = React.forwardRef(FormContent);
+const Form = React.forwardRef(FormContent) as <T extends FieldValues>(
+  props: FormProps<T> & { ref?: React.Ref<HTMLFormElement> }
+) => ReturnType<typeof FormContent>;
 
 export default Form;
