@@ -1,10 +1,7 @@
 /* eslint-disable prettier/prettier */
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -19,22 +16,22 @@ export default {
         'primary-blue': '#0066AE',
         'primary-dark-blue': '#0A3967',
         'primary-light-blue': '#E4EDFF',
-        
-        'danger': '#CB3A31',
-        'success': '#12D79C',
-        'warning': '#FFB831',
+
+        danger: '#CB3A31',
+        success: '#12D79C',
+        warning: '#FFB831',
 
         'muted-black': '#262626',
 
         'dark-grey': '#5D5D5D',
         'light-grey': '#F5F5F5',
-        'grey': '#8E8E8E',
+        grey: '#8E8E8E',
       },
       fontWeight: {
-        'bold': 700,
-        'semibold': 600,
-        'medium': 500,
-        'regular': 400,
+        bold: 700,
+        semibold: 600,
+        medium: 500,
+        regular: 400,
       },
       fontSize: {
         '2xl-display': ['60px', { lineHeight: '96px', letterSpacing: '-0.025em' }],

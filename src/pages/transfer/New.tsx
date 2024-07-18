@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useState } from 'react';
 import { Button, Breadcrumbs, Input, Label } from '@/components';
 
