@@ -1,8 +1,13 @@
 import { useLocation } from 'react-router-dom';
 import { SavedAccount } from '../../types/saved-accounts';
 import { useEffect } from 'react';
+import Breadcrumbs from '../../components/General/Breadcrumbs';
 
 function Saved() {
+  const breadcrumbs = [
+    { label: 'Transfer', path: '/transfer' },
+    { label: 'Input Data Transfer', path: '/transfer/new' },
+  ];
   const location = useLocation();
 
   useEffect(() => {
@@ -11,6 +16,7 @@ function Saved() {
 
   return (
     <div>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <h1>Saved</h1>
       {location.state ? (
         <>
