@@ -11,7 +11,7 @@
 
 @layer components {
   #dashboard-main {
-    @apply flex h-screen w-full flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
+    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
   }
 
   #saved-accounts {
