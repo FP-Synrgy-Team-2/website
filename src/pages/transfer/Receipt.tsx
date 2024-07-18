@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useParams } from 'react-router-dom';
 import { NavbarLogo } from '../../components';
 import axios from 'axios';
@@ -83,23 +82,27 @@ function Receipt() {
         <h2 className="text-xs-display font-regular">
           Invoice ini merupakan bukti pembayaran yang sah
         </h2>
-        <div className="mt-6 grid max-w-[50vw] grid-cols-2 gap-4">
-          <div className="receipt-label">Rekening Sumber</div>
-          <div className="receipt-value">{senderAccount}</div>
-          <div className="receipt-label">Rekening Tujuan</div>
-          <div className="receipt-value">{receiverAccount}</div>
-          <div className="receipt-label">Nama Penerima</div>
-          <div className="receipt-value">{receiverName}</div>
-          <div className="receipt-label">Nominal Transfer</div>
-          <div className="receipt-value">{formatRupiah(amount)}</div>
-          <div className="receipt-label">Biaya Admin</div>
-          <div className="receipt-value">{formatRupiah(adminFee)}</div>
-          <div className="receipt-label">Catatan</div>
-          <div className="receipt-value">{note}</div>
-          <div className="receipt-label">Tanggal Transaksi</div>
-          <div className="receipt-value">{transactionDate}</div>
-          <div className="receipt-label font-bold">Total</div>
-          <div className="receipt-value font-bold">{formatRupiah(total)}</div>
+        <div className="mt-6 flex max-w-[50vw] gap-4">
+          <div className="receipt-label w-1/2">
+            <div className="">Rekening Sumber</div>
+            <div className="">Rekening Tujuan</div>
+            <div className="">Nama Penerima</div>
+            <div className="">Nominal Transfer</div>
+            <div className="">Biaya Admin</div>
+            <div className="">Catatan</div>
+            <div className="">Tanggal Transaksi</div>
+            <div className="font-bold">Total</div>
+          </div>
+          <div className="receipt-value w-1/2">
+            <div className="">{senderAccount}</div>
+            <div className="">{receiverAccount}</div>
+            <div className="">{receiverName}</div>
+            <div className="">{formatRupiah(amount)}</div>
+            <div className="">{formatRupiah(adminFee)}</div>
+            <div className="">{note}</div>
+            <div className="">{transactionDate}</div>
+            <div className="font-bold">{formatRupiah(total)}</div>
+          </div>
         </div>
       </div>
     </>
