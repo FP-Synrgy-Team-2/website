@@ -1,38 +1,43 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { Invoice } from '@/components';
 
 function DownloadInvoice() {
   const captureRef = useRef<HTMLDivElement>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const captureAndDownload = async () => {
+    if (dataLoaded && captureRef.current) {
+      const { offsetWidth: width, offsetHeight: height } = captureRef.current;
+      setDimensions({ width, height });
+    }
+  }, [dataLoaded]);
+
+  useEffect(() => {
+    if (dataLoaded && dimensions) {
       const element = captureRef.current;
       if (element) {
-        try {
-          // Await the canvas rendering
-          const canvas = await html2canvas(element, {
-            width: 1366,
-            height: 768,
-          });
-
-          // Create a download link
+        html2canvas(element, {
+          width: dimensions.width,
+          height: dimensions.height,
+        }).then((canvas) => {
           const link = document.createElement('a');
           link.download = 'invoice.png';
           link.href = canvas.toDataURL('image/png');
           link.click();
-        } catch (error) {
-          console.error('Error while downloading invoice:', error);
-        }
+          // Navigate back after download
+          navigate(-1);
+        });
       }
-    };
-
-    captureAndDownload();
-  }, [navigate]);
-
-  return <Invoice ref={captureRef} />;
+    }
+  }, [dataLoaded, dimensions, navigate]);
+  return <Invoice ref={captureRef} onDataLoaded={() => setDataLoaded(true)} />;
 }
 
 export default DownloadInvoice;
