@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import CopyIcon from '@/assets/icons/Copy_alt.png';
-import HideEye from '@/assets/icons/hide_eye_fill.svg';
-import ShowEye from '@/assets/icons/show_eye.svg';
+import CopyIcon from '../../assets/icons/Copy_alt.png';
+import HideEye from '../../assets/icons/hide_eye_fill.svg';
+import ShowEye from '../../assets/icons/show_eye.svg';
 
 const CardSaldo: React.FC = () => {
   const [isSaldoHidden, setIsSaldoHidden] = useState<boolean>(false);
@@ -34,7 +34,7 @@ const CardSaldo: React.FC = () => {
 
   return (
     <div
-      className="h-52 w-96 rounded-[20px] bg-primary-blue"
+      className="h-50.25 w-96 rounded-[20px] bg-primary-blue"
       aria-label="Informasi saldo"
     >
       <div className="mx-auto flex h-full w-9/12 flex-col justify-center gap-7">
