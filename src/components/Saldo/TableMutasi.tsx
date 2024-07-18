@@ -7,7 +7,7 @@ const TableMutasi: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-182.5">
       <div className="flex items-center justify-between">
         <h1 className="font-xl-body uppercase" aria-label="mutasi rekening">
           Mutasi Rekening
