@@ -1,22 +1,22 @@
 import ModalBase from './ModalBase';
-import checkCircleFill from '../assets/check-circle-fill.svg';
+import xCircleFill from '@/assets/x-circle-fill.svg';
 import { FC } from 'react';
 
-type ModalSuccessType = {
+type ModalFailType = {
   modalFor: string;
   description: string[];
   redirectTo: string;
 };
 
-const ModalSuccess: FC<ModalSuccessType> = ({
+const ModalFail: FC<ModalFailType> = ({
   modalFor,
   description,
   redirectTo,
 }) => {
   return (
     <ModalBase
-      icon={checkCircleFill}
-      mainText={`${modalFor} Berhasil`}
+      icon={xCircleFill}
+      mainText={`${modalFor} Gagal`}
       text={description}
       redirectInMs={5000}
       redirectTo={redirectTo}
@@ -24,4 +24,4 @@ const ModalSuccess: FC<ModalSuccessType> = ({
   );
 };
 
-export default ModalSuccess;
+export default ModalFail;

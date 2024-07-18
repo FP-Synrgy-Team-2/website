@@ -2,9 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
 @layer components {
+  #dashboard-main {
+    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
+  }
+
+  #mutation-table {
+    @apply flex flex-col gap-5 rounded-xl border border-grey border-opacity-20 px-17 pb-5 pt-12;
+  }
+
+  #saved-accounts {
+    @apply h-104 w-55;
+  }
+
+  #saved-accounts > ul {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  #saved-accounts > ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .helper-box {
+    border: 1px dashed red; /* Dashed red border */
+    background-color: rgba(255, 0, 0, 0.1); /* Light red background */
+  }
+
+  .dash-avatar {
+    @apply flex h-12.5 w-12.5 justify-center overflow-hidden rounded-full bg-center bg-no-repeat;
+  }
+
+  .dash-banner {
+    @apply flex h-50.75 w-155 bg-contain bg-bottom bg-no-repeat p-8.75;
+    background-color: #f0f5ff;
+  }
+
+  .dash-card {
+    @apply flex h-27.5 w-25 flex-col content-center justify-center gap-2.5 rounded-xl border px-4.25 py-3;
+  }
+
+  .dash-card:hover,
+  .dash-card:focus {
+    @apply cursor-pointer border-2 border-primary-dark-blue border-opacity-100 shadow;
+  }
+
+  .dash-main {
+    @apply flex h-full w-81/160 justify-center;
+    background-color: #fafafa;
+  }
+
   .modal {
     @apply fixed left-0 top-0 z-0 flex h-screen w-screen flex-col justify-center gap-12 bg-white;
+  }
+
+  .mutation-record {
+    @apply flex h-19.5 flex-col justify-between border-b border-opacity-20 pb-4 last:border-0;
+  }
+
+  .mutation-record > div > span {
+    background-size: 1rem 1rem;
   }
 }
 
@@ -38,12 +102,23 @@
   box-sizing: border-box;
 }
 
-.navbar-brand {
-  max-width: 150px;
-}
-
 .sidebar-item:hover img,
 .img-white {
   filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
     hue-rotate(131deg) brightness(111%) contrast(99%);
+}
+
+#receipt {
+  background-image: url('/images/transfer/bottom.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100%;
+}
+
+.receipt-label {
+  @apply text-muted-black;
+}
+
+.receipt-value {
+  @apply text-dark-grey;
 }

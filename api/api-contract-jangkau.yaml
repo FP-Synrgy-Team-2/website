@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for Jangkau Application
 paths:
-  /auth:
+  /api/auth:
     post:
       summary: Menambahkan pengguna baru
       requestBody:
@@ -23,7 +23,26 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Bad Request
-  /users/{id}:
+  /api/bank-accounts/pin-validation:
+    post:
+      summary: Melakukan validasi pin
+      requestBody:
+        description: Data pengguna baru yang akan ditambahkan.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinValidation'
+      responses:
+        '200':
+          description: Validasi Berhasil!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '400':
+          description: Bad Request
+  /api/users/{id}:
     get:
       summary: Mendapatkan informasi user berdasarkan ID
       parameters:
@@ -42,7 +61,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User tidak ditemukan
-  /bank-accounts:
+  /api/bank-accounts:
     get:
       summary: Mendapatkan daftar semua bank account
       responses:
@@ -54,7 +73,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BankAccount'
-  /bank-accounts/{user_id}:
+  /api/bank-accounts/{user_id}:
     get:
       summary: Mendapatkan informasi bank account user berdasarkan User ID
       parameters:
@@ -73,7 +92,7 @@ paths:
                 $ref: '#/components/schemas/BankAccount'
         '404':
           description: Bank Account tidak ditemukan
-  /bank-accounts/{account_number}:
+  /api/bank-accounts/{account_number}:
     get:
       summary: Mendapatkan informasi bank account user berdasarkan nomor rekening
       parameters:
@@ -92,7 +111,7 @@ paths:
                 $ref: '#/components/schemas/BankAccount'
         '404':
           description: Bank Account tidak ditemukan
-  /transaction:
+  /api/transactions:
     post:
       summary: Melakukan transfer
       requestBody:
@@ -111,7 +130,7 @@ paths:
                 $ref: '#/components/schemas/Transaction'
         '400':
           description: Bad Request
-  /transaction/{transaction_id}:
+  /api/transaction/{transaction_id}:
      get:
       summary: Mendapatkan informasi transaksi berdasarkan Transaction ID
       parameters:
@@ -130,9 +149,16 @@ paths:
                 $ref: '#/components/schemas/Transaction'
         '404':
           description: Bank Account tidak ditemukan
-  /saved-accounts:
+  /api/saved-accounts/{account-id}:
     get:
       summary: Mendapatkan daftar semua bank account yang disimpan
+      parameters:
+        - name: account-id
+          in: path
+          required: true
+          description: Id bank account
+          schema:
+            type: string
       responses:
         '200':
           description: Data berhasil diambil.
@@ -172,6 +198,18 @@ components:
       required:
         - username
         - password
+    PinValidation:
+      type: object
+      properties:
+        account_number:
+          type: string
+          example: 8923445590
+        pin:
+          type: string
+          example: 456734
+      required:
+        - account_number
+        - pin
     BankAccount:
       type: object
       properties:
@@ -207,10 +245,10 @@ components:
     TransferRequest:
       type: object
       properties:
-        rekening_sumber:
+        account_id:
           type: string
           example: '8923445590'
-        rekening_tujuan:
+        beneficiary_account:
           type: string
           example: '8923445589'
         amount:
@@ -233,23 +271,24 @@ components:
     Transaction:
       type: object
       properties:
-        rekening_sumber:
+        account_id:
           type: string
           example: '8923445590'
-        rekening_tujuan:
+        beneficiary_account:
           type: string
           example: '8923445589'
         amount:
           type: integer
           example: 540000
+        admin_fee:
+          type: integer
+          example: 0
         transaction_date:
           type: string
           example: '2024-07-12 08:26:37'
         note:
           type: string
           example: Uang kos
-      required:
-        - rekening_sumber
-        - rekening_tujuan
-        - amount
-        - transaction_date
+        total:
+          type: integer
+          example: 540000

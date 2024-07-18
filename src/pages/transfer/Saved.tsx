@@ -1,12 +1,20 @@
-import { useState } from 'react';
+/* eslint-disable prettier/prettier */
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SavedAccount } from '../../types/saved-accounts';
-import { Label } from '@/components/Label';
-import { Input } from '@/components/Input';
-import Button from '@/components/Button';
+import { SavedAccount } from '@/types/saved-accounts';
+import { Breadcrumbs, Label, Input, Button } from '@/components';
 
 function Saved() {
+  const breadcrumbs = [
+    { label: 'Transfer', path: '/transfer' },
+    { label: 'Input Data Transfer', path: '/transfer/new' },
+  ];
   const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.state);
+  }, [location]);
+
   const account = location.state?.account as SavedAccount;
 
   const [formData, setFormData] = useState({
@@ -39,12 +47,9 @@ function Saved() {
   };
 
   return (
-    <main className="w-[50%]">
-      <div className="my-5">
-        <h2 className="text-3xl font-semibold">
-          Transfer &gt; Input Data Transfer
-        </h2>
-      </div>
+    <>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
+
       {account ? (
         <div className="mt-10">
           <Label className="text-xl">Rekening Tujuan</Label>
@@ -108,13 +113,13 @@ function Saved() {
       <div className="mt-3">
         <Button
           color="blue"
-          className="ms-[200px] rounded-3xl bg-blue-500 px-6 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="rounded-3xl bg-blue-500 px-6 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           onClick={handleSubmit}
         >
           Lanjutkan
         </Button>
       </div>
-    </main>
+    </>
   );
 }
 

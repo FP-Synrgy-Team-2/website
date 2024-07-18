@@ -1,7 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { useState } from 'react';
-import Button from '@/components/Button';
-import { Input } from '@/components/Input';
-import { Label } from '@/components/Label';
+import { Button, Breadcrumbs, Input, Label } from '@/components';
 
 function TransferForm() {
   const [formData, setFormData] = useState({
@@ -10,6 +9,11 @@ function TransferForm() {
     catatan: '',
     simpanRekening: false,
   });
+
+  const breadcrumbs = [
+    { label: 'Transfer', path: '/transfer' },
+    { label: 'Input Data Transfer', path: '/transfer/new' },
+  ];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
@@ -25,12 +29,8 @@ function TransferForm() {
   };
 
   return (
-    <main className="w-[50%]">
-      <div className="my-5">
-        <h2 className="text-3xl font-bold">
-          Transfer &gt; Input Data Transfer
-        </h2>
-      </div>
+    <>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <div className="mt-10">
         <Label className="text-xl">Rekening Sumber</Label>
         <div className="relative bg-[#E4EDFF] px-3 py-4">
@@ -86,13 +86,13 @@ function TransferForm() {
       <div className="mt-3">
         <Button
           color="blue"
-          className="ms-[200px] rounded-3xl bg-blue-500 px-6 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="rounded-3xl bg-blue-500 px-6 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           onClick={handleSubmit}
         >
           Lanjutkan
         </Button>
       </div>
-    </main>
+    </>
   );
 }
 
