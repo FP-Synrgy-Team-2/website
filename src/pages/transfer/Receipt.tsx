@@ -1,10 +1,17 @@
 import { Breadcrumbs, Button } from '@/components';
+import { useNavigate } from 'react-router-dom';
 
 function Receipt() {
+  const navigate = useNavigate();
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
   ];
+
+  const handleDownload = () => {
+    console.log('Download receipt');
+    navigate('/transfer/invoice/1');
+  };
 
   return (
     <>
@@ -72,7 +79,8 @@ function Receipt() {
           </Button>
           <Button
             color="primary-dark-blue"
-            className="h-[52] w-[167px] rounded-[30px] border border-primary-dark-blue px-10 py-3 font-bold text-white"
+            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px] border border-primary-dark-blue px-10 py-3 font-bold text-white"
+            onClick={handleDownload}
           >
             <img src="/images/icons/download.svg" alt="" /> Unduh
           </Button>

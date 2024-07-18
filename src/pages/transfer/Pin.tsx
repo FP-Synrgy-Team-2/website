@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PinInput: React.FC = () => {
   const [pin, setPin] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleChange = (value: string, index: number) => {
     if (/^[0-9]?$/.test(value)) {
@@ -19,7 +21,7 @@ const PinInput: React.FC = () => {
     } else {
       setError('');
       console.log('PIN Submitted:', pin.join(''));
-      // Add your submission logic here
+      navigate('/transfer/receipt', { replace: true });
     }
   };
 

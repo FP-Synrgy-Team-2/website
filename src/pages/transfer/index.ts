@@ -4,6 +4,14 @@ import Pin from './Pin';
 import Confirmation from './Confirmation';
 import Receipt from './Receipt';
 import Saved from './Saved';
-import Invoice from './Invoice';
+import DownloadInvoice from './DownloadInvoice';
 
-export { TransferPage, New, Pin, Confirmation, Receipt, Saved, Invoice };
+export {
+  TransferPage,
+  New,
+  Pin,
+  Confirmation,
+  Receipt,
+  Saved,
+  DownloadInvoice,
+};
