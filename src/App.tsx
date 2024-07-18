@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Route, Routes } from "react-router-dom"
-import DashboardLayouts from "./layouts/DashboardLayouts"
-import ReceiptLayouts from "./layouts/ReceiptLayouts"
+import { Route, Routes } from 'react-router-dom';
+import DashboardLayouts from './layouts/DashboardLayouts';
+import ReceiptLayouts from './layouts/ReceiptLayouts';
 
-import { SwaggerUIComponent, Protected } from './components'
+import { SwaggerUIComponent, Protected } from './components';
 
 import {
   ApiCall,
-  Dashboard, Login,
+  Dashboard,
+  Login,
   History,
   Confirmation,
   New,
@@ -15,7 +16,8 @@ import {
   Receipt,
   Saved,
   TransferPage,
-} from "./pages"
+  Error404,
+} from './pages';
 
 function App() {
   return (
@@ -24,11 +26,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
 
-        <Route path="" element={
-          <Protected>
-            <DashboardLayouts />
-          </Protected>
-        }>
+        <Route
+          path=""
+          element={
+            <Protected>
+              <DashboardLayouts />
+            </Protected>
+          }
+        >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="transfer">
             <Route index element={<TransferPage />} />
@@ -41,11 +46,14 @@ function App() {
           <Route path="history" element={<History />} />
         </Route>
 
-        <Route path="transfer/receipt" element={
-          <Protected>
-            <ReceiptLayouts />
-          </Protected>
-        }>
+        <Route
+          path="transfer/receipt"
+          element={
+            <Protected>
+              <ReceiptLayouts />
+            </Protected>
+          }
+        >
           <Route path=":id" element={<Receipt />} />
         </Route>
 
@@ -54,9 +62,10 @@ function App() {
           <Route path="docs" element={<SwaggerUIComponent />} />
         </Route>
 
+        <Route path="*" element={<Error404 />} />
       </Routes>
     </>
-  )
+  );
 }
 
 export default App;
