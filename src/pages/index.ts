@@ -7,6 +7,7 @@ import {
   Receipt,
   Saved,
   TransferPage,
+  Invoice,
 } from './transfer';
 import { History } from './history';
 import ApiCall from './example/ApiCall';
@@ -33,4 +34,5 @@ export {
 
   // Error
   Error404,
+  Invoice,
 };
