@@ -15,6 +15,7 @@ import {
   Pin,
   Receipt,
   Saved,
+  Invoice,
   TransferPage,
   Error404,
 } from './pages';
@@ -67,14 +68,14 @@ function App() {
         </Route>
 
         <Route
-          path="transfer/receipt"
+          path="transfer/invoice"
           element={
             <Protected>
               <ReceiptLayouts />
             </Protected>
           }
         >
-          <Route path=":id" element={<Receipt />} />
+          <Route path=":id" element={<Invoice />} />
         </Route>
 
         <Route path="/api">
