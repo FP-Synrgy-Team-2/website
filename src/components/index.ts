@@ -10,6 +10,9 @@ import Protected from '@/components/General/Authorization/Protected';
 import Sidebar from '@/components/Layouts/Sidebar';
 import SwaggerUIComponent from '@/components/SwaggerUI';
 
+import { Input } from '@/components/General/Input';
+import { Label } from '@/components/General/Label';
+
 import Banner from '@/components/Dashboard/Banner';
 import SavedAccountCard from '@/components/Dashboard/SavedAccountCard';
 import SavedAccounts from '@/components/Dashboard/SavedAccounts';
@@ -24,6 +27,8 @@ export {
   Button,
   Card,
   Checkbox,
+  Input,
+  Label,
   ModalBase,
   ModalFail,
   ModalSuccess,

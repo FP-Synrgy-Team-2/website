@@ -43,7 +43,7 @@ const SavedAccounts = () => {
     };
 
     populate();
-  }, [data]);
+  }, []);
 
   return (
     <section
