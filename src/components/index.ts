@@ -1,22 +1,22 @@
-import Breadcrumbs from './Breadcrumbs';
-import Button from './Button';
-import Card from './Card';
-import Checkbox from './Checkbox';
-import ModalBase from './ModalBase';
-import ModalFail from './ModalFail';
-import ModalSuccess from './ModalSuccess';
-import NavbarLogo from './NavbarLogo';
-import Protected from './Protected';
-import Sidebar from './Sidebar';
-import SwaggerUIComponent from './SwaggerUI';
+import Breadcrumbs from '@/components/General/Breadcrumbs';
+import Button from '@/components/General/Button';
+import Card from '@/components/General/Card';
+import Checkbox from '@/components/General/Checkbox';
+import ModalBase from '@/components/General/Modal/ModalBase';
+import ModalFail from '@/components/General/Modal/ModalFail';
+import ModalSuccess from '@/components/General/Modal/ModalSuccess';
+import NavbarLogo from '@/components/Layouts/NavbarLogo';
+import Protected from '@/components/General/Authorization/Protected';
+import Sidebar from '@/components/Layouts/Sidebar';
+import SwaggerUIComponent from '@/components/SwaggerUI';
 
-import Banner from './Banner';
-import SavedAccountCard from './SavedAccountCard';
-import SavedAccounts from './SavedAccounts';
-import ServiceCard from './ServiceCard';
+import Banner from '@/components/Dashboard/Banner';
+import SavedAccountCard from '@/components/Dashboard/SavedAccountCard';
+import SavedAccounts from '@/components/Dashboard/SavedAccounts';
+import ServiceCard from '@/components/Dashboard/ServiceCard';
 
-import CardSaldo from './Saldo/CardSaldo';
-import TableMutasi from './Saldo/TableMutasi';
+import CardSaldo from '@/components/Dashboard/CardSaldo';
+import TableMutasi from '@/components/Dashboard/TableMutasi';
 
 export {
   Banner,

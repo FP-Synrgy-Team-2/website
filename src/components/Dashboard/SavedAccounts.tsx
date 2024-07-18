@@ -3,15 +3,17 @@ import SavedAccountCard from './SavedAccountCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export type Account = {
+interface Account {
   name: string;
   image: string;
-};
+}
+
+export type { Account };
 
 const SavedAccounts = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
 
-  const data = [
+  const data: Account[] = [
     { name: 'Maxine', image: '/vite.svg' },
     { name: 'Oscar', image: '' },
     { name: 'Kevin', image: '' },
@@ -41,7 +43,7 @@ const SavedAccounts = () => {
     };
 
     populate();
-  }, []);
+  }, [data]);
 
   return (
     <section

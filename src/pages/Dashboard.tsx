@@ -1,5 +1,5 @@
-import { Banner, SavedAccounts, CardSaldo, TableMutasi } from '../components';
-import dashboardSVG from '../assets/dashboard.svg';
+import { Banner, SavedAccounts, CardSaldo, TableMutasi } from '@/components';
+import dashboardSVG from '@/assets/dashboard.svg';
 
 function Dashboard() {
   return (

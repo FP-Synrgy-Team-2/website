@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import CopyIcon from '../../assets/icons/Copy_alt.png';
-import HideEye from '../../assets/icons/hide_eye_fill.svg';
-import ShowEye from '../../assets/icons/show_eye.svg';
+import CopyIcon from '@/assets/icons/Copy_alt.png';
+import HideEye from '@/assets/icons/hide_eye_fill.svg';
+import ShowEye from '@/assets/icons/show_eye.svg';
 
 const CardSaldo: React.FC = () => {
   const [isSaldoHidden, setIsSaldoHidden] = useState<boolean>(false);
