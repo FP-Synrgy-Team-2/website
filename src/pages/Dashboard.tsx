@@ -1,6 +1,5 @@
-import Banner from '../components/Banner';
-import SavedAccounts from '../components/SavedAccounts';
-import dashboardSVG from '../assets/dashboard.svg';
+import { Banner, SavedAccounts, CardSaldo, TableMutasi } from '@/components';
+import dashboardSVG from '@/assets/dashboard.svg';
 
 function Dashboard() {
   return (
@@ -10,11 +9,11 @@ function Dashboard() {
       style={{ backgroundImage: `url(${dashboardSVG})` }}
     >
       <div className="flex w-265 justify-between">
-        <div className="helper-box h-full w-96" />
+        <CardSaldo />
         <Banner />
       </div>
       <div className="flex w-265 justify-between">
-        <div className="helper-box w-182.5" />
+        <TableMutasi />
         <SavedAccounts />
       </div>
     </main>
