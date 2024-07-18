@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Route, Routes, Navigate } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
