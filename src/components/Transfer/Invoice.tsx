@@ -60,6 +60,8 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
       };
 
       fetchData();
+      setDataLoaded(true);
+      if (props.onDataLoaded) props.onDataLoaded();
     }, [id, URL, props, dataLoaded]);
 
     return (

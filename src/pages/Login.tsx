@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import { NavbarLogo } from '../components';
 
 interface doLoginProps {
   username: string;
   password: string;
 }
-
+/*
 interface dataProps {
   email: string;
   full_name: string;
@@ -19,7 +19,7 @@ async function doLogin({ username, password }: doLoginProps) {
   let data: null | dataProps = null;
   await axios
     .post(
-      URL + '/auth',
+      URL + '/auth/login',
       {
         username,
         password,
@@ -36,6 +36,12 @@ async function doLogin({ username, password }: doLoginProps) {
     .catch((err) => console.log(err));
   if (data) return 'initoken';
   else return null;
+}
+*/
+
+async function doLogin({ username, password }: doLoginProps) {
+  console.log(username, password);
+  return 'initoken';
 }
 
 interface EyeSvgProps {
