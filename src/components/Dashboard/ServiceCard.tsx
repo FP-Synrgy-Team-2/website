@@ -4,17 +4,18 @@ import DashboardCard from './DashboardCard';
 type ServiceCardProps = {
   serviceName: string;
   image: string;
-  index: number;
+  index?: number;
 };
 
-const ServiceCard: FC<ServiceCardProps> = ({ serviceName, image, index }) => {
+const ServiceCard: FC<ServiceCardProps> = ({ serviceName, image }) => {
   return (
     <DashboardCard
       image={image}
       text={serviceName}
       size="1.875rem"
       alt={`${serviceName} service's icon`}
-      index={index}
+      ariaLabel="Service card"
+      onClickFn={() => console.log('Service card clicked')}
     />
   );
 };
