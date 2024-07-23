@@ -14,6 +14,10 @@
     @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
   }
 
+  #mutation-table {
+    @apply flex flex-col gap-5 rounded-xl border border-grey border-opacity-20 px-17 pb-5 pt-12;
+  }
+
   #saved-accounts {
     @apply h-104 w-55;
   }
@@ -57,6 +61,14 @@
 
   .modal {
     @apply fixed left-0 top-0 z-0 flex h-screen w-screen flex-col justify-center gap-12 bg-white;
+  }
+
+  .mutation-record {
+    @apply flex h-19.5 flex-col justify-between border-b border-opacity-20 pb-4 last:border-0;
+  }
+
+  .mutation-record > div > span {
+    background-size: 1rem 1rem;
   }
 }
 

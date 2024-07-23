@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Route, Routes, Navigate } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
@@ -16,6 +15,7 @@ import {
   Pin,
   Receipt,
   Saved,
+  DownloadInvoice,
   TransferPage,
   Error404,
 } from './pages';
@@ -68,14 +68,14 @@ function App() {
         </Route>
 
         <Route
-          path="transfer/receipt"
+          path="transfer/invoice"
           element={
             <Protected>
               <ReceiptLayouts />
             </Protected>
           }
         >
-          <Route path=":id" element={<Receipt />} />
+          <Route path=":id" element={<DownloadInvoice />} />
         </Route>
 
         <Route path="/api">
