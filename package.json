@@ -12,20 +12,21 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "axios": "^1.7.2",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-label": "^2.1.0",
+    "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "html2canvas": "^1.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-loading-skeleton": "^3.4.0",
     "react-router-dom": "^6.24.1",
-    "tailwind-merge": "^2.4.0",
-    "zod": "^3.23.8",
     "swagger-ui": "^5.17.14",
-    "swagger-ui-react": "^5.17.14"
+    "swagger-ui-react": "^5.17.14",
+    "tailwind-merge": "^2.4.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@stoplight/prism-cli": "^5.8.2",
