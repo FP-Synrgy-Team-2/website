@@ -62,7 +62,7 @@ function App() {
             <Route path="saved" element={<Saved />} />
             <Route path="confirm" element={<Confirmation />} />
             <Route path="pin" element={<Pin />} />
-            <Route path="receipt" element={<Receipt />} />
+            <Route path="receipt/:id" element={<Receipt />} />
           </Route>
           <Route path="history" element={<History />} />
         </Route>

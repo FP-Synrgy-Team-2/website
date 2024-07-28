@@ -1,17 +1,62 @@
 import { Breadcrumbs, Button } from '@/components';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-function Receipt() {
+interface TransactionData {
+  account_id: string;
+  beneficiary_account: string;
+  amount: number;
+  admin_fee: number;
+  note: string;
+  total: number;
+}
+
+const Receipt: React.FC = () => {
   const navigate = useNavigate();
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
   ];
 
+  const formatNumber = (num: number): string => {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  };
+
+  const { id } = useParams<{ id: string }>();
+  const transactionId = id || '';
+
   const handleDownload = () => {
     console.log('Download receipt');
-    navigate('/transfer/invoice/1');
+    navigate(`/transfer/invoice/${transactionId}`);
   };
+
+  const URL = import.meta.env.VITE_API_URL;
+  const [data, setData] = useState<TransactionData | null>(null);
+  const [beneficiary_name, setBeneficiaryName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transactionResponse = await axios.get(
+          `${URL}/transaction/${transactionId}`
+        );
+        const transactionData = transactionResponse.data;
+
+        if (transactionData.beneficiary_account) {
+          const bankAccountResponse = await axios.get(
+            `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`
+          );
+          const bankAccountData = bankAccountResponse.data;
+          setBeneficiaryName(bankAccountData.owner_name || '');
+        }
+        setData(transactionData);
+      } catch (error) {
+        console.error('Error fetching invoice data:', error);
+      }
+    };
+    fetchData();
+  }, [URL, transactionId]);
 
   return (
     <>
@@ -45,15 +90,17 @@ function Receipt() {
             <p className="my-3">Catatan</p>
             <p className="my-3">Total</p>
           </div>
-          <div className="mx-auto text-dark-grey">
-            <p className="my-3">8923445590</p>
-            <p className="my-3">2448901238</p>
-            <p className="my-3">John</p>
-            <p className="my-3">Rp 100.000</p>
-            <p className="my-3">Rp 0</p>
-            <p className="my-3">Bayar makanan</p>
-            <p className="my-3">Rp 100.000</p>
-          </div>
+          {data && beneficiary_name && (
+            <div className="mx-auto text-dark-grey">
+              <p className="my-3">{data.account_id}</p>
+              <p className="my-3">{data.beneficiary_account}</p>
+              <p className="my-3">{beneficiary_name}</p>
+              <p className="my-3">Rp {formatNumber(data.amount)}</p>
+              <p className="my-3">Rp {formatNumber(data.admin_fee)}</p>
+              <p className="my-3">{data.note}</p>
+              <p className="my-3">Rp {formatNumber(data.total)}</p>
+            </div>
+          )}
         </div>
 
         <div className="border-b-2 border-grey"></div>
@@ -63,10 +110,12 @@ function Receipt() {
             <p className="my-3">Catatan</p>
             <p className="my-3">Total</p>
           </div>
-          <div className="mx-auto text-dark-grey">
-            <p className="my-3">Bayar makanan</p>
-            <p className="my-3">Rp 100.000</p>
-          </div>
+          {data && (
+            <div className="mx-auto text-dark-grey">
+              <p className="my-3">{data.note}</p>
+              <p className="my-3">Rp {formatNumber(data.total)}</p>
+            </div>
+          )}
         </div>
       </div>
       <div className="my-5 flex p-3">
@@ -88,6 +137,6 @@ function Receipt() {
       </div>
     </>
   );
-}
+};
 
 export default Receipt;

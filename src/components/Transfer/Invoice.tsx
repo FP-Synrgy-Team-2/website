@@ -44,7 +44,7 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
 
           if (transactionData.beneficiary_account) {
             const bankAccountResponse = await axios.get(
-              `${URL}/bank-accounts/${transactionData.beneficiary_account}`
+              `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`
             );
             const bankAccountData = bankAccountResponse.data;
 
