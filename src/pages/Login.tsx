@@ -19,7 +19,7 @@ async function doLogin({ username, password }: doLoginProps) {
   let data: null | dataProps = null;
   await axios
     .post(
-      URL + '/auth',
+      URL + '/auth/login',
       {
         username,
         password,
