@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Button } from '@/components';
-
+import PinInput from './Pin';
 function Confirmation() {
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  // const navigate = useNavigate();
   const breadcrumbs = [
     { label: 'Transfer', path: 'transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
@@ -10,13 +12,22 @@ function Confirmation() {
   ];
 
   const handleClick = () => {
-    navigate('/transfer/pin', {
-      replace: true,
-      state: { from: '/transfer/new' },
-    });
+    // navigate('/transfer/pin', {
+    //   replace: true,
+    //   state: { from: '/transfer/new' },
+    // });
+    setShowModal(true);
   };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div>
+      {showModal && (
+        <PinInput showPinInput={showModal} closePinInput={closeModal} />
+      )}
       <Breadcrumbs breadcrumbs={breadcrumbs} />
       <div className="max-w-[510px]">
         <div className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
