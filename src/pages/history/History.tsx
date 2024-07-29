@@ -18,8 +18,10 @@ interface TransactionsListProps {
 
 function returnLocalDateAndTime(transactionDate: string) {
   const dateObj = new Date(transactionDate);
-  const localDate = dateObj.toLocaleDateString();
-  const localTime = dateObj.toLocaleTimeString();
+  const localDate = dateObj.toLocaleDateString('id-ID', { dateStyle: 'full' });
+  const localTime = dateObj
+    .toLocaleTimeString('id-ID', { hour12: false })
+    .slice(0, -3);
   return { localDate, localTime };
 }
 
