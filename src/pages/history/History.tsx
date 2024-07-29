@@ -18,8 +18,10 @@ interface TransactionsListProps {
 
 function returnLocalDateAndTime(transactionDate: string) {
   const dateObj = new Date(transactionDate);
-  const localDate = dateObj.toLocaleDateString();
-  const localTime = dateObj.toLocaleTimeString();
+  const localDate = dateObj.toLocaleDateString('id-ID', { dateStyle: 'full' });
+  const localTime = dateObj
+    .toLocaleTimeString('id-ID', { hour12: false })
+    .slice(0, -3);
   return { localDate, localTime };
 }
 
@@ -29,6 +31,7 @@ function TransactionsList({ transactions }: TransactionsListProps) {
       <div
         key={`transaction-${index}`}
         className="flex w-[520px] flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
+        aria-label={`Transfer BCA - 872726231 ${transaction.amount} ${returnLocalDateAndTime(transaction.transaction_date)}`}
       >
         <div className="flex gap-x-2.5">
           <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue">
@@ -95,12 +98,18 @@ function History() {
   return (
     <main className="flex flex-col gap-y-20 pl-10 pr-20 pt-[112px]">
       <section className="flex flex-col gap-y-2.5">
-        <h2 className="font-Inter text-xl-body font-medium text-neutral-03">
+        <h2
+          className="font-Inter text-xl-body font-medium text-neutral-03"
+          aria-label="akun"
+        >
           AKUN
         </h2>
         <div className="flex items-end justify-between">
           <div className="flex">
-            <div className="flex flex-col gap-y-[5px] rounded-[10px] border border-black bg-primary-blue px-[30px] py-2.5">
+            <div
+              className="flex flex-col gap-y-[5px] rounded-[10px] border border-black bg-primary-blue px-[30px] py-2.5"
+              aria-label="BCA TABUNGANKu 89993425716257 ZAKIANSYAH"
+            >
               <span className="text-xl-body font-bold italic text-primary-light-blue">
                 BCA TABUNGANKu
               </span>
@@ -112,7 +121,10 @@ function History() {
               </span>
             </div>
           </div>
-          <button className="relative h-min rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5">
+          <button
+            className="relative h-min rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5"
+            aria-label="tombol filter"
+          >
             <div className="absolute left-3 top-[18px]">
               <svg
                 width="24"
@@ -142,7 +154,10 @@ function History() {
         </div>
       </section>
       <section className="flex flex-col gap-y-2.5">
-        <h2 className="font-Inter text-xl-body font-medium text-neutral-03">
+        <h2
+          className="font-Inter text-xl-body font-medium text-neutral-03"
+          aria-label="MUTASI REKENING"
+        >
           MUTASI REKENING
         </h2>
         <div className="flex justify-between gap-x-[30px]">
