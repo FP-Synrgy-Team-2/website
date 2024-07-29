@@ -1,43 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { NavbarLogo } from '../components';
+import { useAuth } from '@/axios';
+import axiosDefault, { AxiosError } from 'axios';
 
 interface doLoginProps {
   username: string;
   password: string;
 }
-
-interface dataProps {
-  email: string;
-  full_name: string;
-  phone_number: string;
-}
-
-async function doLogin({ username, password }: doLoginProps) {
-  const URL = import.meta.env.VITE_API_URL;
-  let data: null | dataProps = null;
-  await axios
-    .post(
-      URL + '/auth',
-      {
-        username,
-        password,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    .then((res) => {
-      data = res.data;
-    })
-    .catch((err) => console.log(err));
-  if (data) return 'initoken';
-  else return null;
-}
-
 interface EyeSvgProps {
   inputType: string;
 }
@@ -80,15 +50,15 @@ function EyeSvg({ inputType }: EyeSvgProps) {
 }
 
 interface LoginErrSpanProps {
-  field: string;
   isShown: boolean;
+  message: string;
 }
 
-function LoginErrSpan({ field, isShown }: LoginErrSpanProps) {
+function LoginErrSpan({ isShown, message }: LoginErrSpanProps) {
   if (isShown) {
     return (
       <span className="absolute -bottom-6 left-0 text-lg-body text-danger">
-        Masukkan {field} yang valid
+        {message}
       </span>
     );
   }
@@ -97,11 +67,13 @@ function LoginErrSpan({ field, isShown }: LoginErrSpanProps) {
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [logInIsError, setLogInIsError] = useState(false);
+  const [loginErrorMsg, setLoginErrorMsg] = useState<string | null>(null);
   const [inputType, setInputType] = useState('password');
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const session = sessionStorage.getItem('session');
+  const [isLoading, setIsLoading] = useState(true);
+  const axios = useAuth();
 
   const defaultCssClass =
     'w-full h-[55px] px-10 border border-black border-opacity-40 rounded-[5px] placeholder:text-lg-body placeholder:text-black placeholder:text-opacity-40';
@@ -110,26 +82,60 @@ function Login() {
 
   const [inputCssClass, setInputCssClass] = useState(defaultCssClass);
 
+  const checkSession = async () => {
+    if (!session) throw 'No Session';
+
+    const { userId } = JSON.parse(session);
+    await axios.get(`/users/${userId}`);
+    navigate('/dashboard', { replace: true });
+  };
+
   useEffect(() => {
     if (logInIsError) setInputCssClass(errorCssClass);
     else setInputCssClass(defaultCssClass);
+
+    checkSession().catch((err) => {
+      setIsLoading(false);
+      console.error(err);
+    });
   }, [logInIsError]);
 
-  useEffect(() => {
-    if (token) setIsLoggedIn(true);
-    else setIsLoggedIn(false);
-  }, [token]);
+  async function doLogin({ username, password }: doLoginProps) {
+    const URL = import.meta.env.VITE_API_URL;
+    const res = await axiosDefault.post(
+      URL + '/auth/login',
+      {
+        username,
+        password,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const { access_token, user_id, account_number } = res.data.data;
+
+    sessionStorage.setItem(
+      'session',
+      JSON.stringify({
+        accessToken: access_token,
+        userId: user_id,
+        accountNumber: account_number,
+      })
+    );
+    navigate('/dashboard', { replace: true });
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    doLogin({ username, password })
-      .then((token) => {
-        if (token) {
-          localStorage.setItem('token', token);
-          navigate('/dashboard');
-        } else setLogInIsError(true);
-      })
-      .catch((err) => console.log(err));
+    doLogin({ username, password }).catch((err) => {
+      console.log(err);
+      setLogInIsError(true);
+      if (err instanceof AxiosError && err.response!.status > 499)
+        setLoginErrorMsg('Error terjadi, silahkan coba lagi!');
+      else setLoginErrorMsg(null);
+    });
   }
 
   const toggleShowPswd = () => {
@@ -137,155 +143,159 @@ function Login() {
     else if (inputType === 'text') setInputType('password');
   };
 
-  return (
+  return isLoading ? (
+    <></>
+  ) : (
     <>
-      {!isLoggedIn ? (
-        <div className="relative flex h-screen w-full justify-between">
-          <NavbarLogo className="absolute left-[68px] top-[50px] flex flex-col items-end" />
+      <div className="relative flex h-screen w-full justify-between">
+        <NavbarLogo className="absolute left-[68px] top-[50px] flex flex-col items-end" />
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-center gap-y-10 pl-[133px]"
-          >
-            <div className="flex w-[348px] flex-col gap-y-5">
-              <h1
-                aria-label="Masuk ke akun anda"
-                className="text-[36px] font-bold"
-              >
-                Masuk ke akun anda
-              </h1>
-              <span
-                aria-label="Nikmati kemudahan mengelola keuangan Anda kapan saja"
-                className="text-lg-body text-black text-opacity-40"
-              >
-                Nikmati kemudahan mengelola keuangan Anda kapan saja
-              </span>
-            </div>
-            <div className="flex flex-col gap-y-5">
-              <div className="flex flex-col gap-y-2.5">
-                <label
-                  aria-label="Username"
-                  htmlFor="username"
-                  className="text-xl-body"
-                >
-                  Username
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => {
-                      setUsername(e.target.value);
-                      setLogInIsError(false);
-                    }}
-                    id="username"
-                    placeholder="Masukkan username anda"
-                    aria-label="text inputfield username"
-                    className={inputCssClass}
-                  />
-                  <div className="absolute left-2.5 top-0 flex h-[55px] items-center">
-                    <svg
-                      width="20"
-                      height="21"
-                      viewBox="0 0 20 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M16.3746 16.671C16.8353 16.575 17.1097 16.0929 16.8808 15.6818C16.3761 14.7754 15.5811 13.9789 14.5641 13.3719C13.2542 12.5902 11.6494 12.1665 9.99835 12.1665C8.34734 12.1665 6.74247 12.5902 5.43264 13.3719C4.41561 13.9789 3.62059 14.7754 3.11594 15.6818C2.88703 16.0929 3.16139 16.575 3.62207 16.671C7.82774 17.5475 12.169 17.5475 16.3746 16.671Z"
-                        fill="#0066AE"
-                      />
-                      <ellipse
-                        cx="9.9987"
-                        cy="7.16667"
-                        rx="4.16667"
-                        ry="4.16667"
-                        fill="#0066AE"
-                      />
-                    </svg>
-                  </div>
-                  <LoginErrSpan field="username" isShown={logInIsError} />
-                </div>
-              </div>
-              <div className="flex flex-col gap-y-2.5">
-                <label
-                  htmlFor="password"
-                  aria-label="Password"
-                  className="text-xl-body"
-                >
-                  Password
-                </label>
-                <div aria-label="text inputfield password" className="relative">
-                  <input
-                    type={inputType}
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setLogInIsError(false);
-                    }}
-                    id="password"
-                    placeholder="Masukkan password anda"
-                    className={inputCssClass}
-                  />
-                  <div className="absolute left-2.5 top-0 flex h-[55px] items-center">
-                    <svg
-                      width="20"
-                      height="21"
-                      viewBox="0 0 20 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M13.3346 7.16667V6.33333C13.3346 4.49239 11.8423 3 10.0013 3V3C8.16035 3 6.66797 4.49239 6.66797 6.33333V7.16667"
-                        stroke="#0066AE"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M3.05332 7.59748C2.5 8.37731 2.5 9.48175 2.5 11.6906C2.5 14.6358 2.5 16.1084 3.23776 17.1482C3.49808 17.5151 3.81843 17.8354 4.18531 18.0957C5.22509 18.8335 6.69768 18.8335 9.64286 18.8335H10.3571C13.3023 18.8335 14.7749 18.8335 15.8147 18.0957C16.1816 17.8354 16.5019 17.5151 16.7622 17.1482C17.5 16.1084 17.5 14.6358 17.5 11.6906C17.5 9.48175 17.5 8.37731 16.9467 7.59748C16.7514 7.32232 16.5112 7.08205 16.236 6.88681C15.4562 6.3335 14.3517 6.3335 12.1429 6.3335H7.85714C5.64826 6.3335 4.54381 6.3335 3.76399 6.88681C3.48882 7.08205 3.24856 7.32232 3.05332 7.59748ZM10 12.6668C10.2761 12.6668 10.5 12.443 10.5 12.1668C10.5 11.8907 10.2761 11.6668 10 11.6668C9.72386 11.6668 9.5 11.8907 9.5 12.1668C9.5 12.443 9.72386 12.6668 10 12.6668ZM12.5 12.1668C12.5 13.192 11.883 14.073 11 14.4588V16.3335H9V14.4588C8.11705 14.073 7.5 13.192 7.5 12.1668C7.5 10.7861 8.61929 9.66683 10 9.66683C11.3807 9.66683 12.5 10.7861 12.5 12.1668Z"
-                        fill="#0066AE"
-                      />
-                    </svg>
-                  </div>
-                  <div className="absolute right-2.5 top-0 z-10 flex h-[55px] items-center">
-                    <button
-                      type="button"
-                      onClick={toggleShowPswd}
-                      aria-label="tombol tampilkan password"
-                    >
-                      <EyeSvg inputType={inputType} />
-                    </button>
-                  </div>
-                  <LoginErrSpan field="password" isShown={logInIsError} />
-                </div>
-              </div>
-            </div>
-            <button
-              type="submit"
-              aria-label="tombol masuk"
-              className="z-10 flex h-[60px] items-center justify-center rounded-[5px] border border-black border-opacity-40 bg-primary-dark-blue text-xl-body font-bold text-primary-light-blue hover:border-primary-dark-blue hover:bg-primary-light-blue hover:text-primary-dark-blue hover:opacity-100"
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col justify-center gap-y-10 pl-[133px]"
+        >
+          <div className="flex w-[348px] flex-col gap-y-5">
+            <h1
+              aria-label="Masuk ke akun anda"
+              className="text-[36px] font-bold"
             >
-              Masuk
-            </button>
-          </form>
-          <div aria-label="banner login" className="h-full w-auto">
-            <img
-              src="images/login/login_image.webp"
-              alt=""
-              className="h-full w-full"
-            />
+              Masuk ke akun anda
+            </h1>
+            <span
+              aria-label="Nikmati kemudahan mengelola keuangan Anda kapan saja"
+              className="text-lg-body text-black text-opacity-40"
+            >
+              Nikmati kemudahan mengelola keuangan Anda kapan saja
+            </span>
           </div>
+          <div className="flex flex-col gap-y-5">
+            <div className="flex flex-col gap-y-2.5">
+              <label
+                aria-label="Username"
+                htmlFor="username"
+                className="text-xl-body"
+              >
+                Username
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setLogInIsError(false);
+                  }}
+                  id="username"
+                  placeholder="Masukkan username anda"
+                  aria-label="text inputfield username"
+                  className={inputCssClass}
+                />
+                <div className="absolute left-2.5 top-0 flex h-[55px] items-center">
+                  <svg
+                    width="20"
+                    height="21"
+                    viewBox="0 0 20 21"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.3746 16.671C16.8353 16.575 17.1097 16.0929 16.8808 15.6818C16.3761 14.7754 15.5811 13.9789 14.5641 13.3719C13.2542 12.5902 11.6494 12.1665 9.99835 12.1665C8.34734 12.1665 6.74247 12.5902 5.43264 13.3719C4.41561 13.9789 3.62059 14.7754 3.11594 15.6818C2.88703 16.0929 3.16139 16.575 3.62207 16.671C7.82774 17.5475 12.169 17.5475 16.3746 16.671Z"
+                      fill="#0066AE"
+                    />
+                    <ellipse
+                      cx="9.9987"
+                      cy="7.16667"
+                      rx="4.16667"
+                      ry="4.16667"
+                      fill="#0066AE"
+                    />
+                  </svg>
+                </div>
+                <LoginErrSpan
+                  message={loginErrorMsg || 'Masukkan username yang benar'}
+                  isShown={logInIsError}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-y-2.5">
+              <label
+                htmlFor="password"
+                aria-label="Password"
+                className="text-xl-body"
+              >
+                Password
+              </label>
+              <div aria-label="text inputfield password" className="relative">
+                <input
+                  type={inputType}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setLogInIsError(false);
+                  }}
+                  id="password"
+                  placeholder="Masukkan password anda"
+                  className={inputCssClass}
+                />
+                <div className="absolute left-2.5 top-0 flex h-[55px] items-center">
+                  <svg
+                    width="20"
+                    height="21"
+                    viewBox="0 0 20 21"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13.3346 7.16667V6.33333C13.3346 4.49239 11.8423 3 10.0013 3V3C8.16035 3 6.66797 4.49239 6.66797 6.33333V7.16667"
+                      stroke="#0066AE"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M3.05332 7.59748C2.5 8.37731 2.5 9.48175 2.5 11.6906C2.5 14.6358 2.5 16.1084 3.23776 17.1482C3.49808 17.5151 3.81843 17.8354 4.18531 18.0957C5.22509 18.8335 6.69768 18.8335 9.64286 18.8335H10.3571C13.3023 18.8335 14.7749 18.8335 15.8147 18.0957C16.1816 17.8354 16.5019 17.5151 16.7622 17.1482C17.5 16.1084 17.5 14.6358 17.5 11.6906C17.5 9.48175 17.5 8.37731 16.9467 7.59748C16.7514 7.32232 16.5112 7.08205 16.236 6.88681C15.4562 6.3335 14.3517 6.3335 12.1429 6.3335H7.85714C5.64826 6.3335 4.54381 6.3335 3.76399 6.88681C3.48882 7.08205 3.24856 7.32232 3.05332 7.59748ZM10 12.6668C10.2761 12.6668 10.5 12.443 10.5 12.1668C10.5 11.8907 10.2761 11.6668 10 11.6668C9.72386 11.6668 9.5 11.8907 9.5 12.1668C9.5 12.443 9.72386 12.6668 10 12.6668ZM12.5 12.1668C12.5 13.192 11.883 14.073 11 14.4588V16.3335H9V14.4588C8.11705 14.073 7.5 13.192 7.5 12.1668C7.5 10.7861 8.61929 9.66683 10 9.66683C11.3807 9.66683 12.5 10.7861 12.5 12.1668Z"
+                      fill="#0066AE"
+                    />
+                  </svg>
+                </div>
+                <div className="absolute right-2.5 top-0 z-10 flex h-[55px] items-center">
+                  <button
+                    type="button"
+                    onClick={toggleShowPswd}
+                    aria-label="tombol tampilkan password"
+                  >
+                    <EyeSvg inputType={inputType} />
+                  </button>
+                </div>
+                <LoginErrSpan
+                  message={loginErrorMsg || 'Masukkan password yang benar'}
+                  isShown={logInIsError}
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            aria-label="tombol masuk"
+            className="z-10 flex h-[60px] items-center justify-center rounded-[5px] border border-black border-opacity-40 bg-primary-dark-blue text-xl-body font-bold text-primary-light-blue hover:border-primary-dark-blue hover:bg-primary-light-blue hover:text-primary-dark-blue hover:opacity-100"
+          >
+            Masuk
+          </button>
+        </form>
+        <div aria-label="banner login" className="h-full w-auto">
           <img
-            src="images/login/blue_object_blc.webp"
+            src="images/login/login_image.webp"
             alt=""
-            className="absolute bottom-0 left-0"
+            className="h-full w-full"
           />
         </div>
-      ) : (
-        <Navigate to="/dashboard" />
-      )}
+        <img
+          src="images/login/blue_object_blc.webp"
+          alt=""
+          className="absolute bottom-0 left-0"
+        />
+      </div>
     </>
   );
 }

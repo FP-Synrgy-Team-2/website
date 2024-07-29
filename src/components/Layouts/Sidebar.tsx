@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavbarLogo } from '@/components';
 
@@ -12,20 +11,9 @@ interface NavbarType {
 
 function Sidebar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (token) setIsLoggedIn(true);
-    else {
-      setIsLoggedIn(false);
-      navigate('/login', { replace: true });
-    }
-  }, [token]);
 
   function handleLogout() {
     localStorage.removeItem('token');
-    setIsLoggedIn(false);
     navigate('/login', { replace: true });
   }
 
@@ -57,10 +45,6 @@ function Sidebar() {
       alt: 'Logo Profil',
     },
   ];
-
-  if (!isLoggedIn) {
-    return null;
-  }
 
   return (
     <div className="fixed flex h-full flex-col pb-16">

@@ -2,47 +2,40 @@ import { useEffect, useState } from 'react';
 import SavedAccountCard from './SavedAccountCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useAuth } from '@/axios';
+import { snakeToCamelCase } from '@/utils/formatter';
 
 interface Account {
+  accountId: string;
   name: string;
-  image: string;
+  accountNumber: string;
 }
 
 export type { Account };
 
 const SavedAccounts = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
-
-  const data: Account[] = [
-    { name: 'Maxine', image: '/vite.svg' },
-    { name: 'Oscar', image: '' },
-    { name: 'Kevin', image: '' },
-    { name: 'Stanley', image: '' },
-    { name: 'Chloe', image: '/vite.svg' },
-    { name: 'Dwight', image: '' },
-    { name: 'Violet', image: '' },
-    { name: 'Darryl', image: '' },
-    { name: 'Caitlyn', image: '' },
-    { name: 'Leslie', image: '' },
-    { name: 'Franklin', image: '' },
-    { name: 'Ron', image: '' },
-    { name: 'Donna', image: '' },
-  ];
-
-  const generateRandom10Digits = () => {
-    let randomDigits = '';
-    for (let i = 0; i < 10; i++) {
-      randomDigits += Math.floor(Math.random() * 10).toString();
-    }
-    return parseInt(randomDigits);
-  };
+  const { userId } = JSON.parse(sessionStorage.getItem('session')!);
+  const [isFetching, setIsFetching] = useState(true);
+  const [isErrorFetching, setIsErrorFetcing] = useState(false);
+  const axios = useAuth();
 
   useEffect(() => {
     const populate = async () => {
-      setTimeout(() => setAccounts(data), 3000);
+      console.log(userId);
+      const res = await axios.get(`/saved-accounts/${userId}`);
+      if (Array.isArray(res.data.data))
+        setAccounts(
+          Array.from(res.data.data).map((account) =>
+            snakeToCamelCase<Account>(account as { [key: string]: any })
+          )
+        );
     };
 
-    populate();
+    populate()
+      .then(() => setIsErrorFetcing(false))
+      .catch(() => setIsErrorFetcing(true))
+      .finally(() => setIsFetching(false));
   }, []);
 
   return (
@@ -52,16 +45,30 @@ const SavedAccounts = () => {
       aria-label="Dafter Rekening Tersimpan"
     >
       <h2 className="text-xl">REKENING TERSIMPAN</h2>
-      <ul className="flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll">
-        {accounts.length != 0 ? (
-          accounts.map((a, i) => (
-            <SavedAccountCard
-              image={a.image}
-              name={a.name}
-              key={i}
-              accountNumber={generateRandom10Digits()}
-            />
-          ))
+      <ul
+        className={
+          isErrorFetching || accounts.length === 0
+            ? 'flex h-full w-full text-center text-lg'
+            : 'flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll'
+        }
+      >
+        {!isFetching ? (
+          !isErrorFetching ? (
+            accounts.length !== 0 ? (
+              accounts.map((a, i) => (
+                <SavedAccountCard
+                  image={''}
+                  name={a.name}
+                  key={i}
+                  accountNumber={parseInt(a.accountNumber)}
+                />
+              ))
+            ) : (
+              <>Tidak ada akun yang tersimpan</>
+            )
+          ) : (
+            <>Error fetching</>
+          )
         ) : (
           <Skeleton
             className="h-27.5 w-25 rounded-xl"
