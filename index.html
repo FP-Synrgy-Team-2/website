@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black40: '#00000066',
+            darkblue: '#0A3967',
+            lightblue: '#E4EDFF'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <section class="w-[621px] flex flex-col items-center">
+    <div class="w-[358px]">
+        <form class="flex flex-col items-center">
+            <div class="pt-32 flex flex-col gap-1">
+                <h1 class="font-bold text-4xl">Atur ulang password</h1>
+                <p class="text-lg text-black40">Step 3/3</p>
+                <p class="text-black40">Lengkapi ketentuan password untuk keamanan optimal</p>
+            </div>
+            <div class="flex flex-col gap-3 self-start my-5">
+              <h1 class="text-xl">Password</h1>
+                <div class="flex gap-3 w-[358px] h-[55px] border border-black40 rounded items-center">
+                  
+                    <img src="/asset/Lock_fill.png" class="ml-3" alt="">
+                    <p class="text-black40 mr-10 text-lg">Masukkan password anda</p>
+                    <img src="/asset/Subtract.png" alt="">
+                  
+                </div>
+              
+            </div>
+                <div class="flex flex-col self-start mb-40">
+                    <div class="flex mb-3 ">
+                        <input id="default-checkbox" type="checkbox" value="" class="w-5 h-5 text-black border-black rounded">
+                        <label for="default-checkbox" class="ms-2 text-sm font-medium text-black">Minimal 8 huruf</label>
+                    </div>
+                    <div class="flex mb-3">
+                        <input id="default-checkbox" type="checkbox" value="" class="w-5 h-5 text-black border-black rounded">
+                        <label for="default-checkbox" class="ms-2 text-sm font-medium text-black">Terdapat angka</label>
+                    </div>
+                    <div class="flex mb-3">
+                        <input id="default-checkbox" type="checkbox" value="" class="w-5 h-5 text-black border-black rounded">
+                        <label for="default-checkbox" class="ms-2 text-sm font-medium text-black">Terdapat huruf kapital</label>
+                    </div>
+                    <div class="flex mb-3">
+                        <input id="default-checkbox" type="checkbox" value="" class="w-5 h-5 text-black border-black rounded">
+                        <label for="default-checkbox" class="ms-2 text-sm font-medium text-black">Terdapat karakter</label>
+                    </div>
+                </div>
+            <button class="bg-darkblue text-lightblue font-bold h-[60px] w-[358px] rounded-[5px] focus:outline-none focus:shadow-outline" type="button">
+               Simpan
+            </button>
+        </form>
+      </div>
+</section>
+</body>
+</html>
