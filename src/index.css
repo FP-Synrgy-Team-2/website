@@ -129,3 +129,33 @@
 .receipt-value {
   @apply text-dark-grey;
 }
+
+/* calender */
+.react-calendar {
+  border: none;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__month-view__weekdays {
+  font-weight: 100;
+
+  color: #3c3c43;
+}
+.react-calendar__tile {
+  max-width: initial !important;
+  padding: 10px 6.6667px;
+  background: none;
+}
+
+.react-calendar__tile--active {
+  background: #3182ce;
+  color: white;
+}
+
+.react-calendar__tile--now {
+  background: #ebf4ff;
+  color: black;
+}
