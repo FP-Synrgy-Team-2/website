@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black40: '#00000066',
+            darkblue: '#0A3967',
+            lightblue: '#E4EDFF',
+            bluesapphire: '#0A3967',
+            grey: '#8E8E8E',
+            lightgrey: '#E3E3E3',
+            primaryblue: '#0066AE',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <section class="w-[621px] flex flex-col items-center">
+    <div class="w-[358px]">
+        <form class="flex flex-col items-center">
+            <div class="pt-32 flex flex-col gap-1">
+                <h1 class="font-bold text-4xl">Atur ulang password</h1>
+                <p class="text-lg text-black40">Step 2/3</p>
+                <p class="text-black40">Masukkan kode yang telah dikirimkan melalui e-mail</p>
+            </div>
+            <div class="flex gap-x-3 my-8" >
+                <div class="flex gap-x-3">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                    <input class="block w-[38px] text-center rounded-md text-4xl dark:text-primaryblue dark:placeholder-lightgrey" type="password" placeholder="●" data-hs-pin-input-item="">
+                  </div> 
+            </div>
+            <div class="flex gap-3 my-5">
+                <p class="underline text-grey">Kirim ulang kode</p>
+                <p class="text-bluesapphire">01:00</p>
+            </div>
+        </form>
+      </div>
+</section>
+</body>
+</html>
