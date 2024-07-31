@@ -2,6 +2,7 @@ import { Breadcrumbs, Button } from '@/components';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { getUserData } from '@/utils/getUserData';
 
 interface TransactionData {
   account_id: string;
@@ -39,13 +40,19 @@ const Receipt: React.FC = () => {
     const fetchData = async () => {
       try {
         const transactionResponse = await axios.get(
-          `${URL}/transaction/${transactionId}`
+          `${URL}/transactions/${transactionId}`,
+          { headers: { Authorization: `Bearer ${getUserData().access_token}` } }
         );
         const transactionData = transactionResponse.data;
 
         if (transactionData.beneficiary_account) {
           const bankAccountResponse = await axios.get(
-            `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`
+            `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getUserData().access_token}`,
+              },
+            }
           );
           const bankAccountData = bankAccountResponse.data;
           setBeneficiaryName(bankAccountData.owner_name || '');

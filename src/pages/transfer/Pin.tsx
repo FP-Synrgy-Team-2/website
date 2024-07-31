@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Button, ModalSuccess } from '@/components';
 import axios from 'axios';
-
+import { getUserData } from '@/utils/getUserData';
 interface pinValidationProps {
   account_number: string;
   pin: string;
 }
-const account_number = '408343815043';
+
 const validatePin = async ({ account_number, pin }: pinValidationProps) => {
   try {
     const response = await axios.post(
@@ -15,8 +15,7 @@ const validatePin = async ({ account_number, pin }: pinValidationProps) => {
       { account_number, pin },
       {
         headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sInVzZXJfbmFtZSI6IkpvaG5kb2UxMjMiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNzIxOTQwMzUxLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiMXQ3NFJ6Ny1xem44eDdINDZxbEJUOEdtMzNrIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9.7oRcV07gM2CRUEbPPlPgT8ebe_mb2ycUBlsQ0_EdkP4',
+          Authorization: `Bearer ${getUserData().access_token}`,
         },
       }
     );
@@ -30,9 +29,17 @@ const validatePin = async ({ account_number, pin }: pinValidationProps) => {
 interface PinInputProps {
   showPinInput: boolean;
   closePinInput: () => void;
+  onPinValidated: () => void;
 }
 
-const PinInput: React.FC<PinInputProps> = ({ showPinInput, closePinInput }) => {
+const PinInput: React.FC<PinInputProps> = ({
+  showPinInput,
+  closePinInput,
+  onPinValidated,
+}) => {
+  const [user, setUser] = useState<{ account_number: string }>({
+    account_number: '',
+  });
   const [pin, setPin] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
@@ -41,6 +48,7 @@ const PinInput: React.FC<PinInputProps> = ({ showPinInput, closePinInput }) => {
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
+    setUser(getUserData());
   }, []);
 
   const handleKeyDown = (
@@ -78,7 +86,7 @@ const PinInput: React.FC<PinInputProps> = ({ showPinInput, closePinInput }) => {
     }
 
     const isValid = await validatePin({
-      account_number,
+      account_number: user?.account_number,
       pin: pin.join(''),
     });
     console.log(isValid);
@@ -93,8 +101,8 @@ const PinInput: React.FC<PinInputProps> = ({ showPinInput, closePinInput }) => {
     } else {
       setError('');
       console.log('PIN Submitted:', pin.join(''));
-      // navigate('/transfer/receipt', { replace: true });
       setShowSuccessModal(true);
+      onPinValidated();
     }
   };
 

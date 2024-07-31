@@ -1,6 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, Breadcrumbs, Input, Label, Form } from '@/components';
+import { useEffect, useState } from 'react';
+import PinInput from './Pin';
+import axios from 'axios';
+import moment from 'moment';
+import { getUserData } from '@/utils/getUserData';
+
+const { VITE_API_URL } = import.meta.env;
 
 interface FormData {
   noRek: string;
@@ -9,8 +16,29 @@ interface FormData {
   simpanRekening: boolean;
 }
 
+const getAccountId = async (account_number: string) => {
+  try {
+    const response = await axios.get(
+      `${VITE_API_URL}/bank-accounts/account/${account_number}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getUserData().access_token}`,
+        },
+      }
+    );
+    return response.data.data.account_id;
+  } catch (error) {
+    console.error('Error fetching account ID:', error);
+    throw error;
+  }
+};
+
 function TransferForm() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<{ account_number: string }>({
+    account_number: '',
+  });
+  const [showPinInput, setShowPinInput] = useState<boolean>(false);
   const methods = useForm<FormData>({
     defaultValues: {
       noRek: '',
@@ -19,6 +47,10 @@ function TransferForm() {
       simpanRekening: false,
     },
   });
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('token') || '{}'));
+  }, []);
 
   const { register } = methods;
 
@@ -29,7 +61,44 @@ function TransferForm() {
 
   const onSubmit: SubmitHandler<FormData> = (formData) => {
     console.log('Data Transfer:', formData);
-    navigate('/transfer/confirm', { state: formData });
+    setShowPinInput(true);
+    // navigate('/transfer/confirm', { state: formData });
+  };
+
+  const handlePinValidated = async () => {
+    const formData = methods.getValues();
+    const sourceAccountNumber = user?.account_number;
+    const beneficiaryAccountNumber = formData.noRek;
+
+    try {
+      const [sourceAccountId, beneficiaryAccountId] = await Promise.all([
+        getAccountId(sourceAccountNumber),
+        getAccountId(beneficiaryAccountNumber),
+      ]);
+
+      const { data } = await axios.post(
+        `${VITE_API_URL}/transactions`,
+        {
+          account_id: sourceAccountId,
+          beneficiary_account: beneficiaryAccountId,
+          amount: formData.nominal,
+          transaction_date: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
+          note: formData.catatan,
+          is_saved: formData.simpanRekening,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getUserData().access_token}`,
+          },
+        }
+      );
+
+      navigate(`/transfer/receipt/${data.data.transaction_id}`, {
+        replace: true,
+      });
+    } catch (error) {
+      console.error('Transfer failed:', error);
+    }
   };
 
   return (
@@ -45,7 +114,7 @@ function TransferForm() {
               className="absolute left-36 top-3"
               alt="Bank Icon"
             />
-            <h4>8923445590</h4>
+            <h4>{user?.account_number}</h4>
           </div>
         </div>
         <div className="mt-3">
@@ -86,6 +155,11 @@ function TransferForm() {
           </Button>
         </div>
       </Form>
+      <PinInput
+        showPinInput={showPinInput}
+        closePinInput={() => setShowPinInput(false)}
+        onPinValidated={handlePinValidated}
+      />
     </>
   );
 }

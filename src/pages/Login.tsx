@@ -31,10 +31,10 @@ async function doLogin({ username, password }: doLoginProps) {
       }
     )
     .then((res) => {
-      data = res.data;
+      data = res.data.data;
     })
     .catch((err) => console.log(err));
-  if (data) return 'initoken';
+  if (data) return data;
   else return null;
 }
 
@@ -125,7 +125,7 @@ function Login() {
     doLogin({ username, password })
       .then((token) => {
         if (token) {
-          localStorage.setItem('token', token);
+          localStorage.setItem('token', JSON.stringify(token));
           navigate('/dashboard');
         } else setLogInIsError(true);
       })
