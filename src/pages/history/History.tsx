@@ -42,7 +42,7 @@ function TransactionsList({ transactions }: TransactionsListProps) {
     return transactions.map((transaction: TransactionsProps, index) => (
       <div
         key={`transaction-${index}`}
-        className="flex w-[520px] flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
+        className="flex flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
         aria-label={`Transfer BCA - 872726231 ${transaction.amount} ${returnLocalDateAndTime(transaction.transaction_date)}`}
       >
         <div className="flex gap-x-2.5">
@@ -186,7 +186,7 @@ function History() {
           </button>
         </div>
       </section>
-      <section className="flex flex-col gap-y-2.5">
+      <section className="flex flex-col gap-y-2.5 pb-10">
         <h2
           className="font-Inter text-xl-body font-medium text-neutral-03"
           aria-label="MUTASI REKENING"
@@ -194,48 +194,68 @@ function History() {
           MUTASI REKENING
         </h2>
         <div className="flex justify-between gap-x-[30px]">
-          <div className="flex flex-col gap-y-[30px]">
+          <div className="flex w-full flex-col gap-y-[30px]">
             <TransactionsList transactions={transactions} />
           </div>
-          <div className="flex items-center justify-center rounded-[20px] bg-white px-[30px] shadow-[0_4px_5px_5px_#EAF6FF]">
-            <div className="flex flex-col gap-y-5">
-              <div className="flex w-[447px] flex-col items-center">
-                <div className="flex h-12.5 w-12.5 items-center justify-center rounded-[25px] bg-success">
-                  <img
-                    src="/images/icons/checklist.png"
-                    alt=""
-                    className="w-[22.5px]"
-                  />
-                </div>
-                <span className="text-center text-xl-body font-bold">
-                  Transaksi Berhasil
-                </span>
-                <div className="flex items-center gap-x-2">
-                  <span className="text-sm-body text-dark-grey">
-                    10 Juni 2024
+          <div className="flex w-full flex-col items-center gap-5">
+            <div className="flex h-max items-center justify-center rounded-[20px] bg-white px-[30px] py-[60px] shadow-[0_4px_5px_5px_#EAF6FF]">
+              <div className="flex flex-col gap-y-5">
+                <div className="flex w-[447px] flex-col items-center">
+                  <div className="flex h-12.5 w-12.5 items-center justify-center rounded-[25px] bg-success">
+                    <img
+                      src="/images/icons/checklist.png"
+                      alt=""
+                      className="w-[22.5px]"
+                    />
+                  </div>
+                  <span className="text-center text-xl-body font-bold">
+                    Transaksi Berhasil
                   </span>
-                  <div className="h-2.5 w-2.5 rounded-[5px] bg-dot-grey"></div>
-                  <span className="text-sm-body text-dark-grey">10.30</span>
+                  <div className="flex items-center gap-x-2">
+                    <span className="text-sm-body text-dark-grey">
+                      10 Juni 2024
+                    </span>
+                    <div className="h-2.5 w-2.5 rounded-[5px] bg-dot-grey"></div>
+                    <span className="text-sm-body text-dark-grey">10.30</span>
+                  </div>
                 </div>
-              </div>
-              <div className="h-0 w-full rounded-[3px] border-[3px] border-neutral-03 border-opacity-30"></div>
-              <div className="grid grid-cols-[170px_126px] gap-x-[7.5px] gap-y-[15px] px-[30px] text-xl-body">
-                <span className="text-muted-black">Rekening Sumber</span>
-                <span className="text-dark-grey">8923445590</span>
-                <span className="text-muted-black">Rekening Tujuan</span>
-                <span className="text-dark-grey">2448901238</span>
-                <span className="text-muted-black">Nama penerima</span>
-                <span className="text-dark-grey">John</span>
-                <span className="text-muted-black">Nominal Transfer </span>
-                <span className="text-dark-grey">Rp 100.000</span>
-                <span className="text-muted-black">Biaya Admin</span>
-                <span className="text-dark-grey">Rp 0</span>
-                <span className="text-muted-black">Catatan</span>
-                <span className="text-dark-grey">Bayar makanan</span>
-                <span className="font-bold text-muted-black">Total</span>
-                <span className="font-bold text-dark-grey">Rp 100.000</span>
+                <div className="h-0 w-full rounded-[3px] border-[3px] border-neutral-03 border-opacity-30"></div>
+                <div className="grid grid-cols-[170px_126px] gap-x-[7.5px] gap-y-[15px] px-[30px] text-xl-body">
+                  <span className="text-muted-black">Rekening Sumber</span>
+                  <span className="text-dark-grey">8923445590</span>
+                  <span className="text-muted-black">Rekening Tujuan</span>
+                  <span className="text-dark-grey">2448901238</span>
+                  <span className="text-muted-black">Nama penerima</span>
+                  <span className="text-dark-grey">John</span>
+                  <span className="text-muted-black">Nominal Transfer </span>
+                  <span className="text-dark-grey">Rp 100.000</span>
+                  <span className="text-muted-black">Biaya Admin</span>
+                  <span className="text-dark-grey">Rp 0</span>
+                  <span className="text-muted-black">Catatan</span>
+                  <span className="text-dark-grey">Bayar makanan</span>
+                  <span className="font-bold text-muted-black">Total</span>
+                  <span className="font-bold text-dark-grey">Rp 100.000</span>
+                </div>
               </div>
             </div>
+            <button className="relative flex items-center gap-5 rounded-[10px] bg-primary-dark-blue px-5 py-[5px] text-2xl font-bold text-white">
+              <svg
+                width="17"
+                height="18"
+                viewBox="0 0 17 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 11.5V14.8333C16 15.2754 15.8244 15.6993 15.5118 16.0118C15.1993 16.3244 14.7754 16.5 14.3333 16.5H2.66667C2.22464 16.5 1.80072 16.3244 1.48816 16.0118C1.17559 15.6993 1 15.2754 1 14.8333V11.5M4.33333 7.33333L8.5 11.5M8.5 11.5L12.6667 7.33333M8.5 11.5V1.5"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>Unduh</span>
+            </button>
           </div>
         </div>
 
