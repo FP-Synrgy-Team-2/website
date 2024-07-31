@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
 
@@ -34,6 +34,7 @@ function App() {
             </Protected>
           }
         >
+          <Route path="" element={<Navigate to="/dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="transfer">
             <Route index element={<TransferPage />} />

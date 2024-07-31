@@ -1,30 +1,11 @@
-import {
-  createContext,
-  Dispatch,
-  FC,
-  ReactNode,
-  SetStateAction,
-  useState,
-} from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { BankAccount, User } from '@/types';
 
-export type AuthContext = {
-  userId: string;
-  setUserId: Dispatch<SetStateAction<string>>;
-  accountNumber: string;
-  setAccountNumber: Dispatch<SetStateAction<string>>;
+type AuthContext = {
+  user: User | null;
+  setUser: Dispatch<SetStateAction<User | null>>;
+  bankAccount: BankAccount | null;
+  setBankAccount: Dispatch<SetStateAction<BankAccount | null>>;
 };
 
-export const authContext = createContext<AuthContext | null>(null);
-
-export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [accountNumber, setAccountNumber] = useState('');
-  const [userId, setUserId] = useState('');
-
-  return (
-    <authContext.Provider
-      value={{ accountNumber, setAccountNumber, userId, setUserId }}
-    >
-      {children}
-    </authContext.Provider>
-  );
-};
+export const AuthContext = createContext<AuthContext | null>(null);

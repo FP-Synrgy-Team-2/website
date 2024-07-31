@@ -1,42 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SavedAccountCard from './SavedAccountCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useAuth } from '@/axios';
+import { axios } from '@/axios';
 import { snakeToCamelCase } from '@/utils/formatter';
-
-interface Account {
-  accountId: string;
-  name: string;
-  accountNumber: string;
-}
-
-export type { Account };
+import { SavedAccount } from '@/types';
+import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 
 const SavedAccounts = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accounts, setAccounts] = useState<SavedAccount[]>([]);
   const { userId } = JSON.parse(sessionStorage.getItem('session')!);
   const [isFetching, setIsFetching] = useState(true);
   const [isErrorFetching, setIsErrorFetcing] = useState(false);
-  const axios = useAuth();
 
-  useEffect(() => {
-    const populate = async () => {
-      console.log(userId);
+  const fetchAccounts = useCallback(async () => {
+    try {
+      setIsFetching(true);
       const res = await axios.get(`/saved-accounts/${userId}`);
       if (Array.isArray(res.data.data))
         setAccounts(
           Array.from(res.data.data).map((account) =>
-            snakeToCamelCase<Account>(account as { [key: string]: any })
+            snakeToCamelCase<SavedAccount>(account as { [key: string]: string })
           )
         );
-    };
+      setIsErrorFetcing(false);
+    } catch (err) {
+      setIsErrorFetcing(true);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [setAccounts, setIsFetching, setIsErrorFetcing, userId]);
 
-    populate()
-      .then(() => setIsErrorFetcing(false))
-      .catch(() => setIsErrorFetcing(true))
-      .finally(() => setIsFetching(false));
-  }, []);
+  useEffect(() => {
+    fetchAccounts();
+  }, [fetchAccounts]);
 
   return (
     <section
@@ -48,7 +45,7 @@ const SavedAccounts = () => {
       <ul
         className={
           isErrorFetching || accounts.length === 0
-            ? 'flex h-full w-full text-center text-lg'
+            ? 'flex items-center text-lg'
             : 'flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll'
         }
       >
@@ -58,16 +55,29 @@ const SavedAccounts = () => {
               accounts.map((a, i) => (
                 <SavedAccountCard
                   image={''}
-                  name={a.name}
+                  name={a.ownerName}
                   key={i}
                   accountNumber={parseInt(a.accountNumber)}
                 />
               ))
             ) : (
-              <>Tidak ada akun yang tersimpan</>
+              <>Belum ada rekening yang tersimpan</>
             )
           ) : (
-            <>Error fetching</>
+            <>
+              Memuat gagal, ulangi?{' '}
+              <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                <button
+                  type="button"
+                  aria-label="Tombol muat ulang"
+                  onClick={() => {
+                    fetchAccounts();
+                  }}
+                >
+                  <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                </button>
+              </span>
+            </>
           )
         ) : (
           <Skeleton

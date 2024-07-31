@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavbarLogo } from '../components';
-import { useAuth } from '@/axios';
+import { createAuthErrorResponseInterceptor, axios } from '@/axios';
 import axiosDefault, { AxiosError } from 'axios';
+import { Session } from '@/types';
 
 interface doLoginProps {
   username: string;
@@ -73,7 +74,6 @@ function Login() {
   const navigate = useNavigate();
   const session = sessionStorage.getItem('session');
   const [isLoading, setIsLoading] = useState(true);
-  const axios = useAuth();
 
   const defaultCssClass =
     'w-full h-[55px] px-10 border border-black border-opacity-40 rounded-[5px] placeholder:text-lg-body placeholder:text-black placeholder:text-opacity-40';
@@ -82,26 +82,34 @@ function Login() {
 
   const [inputCssClass, setInputCssClass] = useState(defaultCssClass);
 
-  const checkSession = async () => {
-    if (!session) throw 'No Session';
-
-    const { userId } = JSON.parse(session);
-    await axios.get(`/users/${userId}`);
-    navigate('/dashboard', { replace: true });
-  };
-
   useEffect(() => {
+    const checkSession = async () => {
+      try {
+        if (!session) throw 'No Session';
+
+        const { userId } = JSON.parse(session) as Session;
+        await axios.get(`/users/${userId}`);
+        navigate('/dashboard', { replace: true });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     if (logInIsError) setInputCssClass(errorCssClass);
     else setInputCssClass(defaultCssClass);
 
-    checkSession().catch((err) => {
-      setIsLoading(false);
-      console.error(err);
-    });
-  }, [logInIsError]);
+    console.log('Checking session');
+    checkSession();
+  }, [logInIsError, navigate, session]);
 
   async function doLogin({ username, password }: doLoginProps) {
     const URL = import.meta.env.VITE_API_URL;
+    axiosDefault.interceptors.response.use(
+      (res) => res,
+      createAuthErrorResponseInterceptor(axiosDefault)
+    );
     const res = await axiosDefault.post(
       URL + '/auth/login',
       {

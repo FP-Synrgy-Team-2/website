@@ -5,7 +5,6 @@ import {
   SubmitHandler,
   UseFormReturn,
 } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 
 interface FormProps<T extends FieldValues>
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
@@ -23,7 +22,7 @@ const FormContent = <T extends FieldValues>(
       <form
         ref={ref}
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={twMerge('space-y-2', className)}
+        className={className}
         {...props}
       >
         {children}

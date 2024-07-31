@@ -1,8 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Button } from '@/components';
 import PinInput from './Pin';
+import { useLocation } from 'react-router-dom';
+
+type StateData = {
+  fromAccount: string;
+  toAccount: string;
+  toName: string;
+  amount: number;
+  note?: string;
+  saved: boolean;
+};
+
 function Confirmation() {
+  const state = useLocation().state as StateData;
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   // const navigate = useNavigate();
   const breadcrumbs = [

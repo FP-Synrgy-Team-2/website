@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import bannerSVG from '@/assets/banner.svg';
 
 type BannerContents = {
   title: string;
@@ -10,7 +11,6 @@ type BannerContents = {
 
 const Banner = () => {
   const [bannerContents, setBannerContents] = useState<BannerContents>();
-  const bannerSVG = 'images/banner.svg';
 
   useEffect(() => {
     const fetch = async () => {
@@ -20,7 +20,7 @@ const Banner = () => {
             title: 'Lakukan transaksi sekarang!',
             subtitle:
               'Nikmati kemudahan transaksi menggunakan internet banking',
-            ariaLabel: 'Banner aplikasi Jangkau',
+            ariaLabel: 'Banner homepage',
           }),
         3000
       );
