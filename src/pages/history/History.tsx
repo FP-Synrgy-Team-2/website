@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
+import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import '../../index.css';
-
 interface TransactionsProps {
   transaction_id: string;
   account_id: string;
@@ -15,6 +13,7 @@ interface TransactionsProps {
   total: number;
 }
 
+type Value = CalendarProps['value'];
 interface TransactionsListProps {
   transactions: TransactionsProps[] | null;
 }
@@ -38,55 +37,49 @@ const returnLocalDateAndTime = (transactionDate: string) => {
   return { localDate, localTime };
 };
 
-const TransactionsList: React.FC<TransactionsListProps> = ({
-  transactions,
-}) => {
-  if (!transactions) return null;
-
-  return (
-    <>
-      {transactions.map((transaction, index) => (
-        <div
-          key={`transaction-${index}`}
-          className="flex w-[520px] flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
-          aria-label={`Transfer BCA - 872726231 ${transaction.amount} ${returnLocalDateAndTime(transaction.transaction_date)}`}
-        >
-          <div className="flex gap-x-2.5">
-            <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.20313 1.5L5.49602 0.792893L6.20313 0.0857863L6.91023 0.792893L6.20313 1.5ZM7.20313 12.75C7.20313 13.3023 6.75541 13.75 6.20313 13.75C5.65084 13.75 5.20313 13.3023 5.20313 12.75L7.20313 12.75ZM1.74602 4.54289L5.49602 0.792893L6.91023 2.20711L3.16023 5.95711L1.74602 4.54289ZM6.91023 0.792893L10.6602 4.54289L9.24602 5.95711L5.49602 2.20711L6.91023 0.792893ZM7.20312 1.5L7.20313 12.75L5.20313 12.75L5.20313 1.5L7.20312 1.5Z"
-                  fill="#0066AE"
-                />
-                <path
-                  d="M12.2031 16.5L11.496 17.2071L12.2031 17.9142L12.9102 17.2071L12.2031 16.5ZM13.2031 5.25C13.2031 4.69772 12.7554 4.25 12.2031 4.25C11.6508 4.25 11.2031 4.69771 11.2031 5.25L13.2031 5.25ZM7.74602 13.4571L11.496 17.2071L12.9102 15.7929L9.16023 12.0429L7.74602 13.4571ZM12.9102 17.2071L16.6602 13.4571L15.246 12.0429L11.496 15.7929L12.9102 17.2071ZM13.2031 16.5L13.2031 5.25L11.2031 5.25L11.2031 16.5L13.2031 16.5Z"
-                  fill="#0066AE"
-                />
-              </svg>
-            </div>
-            <span className="text-2xl font-bold">Transfer</span>
+function TransactionsList({ transactions }: TransactionsListProps) {
+  if (transactions) {
+    return transactions.map((transaction: TransactionsProps, index) => (
+      <div
+        key={`transaction-${index}`}
+        className="flex w-[520px] flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
+        aria-label={`Transfer BCA - 872726231 ${transaction.amount} ${returnLocalDateAndTime(transaction.transaction_date)}`}
+      >
+        <div className="flex gap-x-2.5">
+          <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue">
+            <svg
+              width="19"
+              height="18"
+              viewBox="0 0 19 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.20313 1.5L5.49602 0.792893L6.20313 0.0857863L6.91023 0.792893L6.20313 1.5ZM7.20313 12.75C7.20313 13.3023 6.75541 13.75 6.20313 13.75C5.65084 13.75 5.20313 13.3023 5.20313 12.75L7.20313 12.75ZM1.74602 4.54289L5.49602 0.792893L6.91023 2.20711L3.16023 5.95711L1.74602 4.54289ZM6.91023 0.792893L10.6602 4.54289L9.24602 5.95711L5.49602 2.20711L6.91023 0.792893ZM7.20312 1.5L7.20313 12.75L5.20313 12.75L5.20313 1.5L7.20312 1.5Z"
+                fill="#0066AE"
+              />
+              <path
+                d="M12.2031 16.5L11.496 17.2071L12.2031 17.9142L12.9102 17.2071L12.2031 16.5ZM13.2031 5.25C13.2031 4.69772 12.7554 4.25 12.2031 4.25C11.6508 4.25 11.2031 4.69771 11.2031 5.25L13.2031 5.25ZM7.74602 13.4571L11.496 17.2071L12.9102 15.7929L9.16023 12.0429L7.74602 13.4571ZM12.9102 17.2071L16.6602 13.4571L15.246 12.0429L11.496 15.7929L12.9102 17.2071ZM13.2031 16.5L13.2031 5.25L11.2031 5.25L11.2031 16.5L13.2031 16.5Z"
+                fill="#0066AE"
+              />
+            </svg>
           </div>
-          <div className="flex justify-between gap-x-[5px]">
-            <span className="text-xl-body">BCA - 872726241</span>
-            <span className="text-xl-body">{transaction.amount}</span>
-            <span className="text-xl-body text-neutral-03">
-              {returnLocalDateAndTime(transaction.transaction_date).localDate}{' '}
-              {returnLocalDateAndTime(transaction.transaction_date).localTime}
-            </span>
-          </div>
+          <span className="text-2xl font-bold">Transfer</span>
         </div>
-      ))}
-    </>
-  );
-};
+        <div className="flex justify-between gap-x-[5px]">
+          <span className="text-xl-body">BCA - 872726241</span>
+          <span className="text-xl-body">{transaction.amount}</span>
+          <span className="text-xl-body text-neutral-03">
+            {returnLocalDateAndTime(transaction.transaction_date).localDate}{' '}
+            {returnLocalDateAndTime(transaction.transaction_date).localTime}
+          </span>
+        </div>
+      </div>
+    ));
+  }
+}
 
-const History: React.FC = () => {
+function History() {
   const [showModal, setShowModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -94,21 +87,41 @@ const History: React.FC = () => {
     []
   );
 
-  const getTransactions = async () => {
-    try {
-      const URL = import.meta.env.VITE_API_URL;
-      const res = await axios.get<TransactionsProps>(
-        `${URL}/transaction/47827600-27d1-45e7-ab80-31755f5737b0`
-      );
-      const transaction = res.data;
-      if (transaction) {
-        const transactionsTmp: TransactionsProps[] = Array(5).fill(transaction);
-        setTransactions(transactionsTmp);
+  const handleDateChange = (
+    setter: React.Dispatch<React.SetStateAction<Date | null>>
+  ) => {
+    return (
+      value: Value,
+      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+      if (!Array.isArray(value) && value instanceof Date && event) {
+        setter(value);
       }
-    } catch (err) {
-      console.error(err);
-    }
+    };
   };
+
+  const handleApplyFilter = () => {
+    setShowModal(false);
+  };
+
+  async function getTransactions() {
+    const URL = import.meta.env.VITE_API_URL;
+    let transaction: null | TransactionsProps = null;
+    axios
+      .get(URL + '/transaction/47827600-27d1-45e7-ab80-31755f5737b0')
+      .then((res) => {
+        transaction = res.data;
+        if (transaction) {
+          const transactionsTmp: TransactionsProps[] = [];
+          for (let i = 0; i < 5; i++) {
+            transactionsTmp.push(transaction);
+          }
+          setTransactions(transactionsTmp);
+          return transactions;
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 
   useEffect(() => {
     getTransactions();
@@ -141,9 +154,9 @@ const History: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={() => setShowModal(true)}
             className="relative h-min rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5"
             aria-label="tombol filter"
+            onClick={() => setShowModal(true)}
           >
             <div className="absolute left-3 top-[18px]">
               <svg
@@ -171,63 +184,6 @@ const History: React.FC = () => {
               Filter
             </span>
           </button>
-          {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
-                <h2 className="mb-6 text-center text-xl font-semibold">
-                  Filter Mutasi
-                </h2>
-                <div className="mb-6 flex justify-between gap-[150px]">
-                  <div className="text-center">
-                    <label
-                      className="mb-2 block text-sm font-bold text-gray-700"
-                      htmlFor="startDate"
-                    >
-                      Tanggal Mulai
-                    </label>
-                    <Calendar
-                      onChange={setStartDate}
-                      value={startDate}
-                      className="react-calendar"
-                    />
-                    <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
-                      {formatDate(startDate)}
-                    </button>
-                  </div>
-                  <div className="text-center">
-                    <label
-                      className="mb-2 block text-sm font-bold text-gray-700"
-                      htmlFor="endDate"
-                    >
-                      Tanggal Akhir
-                    </label>
-                    <Calendar
-                      onChange={setEndDate}
-                      value={endDate}
-                      className="react-calendar"
-                    />
-                    <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
-                      {formatDate(endDate)}
-                    </button>
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    onClick={() => console.log('Filter applied')}
-                    className="focus:shadow-outline w-1/4 rounded bg-primary-dark-blue px-2 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-                  >
-                    Gunakan Filter
-                  </button>
-                </div>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </section>
       <section className="flex flex-col gap-y-2.5">
@@ -282,9 +238,67 @@ const History: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
+              <h2 className="mb-6 text-center text-xl font-semibold">
+                Filter Mutasi
+              </h2>
+              <div className="mb-6 flex justify-between gap-[150px]">
+                <div className="text-center">
+                  <label
+                    className="mb-2 block text-sm font-bold text-gray-700"
+                    htmlFor="startDate"
+                  >
+                    Tanggal Mulai
+                  </label>
+                  <Calendar
+                    onChange={handleDateChange(setStartDate)}
+                    value={startDate}
+                    className="react-calendar"
+                  />
+                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                    {formatDate(startDate)}
+                  </button>
+                </div>
+                <div className="text-center">
+                  <label
+                    className="mb-2 block text-sm font-bold text-gray-700"
+                    htmlFor="endDate"
+                  >
+                    Tanggal Akhir
+                  </label>
+                  <Calendar
+                    onChange={handleDateChange(setEndDate)}
+                    value={endDate}
+                    className="react-calendar"
+                  />
+                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                    {formatDate(endDate)}
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  onClick={handleApplyFilter}
+                  className="focus:shadow-outline w-1/4 rounded bg-primary-dark-blue px-2 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                >
+                  Gunakan Filter
+                </button>
+              </div>
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
-};
+}
 
 export default History;
