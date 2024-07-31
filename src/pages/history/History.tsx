@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
+import Calendar, { CalendarProps } from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 interface TransactionsProps {
   transaction_id: string;
   account_id: string;
@@ -12,18 +13,29 @@ interface TransactionsProps {
   total: number;
 }
 
+type Value = CalendarProps['value'];
 interface TransactionsListProps {
   transactions: TransactionsProps[] | null;
 }
 
-function returnLocalDateAndTime(transactionDate: string) {
+const formatDate = (date: Date | null) => {
+  if (!date) return '';
+  const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  };
+  return new Intl.DateTimeFormat('id-ID', options).format(date);
+};
+
+const returnLocalDateAndTime = (transactionDate: string) => {
   const dateObj = new Date(transactionDate);
   const localDate = dateObj.toLocaleDateString('id-ID', { dateStyle: 'full' });
   const localTime = dateObj
     .toLocaleTimeString('id-ID', { hour12: false })
     .slice(0, -3);
   return { localDate, localTime };
-}
+};
 
 function TransactionsList({ transactions }: TransactionsListProps) {
   if (transactions) {
@@ -68,9 +80,29 @@ function TransactionsList({ transactions }: TransactionsListProps) {
 }
 
 function History() {
+  const [showModal, setShowModal] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [transactions, setTransactions] = useState<TransactionsProps[] | null>(
     []
   );
+
+  const handleDateChange = (
+    setter: React.Dispatch<React.SetStateAction<Date | null>>
+  ) => {
+    return (
+      value: Value,
+      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+      if (!Array.isArray(value) && value instanceof Date && event) {
+        setter(value);
+      }
+    };
+  };
+
+  const handleApplyFilter = () => {
+    setShowModal(false);
+  };
 
   async function getTransactions() {
     const URL = import.meta.env.VITE_API_URL;
@@ -124,6 +156,7 @@ function History() {
           <button
             className="relative h-min rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5"
             aria-label="tombol filter"
+            onClick={() => setShowModal(true)}
           >
             <div className="absolute left-3 top-[18px]">
               <svg
@@ -205,6 +238,64 @@ function History() {
             </div>
           </div>
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
+              <h2 className="mb-6 text-center text-xl font-semibold">
+                Filter Mutasi
+              </h2>
+              <div className="mb-6 flex justify-between gap-[150px]">
+                <div className="text-center">
+                  <label
+                    className="mb-2 block text-sm font-bold text-gray-700"
+                    htmlFor="startDate"
+                  >
+                    Tanggal Mulai
+                  </label>
+                  <Calendar
+                    onChange={handleDateChange(setStartDate)}
+                    value={startDate}
+                    className="react-calendar"
+                  />
+                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                    {formatDate(startDate)}
+                  </button>
+                </div>
+                <div className="text-center">
+                  <label
+                    className="mb-2 block text-sm font-bold text-gray-700"
+                    htmlFor="endDate"
+                  >
+                    Tanggal Akhir
+                  </label>
+                  <Calendar
+                    onChange={handleDateChange(setEndDate)}
+                    value={endDate}
+                    className="react-calendar"
+                  />
+                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                    {formatDate(endDate)}
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  onClick={handleApplyFilter}
+                  className="focus:shadow-outline w-1/4 rounded bg-primary-dark-blue px-2 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                >
+                  Gunakan Filter
+                </button>
+              </div>
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
