@@ -22,15 +22,6 @@
     @apply h-104 w-55;
   }
 
-  #saved-accounts > ul {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  #saved-accounts > ul::-webkit-scrollbar {
-    display: none;
-  }
-
   .helper-box {
     border: 1px dashed red; /* Dashed red border */
     background-color: rgba(255, 0, 0, 0.1); /* Light red background */
@@ -94,6 +85,15 @@
     &::-webkit-scrollbar-thumb:hover {
       background: #555;
     }
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
   .no-increment-buttons::-webkit-inner-spin-button,

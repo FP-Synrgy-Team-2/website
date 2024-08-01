@@ -126,7 +126,7 @@ function Transfer() {
                       navigate('/transfer/saved', { state: { account } })
                     }
                     className="flex w-full flex-wrap gap-1 px-4 py-6 text-start"
-                    aria-label={`${account.ownerName} ${account.accountNumber}`}
+                    aria-label={`${account.ownerName.toLowerCase()} ${account.accountNumber.split('').join(' ')}`}
                   >
                     <p className="w-full text-lg">{account.ownerName}</p>
                     <p className="w-full text-lg text-grey">

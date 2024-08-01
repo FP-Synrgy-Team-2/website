@@ -128,7 +128,7 @@ function Saved() {
                 <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
                   <button
                     type="button"
-                    aria-label="Tombol muat ulang"
+                    aria-label="Tombol muat ulang data rekening tujuan"
                     onClick={() => {
                       fetchRecipientAccountStatus();
                     }}
@@ -169,6 +169,7 @@ function Saved() {
               required: 'Tulis nominal yang ingin ditransfer',
             })}
             placeholder="xxxxxxx"
+            aria-label="Text input field rekening tujuan"
             type="number"
             className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
             min={0}
@@ -186,6 +187,7 @@ function Saved() {
           <Input
             {...register('catatan')}
             placeholder="Tambahkan catatan"
+            aria-label="Text input field catatan (opsional)"
             type="text"
             className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
           />
@@ -200,6 +202,7 @@ function Saved() {
           type="submit"
           color="primary-dark-blue"
           className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Tombol lanjutkan"
         >
           Lanjutkan
         </Button>

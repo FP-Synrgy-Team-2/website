@@ -91,6 +91,7 @@ function TransferForm() {
                 required: 'Nomor rekening penerima diperlukan',
               })}
               min={0}
+              aria-label="Text input field nomor rekening tujuan"
               minLength={12}
               maxLength={12}
               placeholder="xxxxxxx"
@@ -116,6 +117,7 @@ function TransferForm() {
             {...register('nominal', {
               required: 'Tulis nominal yang ingin ditransfer',
             })}
+            aria-label="Text input field nominal transfer"
             placeholder="xxxxxxx"
             type="number"
             className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
@@ -133,6 +135,7 @@ function TransferForm() {
           <Input
             {...register('catatan')}
             placeholder="Tambahkan catatan"
+            aria-label="Text input field catatan (opsional)"
             type="text"
             className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
           />
@@ -152,6 +155,7 @@ function TransferForm() {
           type="submit"
           color="primary-dark-blue"
           className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Tombol lanjutkan"
         >
           Lanjutkan
         </Button>
