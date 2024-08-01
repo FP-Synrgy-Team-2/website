@@ -102,29 +102,48 @@ function History() {
 
   const handleApplyFilter = () => {
     setShowModal(false);
+    if (startDate && endDate)
+      getTransactions(
+        '312b09e3-3d69-483c-8db1-8da61a9b6f07',
+        startDate.toLocaleDateString('en-CA'),
+        endDate.toLocaleDateString('en-CA')
+      );
   };
 
-  async function getTransactions() {
+  const accessToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sInVzZXJfbmFtZSI6IkpvaG5kb2UxMjMiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNzIyNTA4MDIyLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiYUszcDlEeEI0SzNxVkxOVEs1N0tQMXk4RGhVIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9.sFVqO9tPpBZtGrX8RnW4_y0SHqh1wi9NyCFSEamo9QU';
+
+  async function getTransactions(
+    userId: string,
+    startDate: string | null,
+    endDate: string | null
+  ) {
     const URL = import.meta.env.VITE_API_URL;
-    let transaction: null | TransactionsProps = null;
+    let transactions: null | TransactionsProps[] = null;
     axios
-      .get(URL + '/transaction/47827600-27d1-45e7-ab80-31755f5737b0')
+      .post(
+        URL + `/transactions/history/${userId}`,
+        {
+          start_date: startDate,
+          end_date: endDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
-        transaction = res.data;
-        if (transaction) {
-          const transactionsTmp: TransactionsProps[] = [];
-          for (let i = 0; i < 5; i++) {
-            transactionsTmp.push(transaction);
-          }
-          setTransactions(transactionsTmp);
-          return transactions;
+        transactions = res.data.data;
+        if (transactions) {
+          setTransactions(transactions);
         }
       })
       .catch((err) => console.log(err));
   }
 
   useEffect(() => {
-    getTransactions();
+    getTransactions('312b09e3-3d69-483c-8db1-8da61a9b6f07', null, null);
   }, []);
 
   return (
