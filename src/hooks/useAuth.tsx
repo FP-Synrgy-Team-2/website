@@ -13,6 +13,7 @@ const useAuth = () => {
     authResErrors,
     setAuthResErrors,
     isAuthenticated,
+    user_id,
     token,
     refreshToken,
   } = context;
@@ -23,6 +24,7 @@ const useAuth = () => {
     authResErrors,
     setAuthResErrors,
     isAuthenticated,
+    user_id,
     token,
     refreshToken,
   };

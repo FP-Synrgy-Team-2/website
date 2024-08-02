@@ -15,11 +15,11 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           className="h-full w-full object-cover"
         />
       </div>
-      <img
+      {/* <img
         src="images/login/blue_object_blc.webp"
         alt=""
         className="absolute bottom-0 left-0"
-      />
+      /> */}
     </div>
   );
 };

@@ -11,12 +11,11 @@ type AccountData = {
 
 function Dashboard() {
   const [accountData, setAccountData] = useState<AccountData | null>(null);
-  const { token } = useAuth();
+  const { token, user_id } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user_id = '312b09e3-3d69-483c-8db1-8da61a9b6f07';
         const response = await api.get(`/bank-accounts/user/${user_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });

@@ -15,6 +15,7 @@ export type AuthContextType = {
   ) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
+  user_id: string | null;
   token: string | null;
   authResErrors: ResponseError | null;
   setAuthResErrors: React.Dispatch<React.SetStateAction<ResponseError | null>>;
@@ -27,6 +28,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authResErrors, setAuthResErrors] =
     React.useState<ResponseError | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [userId, setUserId] = React.useState<string | null>(null);
   const navigate = useNavigate();
 
   const refreshToken = React.useCallback(async () => {
@@ -82,6 +84,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         Cookies.set('refresh-token', response.data.data.refresh_token, {
           expires: 80,
         });
+        setUserId(response.data.data.user_id);
         setAuthResErrors(null);
         navigate(onSuccess, { replace: true });
       } else {
@@ -119,6 +122,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         authResErrors,
         setAuthResErrors,
         isAuthenticated: !!token,
+        user_id: userId,
         token,
         refreshToken,
       }}
