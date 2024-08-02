@@ -1,9 +1,9 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
 
 import { SwaggerUIComponent, Protected } from '@/components';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 
 import {
   ApiCall,
@@ -12,6 +12,7 @@ import {
   History,
   Confirmation,
   New,
+  Logout,
   Pin,
   Receipt,
   Saved,
@@ -21,19 +22,19 @@ import {
 } from './pages';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = localStorage.getItem('token');
-  useEffect(() => {
-    if (token) setIsLoggedIn(true);
-    else {
-      setIsLoggedIn(false);
-    }
-  }, [token]);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const token = localStorage.getItem('token');
+  // useEffect(() => {
+  //   if (token) setIsLoggedIn(true);
+  //   else {
+  //     setIsLoggedIn(false);
+  //   }
+  // }, [token]);
 
   return (
     <>
       <Routes>
-        <Route
+        {/* <Route
           index
           element={
             isLoggedIn ? (
@@ -42,13 +43,14 @@ function App() {
               <Navigate to="/login" replace />
             )
           }
-        />
+        /> */}
 
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
+        <Route path="/forgot-password" element={<Logout />} />
 
         <Route
-          path=""
+          path="/"
           element={
             <Protected>
               <DashboardLayouts />
