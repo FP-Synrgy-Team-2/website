@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MutationRecord from './MutationRecord';
-import axios from 'axios';
+import api from '@/api/api';
 
 interface TransactionsProps {
   transaction_id: string;
@@ -36,10 +36,9 @@ const TableMutasi: React.FC = () => {
     []
   );
   async function getTransactions() {
-    const URL = import.meta.env.VITE_API_URL;
     let transaction: null | TransactionsProps = null;
-    axios
-      .get(URL + '/transaction/47827600-27d1-45e7-ab80-31755f5737b0')
+    api
+      .get('/transaction/47827600-27d1-45e7-ab80-31755f5737b0')
       .then((res) => {
         transaction = res.data;
         if (transaction) {

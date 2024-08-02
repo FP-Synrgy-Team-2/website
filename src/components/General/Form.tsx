@@ -23,7 +23,7 @@ const FormContent = <T extends FieldValues>(
       <form
         ref={ref}
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={twMerge('space-y-2', className)}
+        className={twMerge('w-full', className)}
         {...props}
       >
         {children}
