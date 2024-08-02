@@ -25,11 +25,11 @@ export const createAuthErrorResponseInterceptor = (
       const originalReqConfig = err.config;
       if (err.response.status === 401) {
         console.error('Invalid session: ', err);
-        if (location.pathname !== '/login') {
-          console.log('Redirecting to login');
-          sessionStorage.removeItem('session');
-          location.href = '/login';
-        }
+        // if (location.pathname !== '/login') {
+        //   console.log('Redirecting to login');
+        //   sessionStorage.removeItem('session');
+        //   location.href = '/login';
+        // }
       } else if (err.response.status > 499)
         return axiosInstance(originalReqConfig);
       else console.error(err);

@@ -96,15 +96,153 @@ function Saved() {
   };
 
   return (
-    <div className="px-[2.6875rem] py-[4.625rem]" id="transfer-saved">
+    <div className="px-[2.6875rem] py-[4.625rem]">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-      <Form
-        onSubmit={onSubmit}
-        methods={methods}
-        className="flex w-[30.75rem] flex-col"
-      >
-        {recipientAccountStatus === 'fetching' ? (
+      <div className="mt-[4.0625rem] flex w-[30.75rem] flex-col">
+        <section
+          className="flex flex-col gap-[1.125rem]"
+          aria-labelledby="saved-account-to"
+        >
+          <h2 className="text-2xl" id="saved-account-to">
+            Rekening Tujuan
+          </h2>
+          <p
+            className={`${recipientAccountStatus === 'error' || recipientAccountStatus === 'invalid' ? 'text-base text-danger' : 'text-2xl font-semibold'}`}
+          >
+            {recipientAccountStatus === 'fetching' ? (
+              <Skeleton className="h-8" />
+            ) : recipientAccountStatus === 'found' ? (
+              <>
+                {account.ownerName}
+                <span
+                  className="font-normal text-dark-grey"
+                  aria-label={account.accountNumber.split('').join(' ')}
+                >
+                  {' '}
+                  &bull; {account.accountNumber}
+                </span>
+              </>
+            ) : recipientAccountStatus === 'error' ? (
+              <span className="inline-flex items-center" role="alert">
+                Error memuat data rekening tujuan, muat ulang?
+                <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                  <button
+                    type="button"
+                    aria-label="Tombol muat ulang data rekening tujuan"
+                    onClick={() => {
+                      fetchRecipientAccountStatus();
+                    }}
+                  >
+                    <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                  </button>
+                </span>
+              </span>
+            ) : (
+              <span className="relative inline-flex items-center" role="alert">
+                {recipientAccountStatus === 'invalid'
+                  ? 'Rekening tujuan tidak valid, mengalihkan '
+                  : 'Rekening tujuan tidak ditemukan, mengalihkan'}
+                <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
+                <p className="sr-only">Memuat data rekening</p>
+              </span>
+            )}
+          </p>
+        </section>
+
+        <section
+          className="mt-[1.0625rem]"
+          aria-labelledby="saved-account-from"
+        >
+          <h2 className="text-2xl" id="saved-account-from">
+            Rekening Sumber
+          </h2>
+          <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
+            <span className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
+              {bankAccount?.ownerName}
+              <img src={colorBlueSVG} alt="Bank Icon" />
+            </span>
+            <span
+              className="text-lg text-dark-grey"
+              aria-label={bankAccount?.accountNumber.split('').join(' ')}
+            >
+              {bankAccount?.accountNumber}
+            </span>
+          </p>
+        </section>
+
+        <Form
+          onSubmit={onSubmit}
+          methods={methods}
+          className="flex w-[30.75rem] flex-col"
+          id="saved-input-form"
+        >
+          <fieldset
+            className="mt-5"
+            aria-labelledby="saved-input-amount"
+            form="saved-input-form"
+          >
+            <Label className="text-2xl" id="saved-input-amount">
+              Nominal Transfer
+            </Label>
+            <Input
+              {...register('nominal', {
+                required: 'Tulis nominal yang ingin ditransfer',
+              })}
+              placeholder="xxxxxxx"
+              aria-label="Text input field rekening tujuan"
+              type="number"
+              className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              min={0}
+              max={100000000}
+            />
+            {errors.nominal && (
+              <p className="text-sm leading-8 text-danger" role="alert">
+                {errors.nominal.message}
+              </p>
+            )}
+          </fieldset>
+
+          <fieldset
+            className="mt-5"
+            aria-labelledby="saved-input-note"
+            form="saved-input-form"
+          >
+            <Label className="text-2xl" id="saved-input-note">
+              Catatan (Optional)
+            </Label>
+            <Input
+              {...register('catatan')}
+              placeholder="Tambahkan catatan"
+              aria-label="Text input field catatan (opsional)"
+              type="text"
+              className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+            />
+          </fieldset>
+
+          {/* <div className="h-[3.25rem] mt-[0.6875rem] flex gap-2.5 items-center">
+            <input {...register('simpanRekening')} type="checkbox" id="check" className='scale-150' />
+            <Label htmlFor="check" className='text-2xl'>Simpan Rekening</Label>
+          </div> */}
+
+          <Button
+            type="submit"
+            color="primary-dark-blue"
+            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Tombol lanjutkan"
+          >
+            Lanjutkan
+          </Button>
+        </Form>
+      </div>
+    </div>
+  );
+}
+
+export default Saved;
+
+{
+  /* {recipientAccountStatus === 'fetching' ? (
           <div className="mt-10 flex flex-col gap-[1.125rem]">
             <Skeleton className="h-8" />
             <Skeleton className="h-8" />
@@ -114,7 +252,7 @@ function Saved() {
             <Label className="text-2xl">Rekening Tujuan</Label>
             <p className="text-2xl font-semibold">
               {account.ownerName}
-              <span className="font-normal text-dark-grey">
+              <span className="font-normal text-dark-grey" aria-label={account.accountNumber.split('').join(' ')}>
                 {' '}
                 &bull; {account.accountNumber}
               </span>
@@ -147,68 +285,5 @@ function Saved() {
               </span>
             )}
           </p>
-        )}
-
-        <div className="mt-4">
-          <Label className="text-2xl">Rekening Sumber</Label>
-          <div className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
-            <h3 className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
-              {bankAccount?.ownerName}
-              <img src={colorBlueSVG} alt="Bank Icon" />
-            </h3>
-            <h4 className="text-lg text-dark-grey">
-              {bankAccount?.accountNumber}
-            </h4>
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <Label className="text-2xl">Nominal Transfer</Label>
-          <Input
-            {...register('nominal', {
-              required: 'Tulis nominal yang ingin ditransfer',
-            })}
-            placeholder="xxxxxxx"
-            aria-label="Text input field rekening tujuan"
-            type="number"
-            className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
-            min={0}
-            max={100000000}
-          />
-          {errors.nominal && (
-            <p className="text-sm leading-8 text-danger" role="alert">
-              {errors.nominal.message}
-            </p>
-          )}
-        </div>
-
-        <div className="mt-5">
-          <Label className="text-2xl">Catatan (Optional)</Label>
-          <Input
-            {...register('catatan')}
-            placeholder="Tambahkan catatan"
-            aria-label="Text input field catatan (opsional)"
-            type="text"
-            className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
-          />
-        </div>
-
-        {/* <div className="h-[3.25rem] mt-[0.6875rem] flex gap-2.5 items-center">
-          <input {...register('simpanRekening')} type="checkbox" id="check" className='scale-150' />
-          <Label htmlFor="check" className='text-2xl'>Simpan Rekening</Label>
-        </div> */}
-
-        <Button
-          type="submit"
-          color="primary-dark-blue"
-          className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          aria-label="Tombol lanjutkan"
-        >
-          Lanjutkan
-        </Button>
-      </Form>
-    </div>
-  );
+        )} */
 }
-
-export default Saved;

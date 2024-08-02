@@ -65,101 +65,134 @@ function TransferForm() {
   return (
     <div className="px-[2.6875rem] py-[4.625rem]" id="transfer-new">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Form<FormData>
-        className="flex w-[30.75rem] flex-col"
-        onSubmit={onSubmit}
-        methods={methods}
-      >
-        <div className="mt-[4.0625rem]">
-          <Label className="text-2xl">Rekening Sumber</Label>
-          <div className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
-            <h3 className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
+
+      <div className="mt-[4.0625rem] flex w-[30.75rem] flex-col">
+        <section className="">
+          <h2 className="text-2xl">Rekening Sumber</h2>
+          <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
+            <span className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
               {bankAccount?.ownerName}
               <img src={colorBlueSVG} alt="Bank Icon" />
-            </h3>
-            <h4 className="text-lg text-dark-grey">
+            </span>
+            <span
+              className="text-lg text-dark-grey"
+              aria-label={bankAccount?.accountNumber.split('').join(' ')}
+            >
               {bankAccount?.accountNumber}
-            </h4>
-          </div>
-        </div>
-        <div className="mt-[1.9219rem]">
-          <Label className="text-2xl">Nomor Rekening Tujuan</Label>
-          <span className="relative flex items-center">
+            </span>
+          </p>
+        </section>
+        <Form<FormData>
+          className="flex w-[30.75rem] flex-col"
+          onSubmit={onSubmit}
+          methods={methods}
+          id="new-input-form"
+        >
+          <fieldset
+            className="mt-[1.9219rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-to"
+          >
+            <Label className="text-2xl" id="new-input-to">
+              Nomor Rekening Tujuan
+            </Label>
+            <span className="relative flex items-center">
+              <Input
+                {...register('noRek', {
+                  validate: validateAccountNumber,
+                  required: 'Nomor rekening penerima diperlukan',
+                })}
+                min={0}
+                aria-label="Text input field nomor rekening tujuan"
+                minLength={12}
+                maxLength={12}
+                placeholder="xxxxxxx"
+                type="number"
+                className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              />
+              {isValidating && (
+                <>
+                  <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
+                  <p className="sr-only">Memuat data rekening</p>
+                </>
+              )}
+            </span>
+            {errors.noRek && (
+              <p className="text-sm leading-8 text-danger" role="alert">
+                {errors.noRek.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-amount"
+          >
+            <Label className="text-2xl" id="new-input-amount">
+              Nominal Transfer
+            </Label>
             <Input
-              {...register('noRek', {
-                validate: validateAccountNumber,
-                required: 'Nomor rekening penerima diperlukan',
+              {...register('nominal', {
+                required: 'Tulis nominal yang ingin ditransfer',
               })}
-              min={0}
-              aria-label="Text input field nomor rekening tujuan"
-              minLength={12}
-              maxLength={12}
+              aria-label="Text input field nominal transfer"
               placeholder="xxxxxxx"
               type="number"
               className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              min={0}
+              max={100000000}
             />
-            {isValidating && (
-              <>
-                <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
-                <p className="sr-only">Memuat data rekening</p>
-              </>
+            {errors.nominal && (
+              <p className="text-sm leading-8 text-danger" role="alert">
+                {errors.nominal.message}
+              </p>
             )}
-          </span>
-          {errors.noRek && (
-            <p className="text-sm leading-8 text-danger" role="alert">
-              {errors.noRek.message}
-            </p>
-          )}
-        </div>
-        <div className="mt-[0.6875rem]">
-          <Label className="text-2xl">Nominal Transfer</Label>
-          <Input
-            {...register('nominal', {
-              required: 'Tulis nominal yang ingin ditransfer',
-            })}
-            aria-label="Text input field nominal transfer"
-            placeholder="xxxxxxx"
-            type="number"
-            className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
-            min={0}
-            max={100000000}
-          />
-          {errors.nominal && (
-            <p className="text-sm leading-8 text-danger" role="alert">
-              {errors.nominal.message}
-            </p>
-          )}
-        </div>
-        <div className="mt-[0.6875rem]">
-          <Label className="text-2xl">Catatan (Optional)</Label>
-          <Input
-            {...register('catatan')}
-            placeholder="Tambahkan catatan"
-            aria-label="Text input field catatan (opsional)"
-            type="text"
-            className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
-          />
-        </div>
-        <div className="mt-[0.6875rem] flex h-[3.25rem] items-center gap-2.5">
-          <input
-            {...register('simpanRekening')}
-            type="checkbox"
-            id="check"
-            className="scale-150"
-          />
-          <Label htmlFor="check" className="text-2xl">
-            Simpan Rekening
-          </Label>
-        </div>
-        <Button
-          type="submit"
-          color="primary-dark-blue"
-          className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          aria-label="Tombol lanjutkan"
-        >
-          Lanjutkan
-        </Button>
-      </Form>
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-note"
+          >
+            <Label className="text-2xl" id="new-input-note">
+              Catatan (Optional)
+            </Label>
+            <Input
+              {...register('catatan')}
+              placeholder="Tambahkan catatan"
+              aria-label="Text input field catatan (opsional)"
+              type="text"
+              className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+            />
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem] flex h-[3.25rem] items-center gap-2.5"
+            form="new-input-form"
+            aria-labelledby="new-input-save"
+          >
+            <input
+              {...register('simpanRekening')}
+              type="checkbox"
+              id="check"
+              className="scale-150"
+            />
+            <Label
+              htmlFor="check"
+              className="text-2xl"
+              aria-label="new-input-save"
+            >
+              Simpan Rekening
+            </Label>
+          </fieldset>
+          <Button
+            type="submit"
+            color="primary-dark-blue"
+            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Tombol lanjutkan"
+          >
+            Lanjutkan
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }
