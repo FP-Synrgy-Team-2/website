@@ -11,7 +11,7 @@ interface NavbarType {
 }
 
 function Sidebar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { logout } = useAuth();
   const location = useLocation();
 
   const navbar: NavbarType[] = [
@@ -35,10 +35,6 @@ function Sidebar() {
     },
   ];
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
   return (
     <div className="fixed flex h-full w-1/6 flex-col pb-16 pe-6">
       <div className="ms-3">
@@ -57,7 +53,7 @@ function Sidebar() {
                 isActive
                   ? 'bg-primary-blue text-white'
                   : 'hover:bg-primary-dark-blue hover:text-white'
-              } ${item.className ? item.className : ''}`}
+              } ${item.className ?? ''}`}
               aria-label={'Tombol ' + item.name}
             >
               <img
