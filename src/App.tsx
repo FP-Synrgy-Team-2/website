@@ -3,6 +3,7 @@ import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
 
 import { SwaggerUIComponent, Protected } from '@/components';
+// import { useEffect, useState } from 'react';
 
 import {
   ApiCall,
@@ -11,6 +12,7 @@ import {
   History,
   Confirmation,
   New,
+  Logout,
   Pin,
   Receipt,
   Saved,
@@ -25,9 +27,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
+        <Route path="/forgot-password" element={<Logout />} />
 
         <Route
-          path=""
+          path="/"
           element={
             <Protected>
               <DashboardLayouts />
@@ -42,7 +45,7 @@ function App() {
             <Route path="saved" element={<Saved />} />
             <Route path="confirm" element={<Confirmation />} />
             <Route path="pin" element={<Pin />} />
-            <Route path="receipt" element={<Receipt />} />
+            <Route path="receipt/:id" element={<Receipt />} />
           </Route>
           <Route path="history" element={<History />} />
         </Route>

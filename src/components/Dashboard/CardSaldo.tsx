@@ -3,12 +3,20 @@ import CopyIcon from '../../assets/icons/Copy_alt.png';
 import HideEye from '../../assets/icons/hide_eye_fill.svg';
 import ShowEye from '../../assets/icons/show_eye.svg';
 
-const CardSaldo: React.FC = () => {
+type AccountData = {
+  account_number: string;
+  balance: number;
+};
+
+type CardSaldoProps = {
+  accountData: AccountData;
+};
+
+const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
   const [isSaldoHidden, setIsSaldoHidden] = useState<boolean>(false);
-  const [accountNumber] = useState<string>('1234567890');
   const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false);
 
-  const saldo: string = formatNumber(12321313);
+  const saldo: string = formatNumber(accountData.balance);
 
   function handleSaldoClick(): void {
     setIsSaldoHidden(!isSaldoHidden);
@@ -16,7 +24,7 @@ const CardSaldo: React.FC = () => {
 
   function handleCopyClick(): void {
     navigator.clipboard
-      .writeText(accountNumber)
+      .writeText(accountData.account_number)
       .then(() => {
         setIsCopySuccess(true);
         setTimeout(() => {
@@ -29,7 +37,7 @@ const CardSaldo: React.FC = () => {
   }
 
   function formatNumber(num: number): string {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    return String(num).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
   }
 
   return (
@@ -46,9 +54,9 @@ const CardSaldo: React.FC = () => {
             <h1
               className="text-xl-body font-bold"
               id="rekening"
-              aria-label={accountNumber}
+              aria-label={accountData.account_number}
             >
-              {accountNumber}
+              {accountData.account_number}
             </h1>
             <button
               className="relative cursor-pointer font-bold"

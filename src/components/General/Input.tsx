@@ -9,14 +9,26 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ validation, className, ...props }, ref) => {
     const { register } = useFormContext();
+    const registration = register(props.name!, validation);
+
     return (
       <input
-        {...register(props.name!, validation)}
+        {...registration}
         className={twMerge(
           'file:border-0 file:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
-        ref={ref}
+        ref={(e) => {
+          registration.ref(e);
+          if (ref) {
+            if (typeof ref === 'function') {
+              ref(e);
+            } else {
+              (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+                e;
+            }
+          }
+        }}
         {...props}
       />
     );

@@ -12,6 +12,23 @@ interface FormData {
   simpanRekening: boolean;
 }
 
+const getAccountId = async (account_number: string) => {
+  try {
+    const response = await axios.get(
+      `${VITE_API_URL}/bank-accounts/account/${account_number}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getUserData().access_token}`,
+        },
+      }
+    );
+    return response.data.data.account_id;
+  } catch (error) {
+    console.error('Error fetching account ID:', error);
+    throw error;
+  }
+};
+
 function TransferForm() {
   const navigate = useNavigate();
   const { bankAccount } = useAuthContext();
