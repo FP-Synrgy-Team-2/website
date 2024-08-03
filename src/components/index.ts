@@ -1,5 +1,7 @@
 import Breadcrumbs from '@/components/General/Breadcrumbs';
 import Button from '@/components/General/Button';
+import ButtonPrimary from '@/components/General/ButtonPrimary';
+import ButtonSecondary from '@/components/General/ButtonSecondary';
 import Card from '@/components/General/Card';
 import Checkbox from '@/components/General/Checkbox';
 import ModalBase from '@/components/General/Modal/ModalBase';
@@ -8,7 +10,6 @@ import ModalSuccess from '@/components/General/Modal/ModalSuccess';
 import NavbarLogo from '@/components/Layouts/NavbarLogo';
 import Protected from '@/components/General/Authorization/Protected';
 import Sidebar from '@/components/Layouts/Sidebar';
-import SwaggerUIComponent from '@/components/SwaggerUI';
 
 import Form from '@/components/General/Form';
 import Input from '@/components/General/Input';
@@ -28,6 +29,8 @@ export {
   Banner,
   Breadcrumbs,
   Button,
+  ButtonPrimary,
+  ButtonSecondary,
   Card,
   Checkbox,
   Form,
@@ -40,7 +43,6 @@ export {
   NavbarLogo,
   Protected,
   Sidebar,
-  SwaggerUIComponent,
   CardSaldo,
   TableMutasi,
   SavedAccountCard,
