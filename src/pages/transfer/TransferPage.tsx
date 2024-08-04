@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Breadcrumbs } from '@/components';
 import { SavedAccount } from '@/types';
-import { axios } from '@/axios';
 import { snakeToCamelCase } from '@/utils/formatter';
+import useAuth from '@/hooks/useAuth';
 
 // const savedAccounts = [
 //   {
@@ -35,9 +35,8 @@ import { snakeToCamelCase } from '@/utils/formatter';
 
 function Transfer() {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const { userId } = JSON.parse(sessionStorage.getItem('session')!);
-  // WHEN THE API IS READY
-  const [accounts, setAccounts] = useState<SavedAccount[] | null>(null);
+  const { api: axios, token, userId } = useAuth()
+  const [accounts, setAccounts] = useState<SavedAccount[]>([]);
   const [fetchStatusMessage, setFetchStatusMessage] = useState('');
 
   const navigate = useNavigate();
@@ -45,9 +44,12 @@ function Transfer() {
 
   console.log(location.pathname);
 
-  // WHEN THE API IS READY
   const fetchSavedAccounts = useCallback(async () => {
-    const res = await axios.get(`/saved-accounts/${userId}`);
+    const res = await axios.get(`/api/saved-accounts/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (Array.isArray(res.data.data))
       setAccounts(
         Array.from(res.data.data).map((account) =>
@@ -67,9 +69,6 @@ function Transfer() {
   return (
     <div className="container bg-neutral-50 px-[2.6875rem] py-[4.625rem]">
       <section className="w-1/2">
-        {/* <h1 className="my-5 text-lg-body" aria-label="Transfer">
-          Transfer
-        </h1> */}
         <Breadcrumbs
           breadcrumbs={[
             {
@@ -106,7 +105,7 @@ function Transfer() {
         <button
           onClick={() => setShowDropdown(!showDropdown)}
           className={`flex h-[6.25rem] w-[31.25rem] items-center justify-between rounded-[20px] border-[0.5px] border-grey bg-transparent px-4 py-6 text-2xl text-grey disabled:bg-[#efefef]`}
-          disabled={accounts ? false : true}
+          disabled={accounts.length === 0}
           aria-label="tombol pilih nomor rekening yang tersimpan"
         >
           Pilih nomor rekening yang tersimpan
@@ -118,7 +117,7 @@ function Transfer() {
         </button>
         {showDropdown ? (
           <ul className="scrollbar my-4 flex max-h-80 flex-wrap divide-y-[1px] divide-grey overflow-y-auto rounded-[20px] border-[0.5px] border-grey bg-neutral-01">
-            {accounts &&
+            {accounts.length !== 0 &&
               accounts.map((account, idx) => (
                 <li className="w-full" key={idx}>
                   <button

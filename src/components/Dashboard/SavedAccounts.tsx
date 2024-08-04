@@ -7,33 +7,33 @@ import { SavedAccount } from '@/types';
 import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 import useAuth from '@/hooks/useAuth';
 
-const savedAccounts = [
-  {
-    account_number: '2448901238',
-    owner_name: 'ZAKIYANSYAH',
-    saved_account_id: '11111111'
-  },
-  {
-    account_number: '19827635112',
-    owner_name: 'JOHN',
-    saved_account_id: '11111111'
-  },
-  {
-    account_number: '19827635112',
-    owner_name: 'BUDI',
-    saved_account_id: '11111111'
-  },
-  {
-    account_number: '19827635112',
-    owner_name: 'DANI',
-    saved_account_id: '11111111'
-  },
-  {
-    account_number: '19827635112',
-    owner_name: 'DANI',
-    saved_account_id: '11111111'
-  },
-].map(a => snakeToCamelCase<SavedAccount>(a))
+// const savedAccounts = [
+//   {
+//     account_number: '2448901238',
+//     owner_name: 'ZAKIYANSYAH',
+//     saved_account_id: '11111111'
+//   },
+//   {
+//     account_number: '19827635112',
+//     owner_name: 'JOHN',
+//     saved_account_id: '11111111'
+//   },
+//   {
+//     account_number: '19827635112',
+//     owner_name: 'BUDI',
+//     saved_account_id: '11111111'
+//   },
+//   {
+//     account_number: '19827635112',
+//     owner_name: 'DANI',
+//     saved_account_id: '11111111'
+//   },
+//   {
+//     account_number: '19827635112',
+//     owner_name: 'DANI',
+//     saved_account_id: '11111111'
+//   },
+// ].map(a => snakeToCamelCase<SavedAccount>(a))
 
 const SavedAccounts = () => {
   const [accounts, setAccounts] = useState<SavedAccount[]>([]);

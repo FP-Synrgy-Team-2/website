@@ -2,8 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler, Validate } from 'react-hook-form';
 import { Button, Breadcrumbs, Input, Label, Form } from '@/components';
 import colorBlueSVG from '../../assets/icons/color=blue.svg';
-import { axios } from '@/axios';
-import { useAuthContext } from '@/hooks';
+import useAuth from '@/hooks/useAuth';
+import { useCallback, useEffect, useState } from 'react';
+import { BankAccount } from '@/types';
+import { snakeToCamelCase } from '@/utils/formatter';
+import Skeleton from 'react-loading-skeleton';
+import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 
 interface FormData {
   noRek: string;
@@ -12,26 +16,12 @@ interface FormData {
   simpanRekening: boolean;
 }
 
-const getAccountId = async (account_number: string) => {
-  try {
-    const response = await axios.get(
-      `${VITE_API_URL}/bank-accounts/account/${account_number}`,
-      {
-        headers: {
-          Authorization: `Bearer ${getUserData().access_token}`,
-        },
-      }
-    );
-    return response.data.data.account_id;
-  } catch (error) {
-    console.error('Error fetching account ID:', error);
-    throw error;
-  }
-};
-
 function TransferForm() {
   const navigate = useNavigate();
-  const { bankAccount } = useAuthContext();
+  const { api: axios, token, userId } = useAuth()
+  const [bankAccount, setBankAccount] = useState<BankAccount | null>(null)
+  const [bankAccountFetchStatus, setBankAccountFetchStatus] = useState<'no fetching' | 'fetching' | 'error' >('no fetching')
+  const [recipientAccount, setRecipientAccount] = useState<BankAccount | null>(null)
 
   const methods = useForm<FormData>({
     defaultValues: {
@@ -57,26 +47,57 @@ function TransferForm() {
       if (value === bankAccount?.accountNumber) {
         return 'Tidak bisa transfer ke nomor rekening sendiri';
       }
+      
       const res = await axios.get(`/bank-accounts/account/${value}`);
-      if (res.data.code === 403) return 'Nomor rekening tidak dapat ditemukan';
+      if (res.data.code === 404)
+        return 'Rekening tidak ditemukan'
+      setRecipientAccount(snakeToCamelCase<BankAccount>(res.data.data))
     } catch (err) {
+      setRecipientAccount(null)
       console.error(err);
       return 'Error memuat data rekening';
     }
   };
 
-  const onSubmit: SubmitHandler<FormData> = (formData) => {
-    const data = {
-      fromAccount: bankAccount?.accountNumber,
-      toAccount: formData.noRek,
-      toName: 'test',
-      amount: formData.nominal,
-      note: formData.catatan || undefined,
-      saved: formData.simpanRekening,
-    };
+  const fetchBankAccount = useCallback(async () => {
+    try {
+      setBankAccountFetchStatus('fetching')
+      const res = await axios.get(`/api/bank-accounts/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
 
-    console.log('Data Transfer:', formData);
-    navigate('/transfer/confirm', { state: { ...data } });
+      if (res.data.code === 404)
+        throw new Error('not found')
+      setBankAccount(snakeToCamelCase<BankAccount>(res.data.data))
+      setBankAccountFetchStatus('no fetching')
+    } catch (err) {
+      console.error(err)
+      setBankAccount(null)
+      setBankAccountFetchStatus('error')
+    }
+
+  }, [setBankAccountFetchStatus])
+
+  useEffect(() => {
+    fetchBankAccount()
+  }, [fetchBankAccount])
+
+  const onSubmit: SubmitHandler<FormData> = (formData) => {
+    if (bankAccount && recipientAccount) {
+      const data = {
+        fromAccount: bankAccount?.accountNumber,
+        toAccount: formData.noRek,
+        toName: bankAccount.ownerName,
+        amount: formData.nominal,
+        note: formData.catatan || undefined,
+        saved: formData.simpanRekening,
+      };
+  
+      console.log('Data Transfer:', formData);
+      navigate('/transfer/confirm', { state: { ...data } });
+    }
   };
 
   return (
@@ -85,17 +106,32 @@ function TransferForm() {
 
       <div className="mt-[4.0625rem] flex w-[30.75rem] flex-col">
         <section className="">
-          <h2 className="text-2xl">Rekening Sumber</h2>
+          <h2>Rekening Sumber</h2>
           <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
-            <span className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
-              {bankAccount?.ownerName}
-              <img src={colorBlueSVG} alt="Bank Icon" />
+            <span className={`flex gap-[0.3125rem] ${bankAccountFetchStatus === 'error' ? 'text-danger text-lg' : 'text-2xl text-primary-dark-blue'}`}>
+              {bankAccountFetchStatus === 'fetching' ? <Skeleton containerClassName='w-full' baseColor='#5D5D5D'/> : bankAccountFetchStatus === 'error' ? <>
+                  Gagal memuat data, ulangi?
+                  <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                  <button
+                    type="button"
+                    aria-label="Tombol muat ulang data rekening tujuan"
+                    onClick={() => {
+                      fetchBankAccount();
+                    }}
+                  >
+                    <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                  </button>
+                </span>
+                </> : <>
+                {bankAccount?.ownerName}
+                <img src={colorBlueSVG} alt="Bank Icon" />
+              </>}
             </span>
             <span
               className="text-lg text-dark-grey"
-              aria-label={bankAccount?.accountNumber.split('').join(' ')}
+              aria-label={bankAccountFetchStatus === 'fetching' ? 'memuat data rekening sumber' : bankAccountFetchStatus === 'error' ? 'error' : bankAccount?.accountNumber.split('').join(' ')}
             >
-              {bankAccount?.accountNumber}
+              {bankAccountFetchStatus === 'fetching' ? <Skeleton baseColor='#5D5D5D'/> : bankAccountFetchStatus === 'error' ? <>&bull;&bull;&bull;&bull;&bull;&bull;&bull;</> : bankAccount?.accountNumber}
             </span>
           </p>
         </section>
