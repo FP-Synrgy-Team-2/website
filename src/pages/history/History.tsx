@@ -1,22 +1,31 @@
+import useAuth from '@/hooks/useAuth';
+import TransactionsList from '@/components/History/TransactionsList';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-interface TransactionsProps {
+import { useNavigate } from 'react-router-dom';
+interface TransactionProps {
   transaction_id: string;
-  account_id: string;
-  beneficiary_account: string;
+  from: {
+    account_id: string;
+    owner_name: string;
+    account_number: string;
+  };
+  to: {
+    account_id: string;
+    owner_name: string;
+    account_number: string;
+  };
+  transaction_date: string;
   amount: number;
   admin_fee: number;
-  transaction_date: string;
-  note: string;
   total: number;
+  note: number;
+  type: string;
 }
 
 type Value = CalendarProps['value'];
-interface TransactionsListProps {
-  transactions: TransactionsProps[] | null;
-}
 
 const formatDate = (date: Date | null) => {
   if (!date) return '';
@@ -28,64 +37,17 @@ const formatDate = (date: Date | null) => {
   return new Intl.DateTimeFormat('id-ID', options).format(date);
 };
 
-const returnLocalDateAndTime = (transactionDate: string) => {
-  const dateObj = new Date(transactionDate);
-  const localDate = dateObj.toLocaleDateString('id-ID', { dateStyle: 'full' });
-  const localTime = dateObj
-    .toLocaleTimeString('id-ID', { hour12: false })
-    .slice(0, -3);
-  return { localDate, localTime };
-};
-
-function TransactionsList({ transactions }: TransactionsListProps) {
-  if (transactions) {
-    return transactions.map((transaction: TransactionsProps, index) => (
-      <div
-        key={`transaction-${index}`}
-        className="flex flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2"
-        aria-label={`Transfer BCA - 872726231 ${transaction.amount} ${returnLocalDateAndTime(transaction.transaction_date)}`}
-      >
-        <div className="flex gap-x-2.5">
-          <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue">
-            <svg
-              width="19"
-              height="18"
-              viewBox="0 0 19 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.20313 1.5L5.49602 0.792893L6.20313 0.0857863L6.91023 0.792893L6.20313 1.5ZM7.20313 12.75C7.20313 13.3023 6.75541 13.75 6.20313 13.75C5.65084 13.75 5.20313 13.3023 5.20313 12.75L7.20313 12.75ZM1.74602 4.54289L5.49602 0.792893L6.91023 2.20711L3.16023 5.95711L1.74602 4.54289ZM6.91023 0.792893L10.6602 4.54289L9.24602 5.95711L5.49602 2.20711L6.91023 0.792893ZM7.20312 1.5L7.20313 12.75L5.20313 12.75L5.20313 1.5L7.20312 1.5Z"
-                fill="#0066AE"
-              />
-              <path
-                d="M12.2031 16.5L11.496 17.2071L12.2031 17.9142L12.9102 17.2071L12.2031 16.5ZM13.2031 5.25C13.2031 4.69772 12.7554 4.25 12.2031 4.25C11.6508 4.25 11.2031 4.69771 11.2031 5.25L13.2031 5.25ZM7.74602 13.4571L11.496 17.2071L12.9102 15.7929L9.16023 12.0429L7.74602 13.4571ZM12.9102 17.2071L16.6602 13.4571L15.246 12.0429L11.496 15.7929L12.9102 17.2071ZM13.2031 16.5L13.2031 5.25L11.2031 5.25L11.2031 16.5L13.2031 16.5Z"
-                fill="#0066AE"
-              />
-            </svg>
-          </div>
-          <span className="text-2xl font-bold">Transfer</span>
-        </div>
-        <div className="flex justify-between gap-x-[5px]">
-          <span className="text-xl-body">BCA - 872726241</span>
-          <span className="text-xl-body">{transaction.amount}</span>
-          <span className="text-xl-body text-neutral-03">
-            {returnLocalDateAndTime(transaction.transaction_date).localDate}{' '}
-            {returnLocalDateAndTime(transaction.transaction_date).localTime}
-          </span>
-        </div>
-      </div>
-    ));
-  }
-}
-
 function History() {
   const [showModal, setShowModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [transactions, setTransactions] = useState<TransactionsProps[] | null>(
+  const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );
+  const [transactionId, setTransactionId] = useState<string | null>(null);
+  const { token, user_id: userId } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleDateChange = (
     setter: React.Dispatch<React.SetStateAction<Date | null>>
@@ -104,22 +66,23 @@ function History() {
     setShowModal(false);
     if (startDate && endDate)
       getTransactions(
-        '312b09e3-3d69-483c-8db1-8da61a9b6f07',
+        userId,
         startDate.toLocaleDateString('en-CA'),
         endDate.toLocaleDateString('en-CA')
       );
   };
 
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sInVzZXJfbmFtZSI6IkpvaG5kb2UxMjMiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNzIyNTA4MDIyLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiYUszcDlEeEI0SzNxVkxOVEs1N0tQMXk4RGhVIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9.sFVqO9tPpBZtGrX8RnW4_y0SHqh1wi9NyCFSEamo9QU';
+  const handleDownload = () => {
+    if (transactionId) navigate(`/transfer/invoice/${transactionId}`);
+  };
 
   async function getTransactions(
-    userId: string,
+    userId: string | null,
     startDate: string | null,
     endDate: string | null
   ) {
     const URL = import.meta.env.VITE_API_URL;
-    let transactions: null | TransactionsProps[] = null;
+    let transactions: null | TransactionProps[] = null;
     axios
       .post(
         URL + `/transactions/history/${userId}`,
@@ -129,7 +92,7 @@ function History() {
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -137,14 +100,17 @@ function History() {
         transactions = res.data.data;
         if (transactions) {
           setTransactions(transactions);
-        }
+        } else setTransactions(null);
       })
       .catch((err) => console.log(err));
   }
 
   useEffect(() => {
-    getTransactions('312b09e3-3d69-483c-8db1-8da61a9b6f07', null, null);
-  }, []);
+    setTransactionId(null);
+    const startDate = new Date(0).toISOString();
+    const endDate = new Date().toISOString();
+    getTransactions(userId, startDate, endDate);
+  }, [token]);
 
   return (
     <main className="flex flex-col gap-y-20 pl-10 pr-20 pt-[112px]">
@@ -257,7 +223,10 @@ function History() {
                 </div>
               </div>
             </div>
-            <button className="relative flex items-center gap-5 rounded-[10px] bg-primary-dark-blue px-5 py-[5px] text-2xl font-bold text-white">
+            <button
+              className="relative flex items-center gap-5 rounded-[10px] bg-primary-dark-blue px-5 py-[5px] text-2xl font-bold text-white"
+              onClick={handleDownload}
+            >
               <svg
                 width="17"
                 height="18"
