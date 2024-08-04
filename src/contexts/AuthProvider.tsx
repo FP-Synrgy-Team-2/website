@@ -4,6 +4,8 @@ import { Api } from '@/api/api';
 import { ResponseError } from '@/types/response';
 import Cookies from 'js-cookie';
 import Loading from '@/components/General/Loading';
+import { jwtDecode } from 'jwt-decode';
+import { CustomJWTPayload } from '@/types';
 
 export type AuthContextType = {
   isAuthenticated: boolean;
@@ -31,7 +33,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [userId, setUserId] = React.useState<string | null>(null);
   const navigate = useNavigate();
-  const api = React.useRef(new Api(import.meta.env.VITE_API_URL, token, setToken)).current
+
+  // custom api to be used when your request needs auth
+  const api = React.useMemo(() => new Api(import.meta.env.VITE_API_URL, token, setToken), [token])
 
   const refreshToken = React.useCallback(async () => {
     try {
@@ -42,6 +46,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         `/api/refresh-token?refresh_token=${Cookies.get('refresh-token')}`
       );
       if (response.status === 200) {
+
+        // save userId on mount for cases when user closes or reloads page but not logged-off
+        if (!userId)
+          setUserId(jwtDecode<CustomJWTPayload>(response.data.access_token).user_id)
+
         setToken(response.data.access_token);
         setAuthResErrors(null);
       } else {
@@ -63,14 +72,16 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   React.useEffect(() => {
     refreshToken();
-    const intervalId = setInterval(
-      () => {
-        refreshToken();
-      },
-      9 * 60 * 1000
-    );
 
-    return () => clearInterval(intervalId);
+    // commented out as access token refreshing is auto-handled by axios interceptor, look at Api class for details
+    // const intervalId = setInterval(
+    //   () => {
+    //     refreshToken();
+    //   },
+    //   9 * 60 * 1000
+    // );
+
+    // return () => clearInterval(intervalId);
   }, [refreshToken]);
 
   const login = async (
@@ -86,21 +97,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await api.post<typeof body>('/api/auth/login', body);
       if (response.status === 200) {
         setToken(response.data.data.access_token);
-        console.log('Setting token authpr')
         Cookies.set('refresh-token', response.data.data.refresh_token, {
           expires: 80,
         });
+        Cookies.set('userId', response.data.data.user_id, {
+          expires: 80
+        })
         setUserId(response.data.data.user_id);
         setAuthResErrors(null);
         navigate(onSuccess, { replace: true });
       } else {
-        console.log('FUCK A')
         setToken(null);
         setAuthResErrors(response.data);
         navigate(onError, { replace: true });
       }
     } catch (error) {
-      console.log('FUCK B')
       setToken(null);
       setAuthResErrors({
         code: 500,
@@ -116,6 +127,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setToken(null);
+    Cookies.remove('userId')
     Cookies.remove('refresh_token');
   };
 
