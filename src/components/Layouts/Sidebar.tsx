@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NavbarLogo } from '@/components';
+import useAuth from '@/hooks/useAuth';
 
 interface NavbarType {
   name: string;
@@ -11,25 +11,9 @@ interface NavbarType {
 }
 
 function Sidebar() {
-  const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (token) setIsLoggedIn(true);
-    else {
-      setIsLoggedIn(false);
-      navigate('/login', { replace: true });
-    }
-  }, [token]);
-
-  function handleLogout() {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    navigate('/login', { replace: true });
-  }
-
+  const { logout } = useAuth();
   const location = useLocation();
+
   const navbar: NavbarType[] = [
     {
       name: 'Beranda',
@@ -49,21 +33,10 @@ function Sidebar() {
       link: '/history',
       alt: 'Logo Mutasi',
     },
-    {
-      name: 'Profil',
-      icon: '/images/icons/user.svg',
-      link: '/profile',
-      className: 'mt-auto',
-      alt: 'Logo Profil',
-    },
   ];
 
-  if (!isLoggedIn) {
-    return null;
-  }
-
   return (
-    <div className="fixed flex h-full flex-col pb-16">
+    <div className="fixed flex h-full w-1/6 flex-col pb-16 pe-6">
       <div className="ms-3">
         <NavbarLogo />
       </div>
@@ -80,7 +53,7 @@ function Sidebar() {
                 isActive
                   ? 'bg-primary-blue text-white'
                   : 'hover:bg-primary-dark-blue hover:text-white'
-              } ${item.className ? item.className : ''}`}
+              } ${item.className ?? ''}`}
               aria-label={'Tombol ' + item.name}
             >
               <img
@@ -96,8 +69,8 @@ function Sidebar() {
         })}
 
         <button
-          onClick={handleLogout}
-          className={`sidebar-item body-md flex items-center gap-5 rounded-md p-3 hover:bg-danger hover:text-white`}
+          onClick={logout}
+          className={`sidebar-item body-md mt-auto flex items-center gap-5 rounded-md p-3 hover:bg-danger hover:text-white`}
         >
           <img
             src="/images/icons/arrow-right.svg"

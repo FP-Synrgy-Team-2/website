@@ -2,11 +2,10 @@ import { Route, Routes } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
 
-import { SwaggerUIComponent, Protected } from '@/components';
+import { Protected } from '@/components';
 // import { useEffect, useState } from 'react';
 
 import {
-  ApiCall,
   Dashboard,
   Login,
   History,
@@ -78,11 +77,6 @@ function App() {
           }
         >
           <Route path=":id" element={<DownloadInvoice />} />
-        </Route>
-
-        <Route path="/api">
-          <Route path="example" element={<ApiCall />}></Route>
-          <Route path="docs" element={<SwaggerUIComponent />} />
         </Route>
 
         <Route path="*" element={<Error404 />} />
