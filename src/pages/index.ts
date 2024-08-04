@@ -11,12 +11,12 @@ import {
   DownloadInvoice,
 } from './transfer';
 import { History } from './history';
-import ApiCall from './example/ApiCall';
+// import ApiCall from './example/ApiCall';
 import Error404 from './error/404';
 
 export {
   // Example,
-  ApiCall,
+  // ApiCall,
 
   // Dashboard & Login
   Dashboard,
