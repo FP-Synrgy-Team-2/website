@@ -44,7 +44,6 @@ function TransactionsList({ transactions }: TransactionsListProps) {
 
 const TableMutasi: React.FC = () => {
   const { api, token, userId } = useAuth();
-
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );
