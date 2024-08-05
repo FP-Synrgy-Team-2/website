@@ -289,8 +289,7 @@ function Saved() {
 
           <Button
             type="submit"
-            color="primary-dark-blue"
-            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl bg-primary-dark-blue px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="Tombol lanjutkan"
           >
             Lanjutkan

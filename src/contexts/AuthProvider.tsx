@@ -103,9 +103,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         Cookies.set('refresh-token', response.data.data.refresh_token, {
           expires: 80,
         });
-        Cookies.set('userId', response.data.data.user_id, {
-          expires: 80,
-        });
         setUserId(response.data.data.user_id);
         setAuthResErrors(null);
         navigate(onSuccess, { replace: true });
@@ -130,8 +127,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setToken(null);
-    Cookies.remove('userId');
-    Cookies.remove('refresh_token');
+    Cookies.remove('refresh-token');
   };
 
   return loading ? (
