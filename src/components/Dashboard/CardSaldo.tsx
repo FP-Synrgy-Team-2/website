@@ -44,11 +44,16 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
     >
       <div className="mx-auto flex h-full w-9/12 flex-col justify-center gap-7">
         <div className="text-neutral-01">
-          <p className="text-sm-body font-thin" aria-label="Nomor rekening">
+          <p
+            className="text-sm-body font-thin"
+            aria-label="Nomor rekening"
+            tabIndex={0}
+          >
             Nomor Rekening
           </p>
           <div className="flex items-center justify-between gap-2">
             <h1
+              tabIndex={0}
               className="text-xl-body font-bold"
               id="rekening"
               aria-label={'Nomor Rekening: ' + accountData.account_number}
@@ -73,11 +78,15 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
           </div>
         </div>
         <div className="text-neutral-01">
-          <p className="text-sm-body font-thin" aria-label="Saldo">
+          <p className="text-sm-body font-thin" aria-label="Saldo" tabIndex={0}>
             Saldo
           </p>
           <div className="flex justify-between gap-2">
-            <p className="text-sm-body font-thin" aria-label={'Rp. ' + saldo}>
+            <p
+              className="text-sm-body font-thin"
+              tabIndex={0}
+              aria-label={'Rp. ' + saldo}
+            >
               Rp.{' '}
               <span className="text-xl-body font-bold" id="saldo">
                 {isSaldoHidden ? '******' : saldo}
