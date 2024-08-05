@@ -11,7 +11,7 @@
 
 @layer components {
   #dashboard-main {
-    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
+    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat;
   }
 
   #mutation-table {
@@ -228,6 +228,17 @@
 .img-white {
   filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
     hue-rotate(131deg) brightness(111%) contrast(99%);
+}
+
+#login-page {
+  background-image: url('images/login/blue_object_blc.webp');
+  background-position: bottom left;
+  background-size: 50%;
+  background-repeat: no-repeat;
+}
+
+.img-black {
+  filter: invert(100%);
 }
 
 #receipt {
