@@ -1,10 +1,76 @@
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Button } from '@/components';
+import { Breadcrumbs } from '@/components';
 import PinInput from './Pin';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useAuth from '@/hooks/useAuth';
+import { getAccountId } from '@/utils/getUserData';
+
+const ADMIN_FEE = 0;
+
+type StateData = {
+  balance: number;
+  fromAccount: string;
+  fromName: string;
+  toAccount: string;
+  toName: string;
+  amount: number;
+  note?: string;
+  saved: boolean;
+};
+
 function Confirmation() {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  // const navigate = useNavigate();
+  const {
+    balance,
+    amount,
+    fromAccount,
+    fromName,
+    saved,
+    toAccount,
+    toName,
+    note,
+  } = useLocation().state as StateData;
+  const [showPinInput, setShowPinInput] = useState(false);
+  const { api, token } = useAuth();
+  const navigate = useNavigate();
+
+  const handlePinValidated = async () => {
+    const now = new Date();
+    try {
+      if (token) {
+        const [sourceAccountId, beneficiaryAccountId] = await Promise.all([
+          getAccountId(api, fromAccount, token),
+          getAccountId(api, toAccount, token),
+        ]);
+
+        const { data } = await api.post(
+          `/api/transactions`,
+          {
+            account_id: sourceAccountId,
+            beneficiary_account: beneficiaryAccountId,
+            amount,
+            transaction_date:
+              now.toISOString().slice(0, 10) +
+              ' ' +
+              now.toLocaleTimeString().slice(0, 8),
+            note,
+            saved,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        navigate(`/transfer/receipt/${data.data.transaction_id}`, {
+          replace: true,
+        });
+      }
+    } catch (error) {
+      console.error('Transfer failed:', error);
+    }
+  };
+
   const breadcrumbs = [
     { label: 'Transfer', path: 'transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
@@ -12,106 +78,128 @@ function Confirmation() {
   ];
 
   const handleClick = () => {
-    // navigate('/transfer/pin', {
-    //   replace: true,
-    //   state: { from: '/transfer/new' },
-    // });
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
+    setShowPinInput(true);
   };
 
   return (
-    <div>
-      {showModal && (
-        <PinInput showPinInput={showModal} closePinInput={closeModal} />
-      )}
+    <div className="px-[2.6875rem] py-[4.625rem]">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <div className="max-w-[510px]">
-        <div className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
-          <div className="flex basis-1/2 gap-[20px]">
-            <div className="flex h-[45px] w-[45px] self-center rounded-full bg-primary-blue font-semibold text-white">
-              <span className="mx-auto my-0.5 text-3xl">Z</span>
+      <section className="w-[31.875rem] pt-12">
+        <h2 className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
+          <div className="flex basis-1/2 items-center gap-[20px]">
+            <div className="flex h-[45px] w-[45px] items-center justify-center rounded-full bg-primary-blue font-bold text-white">
+              <span className="text-2xl">{fromName[0]}</span>
             </div>
-            <h1 className="self-center text-[24px]">Zakiansyah</h1>
+            <span className="self-center text-[24px]">{fromName}</span>
           </div>
           <div className="grid basis-1/2 justify-items-end self-center">
-            <div className="text-xl">Rp.252.672.982</div>
-            <div className="text-lg">Rp.100.000</div>
+            <div className="text-xl">
+              {Math.abs(balance).toLocaleString('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+              })}
+            </div>
           </div>
-        </div>
+        </h2>
 
-        <div className="my-2 p-3">
-          <h2 className="text-grey">Rincian Transaksi</h2>
-        </div>
-        <hr className="bg-greypudar" />
+        <table className="mt-[1.625rem] w-full text-left text-2xl">
+          <caption className="flex h-[3.8125rem] items-center border-b border-opacity-20 text-dark-grey">
+            Rincian Transaksi
+          </caption>
+          <tbody className="mb-5 mt-3.5 flex flex-col gap-[1.6875rem]">
+            {[
+              ['Rekening Sumber', fromAccount],
+              ['Rekening Tujuan', toAccount],
+              ['Nama Penerima', toName],
+              [
+                'Nominal Transfer',
+                Math.abs(amount).toLocaleString('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                }),
+              ],
+              [
+                'Biaya Admin',
+                ADMIN_FEE.toLocaleString('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                }),
+              ],
+              ['Catatan', note],
+            ].map((r, i) => (
+              <tr key={i} className="flex text-left">
+                <th className="w-[16.375rem] font-normal">{r[0]}</th>
+                <td className="text-dark-grey">{r[1]}</td>
+              </tr>
+            ))}
+          </tbody>
 
-        <div className="flex gap-[92px] bg-white p-3">
-          <div>
-            <p className="my-3 text-muted-black">Rekening Sumber</p>
-            <p className="my-3 text-muted-black">Rekening Tujuan</p>
-            <p className="my-3 text-muted-black">Nama penerima</p>
-            <p className="my-3 text-muted-black">Nominal Transfer</p>
-            <p className="my-3 text-muted-black">Biaya Admin</p>
-            <p className="my-3 text-muted-black">Catatan</p>
-          </div>
-          <div>
-            <p className="my-3 text-dark-grey">8923445590</p>
-            <p className="my-3 text-dark-grey">2448901238</p>
-            <p className="my-3 text-dark-grey">John</p>
-            <p className="my-3 text-dark-grey">Rp. 100.000</p>
-            <p className="my-3 text-dark-grey">Rp 0</p>
-            <p className="my-3 text-dark-grey">Bayar makanan</p>
-          </div>
-        </div>
+          <tfoot>
+            <tr className="flex h-[3.75rem] items-center justify-between rounded-xl bg-primary-light-blue px-[0.9375rem] py-2.5">
+              <th className="font-normal">Total</th>
+              <td>
+                {Math.abs(ADMIN_FEE + amount).toLocaleString('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                })}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
 
-        <div className="h-[60px] rounded-[10px] bg-primary-light-blue p-3">
-          <div className="flex flex-row">
-            <div className="basis-1/2">Total</div>
-            <div className="flex basis-1/2 justify-end">Rp.100.000</div>
-          </div>
-        </div>
-
-        <div className="my-10 flex justify-end gap-[20px]">
-          <Button color="bg-white" className="">
+        <div className="mt-[4.4375rem] flex justify-end gap-[1.875rem] text-2xl font-bold">
+          <button
+            className="h-[3.25rem] w-[10.4375rem] rounded-[1.875rem] border border-primary-dark-blue bg-white text-primary-dark-blue"
+            onClick={() => navigate(-1)}
+          >
             Kembali
-          </Button>
-          <div>
-            <Button
-              color="primary-dark-blue"
-              className=""
-              onClick={handleClick}
-            >
-              <div className="flex gap-[10px]">
-                <p className="">Kirim</p>
-                <div className="mt-0.5 self-center">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M17 12H3"
-                      stroke="#FFFFFF"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M21.7152 11.7966L16.265 7.90356C15.7355 7.52535 15 7.90385 15 8.55455V15.4454C15 16.0961 15.7355 16.4746 16.265 16.0964L21.7152 12.2034C21.8548 12.1037 21.8548 11.8963 21.7152 11.7966Z"
-                      fill="#FFFFFF"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </Button>
-          </div>
+          </button>
+          <button
+            className="flex h-[3.25rem] w-[10.4375rem] items-center justify-center gap-2.5 rounded-[1.875rem] bg-primary-dark-blue text-white"
+            onClick={handleClick}
+          >
+            Kirim
+            <span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17 12H3"
+                  stroke="#FFFFFF"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M21.7152 11.7966L16.265 7.90356C15.7355 7.52535 15 7.90385 15 8.55455V15.4454C15 16.0961 15.7355 16.4746 16.265 16.0964L21.7152 12.2034C21.8548 12.1037 21.8548 11.8963 21.7152 11.7966Z"
+                  fill="#FFFFFF"
+                />
+              </svg>
+            </span>
+          </button>
         </div>
-      </div>
+      </section>
+      {showPinInput && (
+        <PinInput
+          showPinInput={showPinInput}
+          closePinInput={() => setShowPinInput(false)}
+          onPinValidated={handlePinValidated}
+          data={{
+            amount,
+            balance,
+            fromAccount,
+            fromName,
+            saved,
+            toAccount,
+            toName,
+            note,
+          }}
+        />
+      )}
     </div>
   );
 }

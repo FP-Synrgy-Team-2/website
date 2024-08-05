@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import bannerSVG from '@/assets/banner.svg';
 
 type BannerContents = {
   title: string;
-  subtitle: string;
+  text: string;
   ariaLabel: string;
 };
 
 const Banner = () => {
   const [bannerContents, setBannerContents] = useState<BannerContents>();
-  const bannerSVG = 'images/banner.svg';
 
   useEffect(() => {
     const fetch = async () => {
@@ -18,11 +18,10 @@ const Banner = () => {
         () =>
           setBannerContents({
             title: 'Lakukan transaksi sekarang!',
-            subtitle:
-              'Nikmati kemudahan transaksi menggunakan internet banking',
-            ariaLabel: 'Banner aplikasi Jangkau',
+            text: 'Nikmati kemudahan transaksi menggunakan internet banking',
+            ariaLabel: 'Banner homepage',
           }),
-        3000
+        1500
       );
     };
 
@@ -34,12 +33,19 @@ const Banner = () => {
       className="dash-banner"
       role="banner"
       style={{ backgroundImage: `url(${bannerSVG})` }}
+      aria-labelledby="banner-text"
       aria-label={bannerContents.ariaLabel}
       tabIndex={0}
     >
       <article className="flex w-85 flex-col gap-3.75 self-center">
         <h2 className="font-medium text-dark-grey">{bannerContents.title}</h2>
-        <p className="text-xl font-normal">{bannerContents.subtitle}</p>
+        <p
+          className="text-xl font-normal"
+          id="banner-text"
+          aria-label={'Banner homepage' + ' ' + bannerContents.text}
+        >
+          {bannerContents.text}
+        </p>
       </article>
     </section>
   ) : (

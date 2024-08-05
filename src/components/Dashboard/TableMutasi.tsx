@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MutationRecord from './MutationRecord';
-import api from '@/api/api';
 import useAuth from '@/hooks/useAuth';
 
 interface TransactionProps {
@@ -44,8 +43,7 @@ function TransactionsList({ transactions }: TransactionsListProps) {
 }
 
 const TableMutasi: React.FC = () => {
-  const { token, user_id: userId } = useAuth();
-
+  const { api, token, userId } = useAuth();
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
 
@@ -12,7 +12,6 @@ import {
   Confirmation,
   New,
   Logout,
-  Pin,
   Receipt,
   Saved,
   DownloadInvoice,
@@ -21,29 +20,9 @@ import {
 } from './pages';
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const token = localStorage.getItem('token');
-  // useEffect(() => {
-  //   if (token) setIsLoggedIn(true);
-  //   else {
-  //     setIsLoggedIn(false);
-  //   }
-  // }, [token]);
-
   return (
     <>
       <Routes>
-        {/* <Route
-          index
-          element={
-            isLoggedIn ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        /> */}
-
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
         <Route path="/forgot-password" element={<Logout />} />
@@ -56,13 +35,13 @@ function App() {
             </Protected>
           }
         >
+          <Route path="" element={<Navigate to="/dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="transfer">
             <Route index element={<TransferPage />} />
             <Route path="new" element={<New />} />
             <Route path="saved" element={<Saved />} />
             <Route path="confirm" element={<Confirmation />} />
-            <Route path="pin" element={<Pin />} />
             <Route path="receipt/:id" element={<Receipt />} />
           </Route>
           <Route path="history" element={<History />} />

@@ -2,7 +2,6 @@ import { Banner, SavedAccounts, CardSaldo, TableMutasi } from '@/components';
 import dashboardSVG from '@/assets/dashboard.svg';
 import { useEffect, useState } from 'react';
 import useAuth from '@/hooks/useAuth';
-import api from '@/api/api';
 
 type AccountData = {
   account_number: string;
@@ -11,12 +10,12 @@ type AccountData = {
 
 function Dashboard() {
   const [accountData, setAccountData] = useState<AccountData | null>(null);
-  const { token, user_id } = useAuth();
+  const { token, userId, api } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(`/bank-accounts/user/${user_id}`, {
+        const response = await api.get(`/api/bank-accounts/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAccountData(response.data.data);

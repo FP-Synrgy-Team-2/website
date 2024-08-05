@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Validate } from 'react-hook-form';
 import { Button, Breadcrumbs, Input, Label, Form } from '@/components';
-import { useEffect, useState } from 'react';
-import PinInput from './Pin';
-import axios from 'axios';
-import moment from 'moment';
-import { getUserData } from '@/utils/getUserData';
-
-const { VITE_API_URL } = import.meta.env;
+import colorBlueSVG from '../../assets/icons/color=blue.svg';
+import useAuth from '@/hooks/useAuth';
+import { useCallback, useEffect, useState } from 'react';
+import { BankAccount } from '@/types';
+import { snakeToCamelCase } from '@/utils/formatter';
+import Skeleton from 'react-loading-skeleton';
+import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 
 interface FormData {
   noRek: string;
@@ -16,29 +16,17 @@ interface FormData {
   simpanRekening: boolean;
 }
 
-const getAccountId = async (account_number: string) => {
-  try {
-    const response = await axios.get(
-      `${VITE_API_URL}/bank-accounts/account/${account_number}`,
-      {
-        headers: {
-          Authorization: `Bearer ${getUserData().access_token}`,
-        },
-      }
-    );
-    return response.data.data.account_id;
-  } catch (error) {
-    console.error('Error fetching account ID:', error);
-    throw error;
-  }
-};
-
 function TransferForm() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<{ account_number: string }>({
-    account_number: '',
-  });
-  const [showPinInput, setShowPinInput] = useState<boolean>(false);
+  const { api: axios, token, userId } = useAuth();
+  const [bankAccount, setBankAccount] = useState<BankAccount | null>(null);
+  const [bankAccountFetchStatus, setBankAccountFetchStatus] = useState<
+    'no fetching' | 'fetching' | 'error'
+  >('no fetching');
+  const [recipientAccount, setRecipientAccount] = useState<BankAccount | null>(
+    null
+  );
+
   const methods = useForm<FormData>({
     defaultValues: {
       noRek: '',
@@ -46,121 +34,246 @@ function TransferForm() {
       catatan: '',
       simpanRekening: false,
     },
+    mode: 'onBlur',
   });
-
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('token') || '{}'));
-  }, []);
-
-  const { register } = methods;
+  const {
+    register,
+    formState: { isValidating, errors },
+  } = methods;
 
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
   ];
 
-  const onSubmit: SubmitHandler<FormData> = (formData) => {
-    console.log('Data Transfer:', formData);
-    setShowPinInput(true);
-    // navigate('/transfer/confirm', { state: formData });
+  const validateAccountNumber: Validate<string, FormData> = async (value) => {
+    try {
+      if (value === bankAccount?.accountNumber) {
+        return 'Tidak bisa transfer ke nomor rekening sendiri';
+      }
+
+      const res = await axios.get(`/api/bank-accounts/account/${value}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.data.code === 404) return 'Rekening tidak ditemukan';
+      setRecipientAccount(snakeToCamelCase<BankAccount>(res.data.data));
+    } catch (err) {
+      setRecipientAccount(null);
+      console.error(err);
+      return 'Error memuat data rekening';
+    }
   };
 
-  const handlePinValidated = async () => {
-    const formData = methods.getValues();
-    const sourceAccountNumber = user?.account_number;
-    const beneficiaryAccountNumber = formData.noRek;
-
+  const fetchBankAccount = useCallback(async () => {
     try {
-      const [sourceAccountId, beneficiaryAccountId] = await Promise.all([
-        getAccountId(sourceAccountNumber),
-        getAccountId(beneficiaryAccountNumber),
-      ]);
-
-      const { data } = await axios.post(
-        `${VITE_API_URL}/transactions`,
-        {
-          account_id: sourceAccountId,
-          beneficiary_account: beneficiaryAccountId,
-          amount: formData.nominal,
-          transaction_date: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-          note: formData.catatan,
-          is_saved: formData.simpanRekening,
+      setBankAccountFetchStatus('fetching');
+      const res = await axios.get(`/api/bank-accounts/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${getUserData().access_token}`,
-          },
-        }
-      );
-
-      navigate(`/transfer/receipt/${data.data.transaction_id}`, {
-        replace: true,
       });
-    } catch (error) {
-      console.error('Transfer failed:', error);
+
+      if (res.data.code === 404) throw new Error('not found');
+      setBankAccount(snakeToCamelCase<BankAccount>(res.data.data));
+      setBankAccountFetchStatus('no fetching');
+    } catch (err) {
+      console.error(err);
+      setBankAccount(null);
+      setBankAccountFetchStatus('error');
+    }
+  }, [setBankAccountFetchStatus]);
+
+  useEffect(() => {
+    fetchBankAccount();
+  }, [fetchBankAccount]);
+
+  const onSubmit: SubmitHandler<FormData> = (formData) => {
+    if (bankAccount && recipientAccount) {
+      const data = {
+        balance: bankAccount.balance,
+        fromAccount: bankAccount.accountNumber,
+        fromName: bankAccount.ownerName,
+        toAccount: formData.noRek,
+        toName: bankAccount.ownerName,
+        amount: formData.nominal,
+        note: formData.catatan || undefined,
+        saved: formData.simpanRekening,
+      };
+
+      console.log('Data Transfer:', formData);
+      navigate('/transfer/confirm', { state: { ...data } });
     }
   };
 
   return (
-    <>
+    <div className="px-[2.6875rem] py-[4.625rem]" id="transfer-new">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Form<FormData> onSubmit={onSubmit} methods={methods}>
-        <div className="mt-10">
-          <Label className="text-xl">Rekening Sumber</Label>
-          <div className="relative bg-[#E4EDFF] px-3 py-4">
-            <h3>BCA TABUNGANKU</h3>
-            <img
-              src="/images/icons/color=blue.svg"
-              className="absolute left-36 top-3"
-              alt="Bank Icon"
+
+      <div className="mt-[4.0625rem] flex w-[30.75rem] flex-col">
+        <section className="">
+          <h2>Rekening Sumber</h2>
+          <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
+            <span
+              className={`flex gap-[0.3125rem] ${bankAccountFetchStatus === 'error' ? 'text-lg text-danger' : 'text-2xl text-primary-dark-blue'}`}
+            >
+              {bankAccountFetchStatus === 'fetching' ? (
+                <Skeleton containerClassName="w-full" baseColor="#5D5D5D" />
+              ) : bankAccountFetchStatus === 'error' ? (
+                <>
+                  Gagal memuat data, ulangi?
+                  <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                    <button
+                      type="button"
+                      aria-label="Tombol muat ulang data rekening tujuan"
+                      onClick={() => {
+                        fetchBankAccount();
+                      }}
+                    >
+                      <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                    </button>
+                  </span>
+                </>
+              ) : (
+                <>
+                  {bankAccount?.ownerName}
+                  <img src={colorBlueSVG} alt="Bank Icon" />
+                </>
+              )}
+            </span>
+            <span
+              className="text-lg text-dark-grey"
+              aria-label={
+                bankAccountFetchStatus === 'fetching'
+                  ? 'memuat data rekening sumber'
+                  : bankAccountFetchStatus === 'error'
+                    ? 'error'
+                    : bankAccount?.accountNumber.split('').join(' ')
+              }
+            >
+              {bankAccountFetchStatus === 'fetching' ? (
+                <Skeleton baseColor="#5D5D5D" />
+              ) : bankAccountFetchStatus === 'error' ? (
+                <>&bull;&bull;&bull;&bull;&bull;&bull;&bull;</>
+              ) : (
+                bankAccount?.accountNumber
+              )}
+            </span>
+          </p>
+        </section>
+        <Form<FormData>
+          className="flex w-[30.75rem] flex-col"
+          onSubmit={onSubmit}
+          methods={methods}
+          id="new-input-form"
+        >
+          <fieldset
+            className="mt-[1.9219rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-to"
+          >
+            <Label className="text-2xl" id="new-input-to">
+              Nomor Rekening Tujuan
+            </Label>
+            <span className="relative flex items-center">
+              <Input
+                {...register('noRek', {
+                  validate: validateAccountNumber,
+                  required: 'Nomor rekening penerima diperlukan',
+                })}
+                min={0}
+                aria-label="Text input field nomor rekening tujuan"
+                minLength={12}
+                maxLength={12}
+                placeholder="xxxxxxx"
+                type="number"
+                className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              />
+              {isValidating && (
+                <>
+                  <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
+                  <p className="sr-only">Memuat data rekening</p>
+                </>
+              )}
+            </span>
+            {errors.noRek && (
+              <p className="text-sm leading-8 text-danger" role="alert">
+                {errors.noRek.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-amount"
+          >
+            <Label className="text-2xl" id="new-input-amount">
+              Nominal Transfer
+            </Label>
+            <Input
+              {...register('nominal', {
+                required: 'Tulis nominal yang ingin ditransfer',
+              })}
+              aria-label="Text input field nominal transfer"
+              placeholder="xxxxxxx"
+              type="number"
+              className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              min={0}
+              max={100000000}
             />
-            <h4>{user?.account_number}</h4>
-          </div>
-        </div>
-        <div className="mt-3">
-          <Label className="text-xl">Nomor Rekening Tujuan</Label>
-          <Input
-            {...register('noRek', { required: true })}
-            placeholder="******"
-            type="text"
-          />
-        </div>
-        <div className="mt-3">
-          <Label className="text-xl">Nominal Transfer</Label>
-          <Input
-            {...register('nominal', { required: true })}
-            placeholder="******"
-            type="text"
-          />
-        </div>
-        <div className="mt-3">
-          <Label className="text-xl">Catatan (Optional)</Label>
-          <Input
-            {...register('catatan')}
-            placeholder="Tambahkan catatan"
-            type="text"
-          />
-        </div>
-        <div className="mt-3 flex gap-1">
-          <input {...register('simpanRekening')} type="checkbox" id="check" />
-          <Label htmlFor="check">Simpan Rekening</Label>
-        </div>
-        <div className="mt-3">
+            {errors.nominal && (
+              <p className="text-sm leading-8 text-danger" role="alert">
+                {errors.nominal.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem]"
+            form="new-input-form"
+            aria-labelledby="new-input-note"
+          >
+            <Label className="text-2xl" id="new-input-note">
+              Catatan (Optional)
+            </Label>
+            <Input
+              {...register('catatan')}
+              placeholder="Tambahkan catatan"
+              aria-label="Text input field catatan (opsional)"
+              type="text"
+              className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+            />
+          </fieldset>
+          <fieldset
+            className="mt-[0.6875rem] flex h-[3.25rem] items-center gap-2.5"
+            form="new-input-form"
+            aria-labelledby="new-input-save"
+          >
+            <input
+              {...register('simpanRekening')}
+              type="checkbox"
+              id="check"
+              className="scale-150"
+            />
+            <Label
+              htmlFor="check"
+              className="text-2xl"
+              aria-label="new-input-save"
+            >
+              Simpan Rekening
+            </Label>
+          </fieldset>
           <Button
             type="submit"
-            color="blue"
-            className="rounded-3xl bg-blue-500 px-6 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            color="primary-dark-blue"
+            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Tombol lanjutkan"
           >
             Lanjutkan
           </Button>
-        </div>
-      </Form>
-      <PinInput
-        showPinInput={showPinInput}
-        closePinInput={() => setShowPinInput(false)}
-        onPinValidated={handlePinValidated}
-      />
-    </>
+        </Form>
+      </div>
+    </div>
   );
 }
 
