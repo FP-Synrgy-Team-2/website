@@ -1,54 +1,84 @@
 import React, { useState, useRef, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Button, ModalSuccess } from '@/components';
-import axios from 'axios';
-import { getUserData } from '@/utils/getUserData';
+import useAuth from '@/hooks/useAuth';
+import { getAccountId } from '@/utils/getUserData';
+import { useNavigate } from 'react-router-dom';
+import Loading from '@/components/General/Loading';
+
 interface pinValidationProps {
-  account_number: string;
+  accountNumber: string;
   pin: string;
 }
-
-const validatePin = async ({ account_number, pin }: pinValidationProps) => {
-  try {
-    const response = await axios.post(
-      'https://tense-margy-jangkau-a8ec8afe.koyeb.app/api/bank-accounts/pin-validation',
-      { account_number, pin },
-      {
-        headers: {
-          Authorization: `Bearer ${getUserData().access_token}`,
-        },
-      }
-    );
-    return response.data.status;
-  } catch (error) {
-    console.error('Error validating PIN:', error);
-    return false;
-  }
-};
 
 interface PinInputProps {
   showPinInput: boolean;
   closePinInput: () => void;
   onPinValidated: () => void;
+  data: {
+    balance: number;
+    fromAccount: string;
+    fromName: string;
+    toAccount: string;
+    toName: string;
+    amount: number;
+    note?: string;
+    saved: boolean;
+  };
 }
 
 const PinInput: React.FC<PinInputProps> = ({
   showPinInput,
   closePinInput,
   onPinValidated,
+  data,
 }) => {
-  const [user, setUser] = useState<{ account_number: string }>({
-    account_number: '',
-  });
   const [pin, setPin] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
-  // const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null));
+  const { api: axios, token } = useAuth();
+
+  const validatePin = async ({ accountNumber, pin }: pinValidationProps) => {
+    try {
+      const response = await axios.post(
+        'api/bank-accounts/pin-validation',
+        { account_number: accountNumber, pin },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.status;
+    } catch (error) {
+      console.error('Error validating PIN:', error);
+      return false;
+    }
+  };
 
   useEffect(() => {
+    const validate = async () => {
+      setIsLoading(true);
+      try {
+        if (token) {
+          await getAccountId(axios, data.fromAccount, token);
+          await getAccountId(axios, data.toAccount, token);
+        }
+      } catch (err) {
+        console.error(err);
+        setTimeout(() => {
+          navigate('/transfer', { replace: true });
+        }, 3000);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    validate();
     inputRefs.current[0]?.focus();
-    setUser(getUserData());
   }, []);
 
   const handleKeyDown = (
@@ -86,7 +116,7 @@ const PinInput: React.FC<PinInputProps> = ({
     }
 
     const isValid = await validatePin({
-      account_number: user?.account_number,
+      accountNumber: data.fromAccount,
       pin: pin.join(''),
     });
     console.log(isValid);
@@ -106,72 +136,74 @@ const PinInput: React.FC<PinInputProps> = ({
     }
   };
 
-  return (
-    <>
-      {showSuccessModal && (
-        <ModalSuccess
-          modalFor="Transaksi"
-          redirectTo="../receipt"
-          description={[
-            'Yeay transaksi telah berhasil',
-            'Silahkan tunggu beberapa saat untuk bukti transaksi',
-          ]}
-        />
-      )}
+  if (isLoading) return <Loading size="5vw" bgSize="100vh" />;
+  else
+    return (
+      <>
+        {showSuccessModal && (
+          <ModalSuccess
+            modalFor="Transaksi"
+            redirectTo="../receipt"
+            description={[
+              'Yeay transaksi telah berhasil',
+              'Silahkan tunggu beberapa saat untuk bukti transaksi',
+            ]}
+          />
+        )}
 
-      {showPinInput && !showSuccessModal && (
-        <>
-          <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="fixed inset-0 flex items-center justify-center">
-            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-              <h2 className="mb-4 text-center text-2xl font-semibold">
-                Masukkan PIN
-              </h2>
-              <p className="mb-6 text-center text-grey">
-                Pastikan pin sesuai dengan yang telah anda buat
-              </p>
-              <div className="mb-5 flex justify-center">
-                {pin.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
-                    type="password"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleChange(e.target.value, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    className={`mx-1 h-10 w-10 border-b-2 text-center focus:border-blue-500 focus:outline-none ${error ? 'border-danger text-danger' : 'border-gray'} `}
-                  />
-                ))}
-              </div>
-              {error && (
-                <div className="mb-4 text-center text-danger">{error}</div>
-              )}
-              <div className="mt-5 flex justify-center gap-10">
-                <Button
-                  onClick={() => {
-                    setPin(Array(6).fill(''));
-                    closePinInput();
-                  }}
-                  color="neutral-01"
-                  className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
-                >
-                  Kembali
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  color="primary-dark-blue"
-                  className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
-                >
-                  Kirim →
-                </Button>
+        {showPinInput && !showSuccessModal && (
+          <>
+            <div className="fixed inset-0 bg-black opacity-50"></div>
+            <div className="fixed inset-0 flex items-center justify-center">
+              <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+                <h2 className="mb-4 text-center text-2xl font-semibold">
+                  Masukkan PIN
+                </h2>
+                <p className="mb-6 text-center text-grey">
+                  Pastikan pin sesuai dengan yang telah anda buat
+                </p>
+                <div className="mb-5 flex justify-center">
+                  {pin.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      type="password"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleChange(e.target.value, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className={`mx-1 h-10 w-10 border-b-2 text-center focus:border-blue-500 focus:outline-none ${error ? 'border-danger text-danger' : 'border-gray'} `}
+                    />
+                  ))}
+                </div>
+                {error && (
+                  <div className="mb-4 text-center text-danger">{error}</div>
+                )}
+                <div className="mt-5 flex justify-center gap-10">
+                  <Button
+                    onClick={() => {
+                      setPin(Array(6).fill(''));
+                      closePinInput();
+                    }}
+                    color="neutral-01"
+                    className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
+                  >
+                    Kembali
+                  </Button>
+                  <Button
+                    onClick={handleSubmit}
+                    color="primary-dark-blue"
+                    className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
+                  >
+                    Kirim →
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
-    </>
-  );
+          </>
+        )}
+      </>
+    );
 };
 
 export default PinInput;

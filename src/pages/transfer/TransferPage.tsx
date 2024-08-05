@@ -35,20 +35,18 @@ import useAuth from '@/hooks/useAuth';
 
 function Transfer() {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const { api: axios, token, userId } = useAuth()
+  const { api: axios, token, userId } = useAuth();
   const [accounts, setAccounts] = useState<SavedAccount[]>([]);
   const [fetchStatusMessage, setFetchStatusMessage] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(location.pathname);
-
   const fetchSavedAccounts = useCallback(async () => {
     const res = await axios.get(`/api/saved-accounts/${userId}`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     if (Array.isArray(res.data.data))
       setAccounts(

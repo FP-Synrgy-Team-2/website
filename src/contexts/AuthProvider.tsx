@@ -21,7 +21,7 @@ export type AuthContextType = {
   token: string | null;
   authResErrors: ResponseError | null;
   setAuthResErrors: React.Dispatch<React.SetStateAction<ResponseError | null>>;
-  api: Api
+  api: Api;
 };
 
 export const AuthContext = React.createContext<AuthContextType | null>(null);
@@ -35,21 +35,24 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   // custom api to be used when your request needs auth
-  const api = React.useMemo(() => new Api(import.meta.env.VITE_API_URL, token, setToken), [token])
+  const api = React.useMemo(
+    () => new Api(import.meta.env.VITE_API_URL, token, setToken),
+    [token]
+  );
 
   const refreshToken = React.useCallback(async () => {
     try {
-      if (!Cookies.get('refresh-token'))
-        throw new Error('Not authenticated')
-      
+      if (!Cookies.get('refresh-token')) throw new Error('Not authenticated');
+
       const response = await api.get(
         `/api/refresh-token?refresh_token=${Cookies.get('refresh-token')}`
       );
       if (response.status === 200) {
-
         // save userId on mount for cases when user closes or reloads page but not logged-off
         if (!userId)
-          setUserId(jwtDecode<CustomJWTPayload>(response.data.access_token).user_id)
+          setUserId(
+            jwtDecode<CustomJWTPayload>(response.data.access_token).user_id
+          );
 
         setToken(response.data.access_token);
         setAuthResErrors(null);
@@ -71,7 +74,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [api, setToken, setAuthResErrors, setLoading]);
 
   React.useEffect(() => {
-    refreshToken();
+    if (!token) refreshToken();
 
     // commented out as access token refreshing is auto-handled by axios interceptor, look at Api class for details
     // const intervalId = setInterval(
@@ -101,8 +104,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           expires: 80,
         });
         Cookies.set('userId', response.data.data.user_id, {
-          expires: 80
-        })
+          expires: 80,
+        });
         setUserId(response.data.data.user_id);
         setAuthResErrors(null);
         navigate(onSuccess, { replace: true });
@@ -127,7 +130,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setToken(null);
-    Cookies.remove('userId')
+    Cookies.remove('userId');
     Cookies.remove('refresh_token');
   };
 
@@ -145,7 +148,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userId,
         token,
         refreshToken,
-        api
+        api,
       }}
     >
       {children}

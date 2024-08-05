@@ -13,7 +13,6 @@ import {
   Confirmation,
   New,
   Logout,
-  Pin,
   Receipt,
   Saved,
   DownloadInvoice,
@@ -44,7 +43,6 @@ function App() {
             <Route path="new" element={<New />} />
             <Route path="saved" element={<Saved />} />
             <Route path="confirm" element={<Confirmation />} />
-            <Route path="pin" element={<Pin />} />
             <Route path="receipt/:id" element={<Receipt />} />
           </Route>
           <Route path="history" element={<History />} />

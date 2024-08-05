@@ -1,8 +1,8 @@
 import { Breadcrumbs, Button } from '@/components';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { getUserData } from '@/utils/getUserData';
+import useAuth from '@/hooks/useAuth';
+// import { getUserData } from '@/utils/getUserData';
 
 interface TransactionData {
   account_id: string;
@@ -15,6 +15,8 @@ interface TransactionData {
 
 const Receipt: React.FC = () => {
   const navigate = useNavigate();
+  const { api: axios, token } = useAuth();
+
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
@@ -41,7 +43,7 @@ const Receipt: React.FC = () => {
       try {
         const transactionResponse = await axios.get(
           `${URL}/transactions/${transactionId}`,
-          { headers: { Authorization: `Bearer ${getUserData().access_token}` } }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const transactionData = transactionResponse.data;
 
@@ -50,7 +52,7 @@ const Receipt: React.FC = () => {
             `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`,
             {
               headers: {
-                Authorization: `Bearer ${getUserData().access_token}`,
+                Authorization: `Bearer ${token}`,
               },
             }
           );

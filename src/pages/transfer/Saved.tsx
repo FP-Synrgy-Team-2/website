@@ -17,9 +17,11 @@ interface FormData {
 
 function Saved() {
   const navigate = useNavigate();
-  const { api: axios, token, userId } = useAuth()
-  const [bankAccount, setBankAccount] = useState<BankAccount | null>(null)
-  const [bankAccountFetchStatus, setBankAccountFetchStatus] = useState<'no fetching' | 'error' | 'fetching'>('no fetching')
+  const { api: axios, token, userId } = useAuth();
+  const [bankAccount, setBankAccount] = useState<BankAccount | null>(null);
+  const [bankAccountFetchStatus, setBankAccountFetchStatus] = useState<
+    'no fetching' | 'error' | 'fetching'
+  >('no fetching');
   const [recipientAccountStatus, setRecipientAccountStatus] = useState<
     'initial' | 'not found' | 'found' | 'error' | 'invalid' | 'fetching'
   >('initial');
@@ -47,23 +49,21 @@ function Saved() {
 
   const fetchBankAccount = useCallback(async () => {
     try {
-      setBankAccountFetchStatus('fetching')
+      setBankAccountFetchStatus('fetching');
       const res = await axios.get(`/api/bank-accounts/user/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      if (res.data.code === 404)
-        throw new Error('not found')
-      setBankAccount(snakeToCamelCase<BankAccount>(res.data.data))
-      setBankAccountFetchStatus('no fetching')
+      if (res.data.code === 404) throw new Error('not found');
+      setBankAccount(snakeToCamelCase<BankAccount>(res.data.data));
+      setBankAccountFetchStatus('no fetching');
     } catch (err) {
-      console.error(err)
-      setBankAccountFetchStatus('error')
+      console.error(err);
+      setBankAccountFetchStatus('error');
     }
-
-  }, [setBankAccountFetchStatus])
+  }, [setBankAccountFetchStatus]);
 
   const fetchRecipientAccountStatus = useCallback(async () => {
     const navigateToTransfer = () => navigate('/transfer');
@@ -78,7 +78,7 @@ function Saved() {
     try {
       setRecipientAccountStatus('fetching');
       const res = await axios.get(
-        `/bank-accounts/account/${recipientAccountNumber}`
+        `/api/bank-accounts/account/${recipientAccountNumber}`
       );
       if (res.data.code === 403) {
         setRecipientAccountStatus('not found');
@@ -106,7 +106,9 @@ function Saved() {
 
     if (bankAccount && recipientAccountStatus === 'found') {
       const data = {
-        fromAccount: bankAccount?.accountNumber,
+        balance: bankAccount.balance,
+        fromAccount: bankAccount.accountNumber,
+        fromName: bankAccount.ownerName,
         toAccount: account.accountNumber,
         toName: account.ownerName,
         amount: formData.nominal,
@@ -182,29 +184,47 @@ function Saved() {
           </h2>
           <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
             <span className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
-                {bankAccountFetchStatus === 'fetching' ? <Skeleton containerClassName='w-full' baseColor='#5D5D5D'/> : bankAccountFetchStatus === 'error' ? <>
+              {bankAccountFetchStatus === 'fetching' ? (
+                <Skeleton containerClassName="w-full" baseColor="#5D5D5D" />
+              ) : bankAccountFetchStatus === 'error' ? (
+                <>
                   Gagal memuat data, ulangi?
                   <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
-                  <button
-                    type="button"
-                    aria-label="Tombol muat ulang data rekening tujuan"
-                    onClick={() => {
-                      fetchBankAccount();
-                    }}
-                  >
-                    <img src={arrowClockwiseSVG} alt="Muat ulang" />
-                  </button>
-                </span>
-                </> : <>
-                {bankAccount?.ownerName}
-                <img src={colorBlueSVG} alt="Bank Icon" />
-              </>}
+                    <button
+                      type="button"
+                      aria-label="Tombol muat ulang data rekening tujuan"
+                      onClick={() => {
+                        fetchBankAccount();
+                      }}
+                    >
+                      <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                    </button>
+                  </span>
+                </>
+              ) : (
+                <>
+                  {bankAccount?.ownerName}
+                  <img src={colorBlueSVG} alt="Bank Icon" />
+                </>
+              )}
             </span>
             <span
               className="text-lg text-dark-grey"
-              aria-label={bankAccountFetchStatus === 'fetching' ? 'memuat data rekening sumber' : bankAccountFetchStatus === 'error' ? 'error' : bankAccount?.accountNumber.split('').join(' ')}
+              aria-label={
+                bankAccountFetchStatus === 'fetching'
+                  ? 'memuat data rekening sumber'
+                  : bankAccountFetchStatus === 'error'
+                    ? 'error'
+                    : bankAccount?.accountNumber.split('').join(' ')
+              }
             >
-              {bankAccountFetchStatus === 'fetching' ? <Skeleton baseColor='#5D5D5D'/> : bankAccountFetchStatus === 'error' ? <>&bull;&bull;&bull;&bull;&bull;&bull;&bull;</> : bankAccount?.accountNumber}
+              {bankAccountFetchStatus === 'fetching' ? (
+                <Skeleton baseColor="#5D5D5D" />
+              ) : bankAccountFetchStatus === 'error' ? (
+                <>&bull;&bull;&bull;&bull;&bull;&bull;&bull;</>
+              ) : (
+                bankAccount?.accountNumber
+              )}
             </span>
           </p>
         </section>
