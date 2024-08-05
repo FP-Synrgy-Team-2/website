@@ -141,10 +141,8 @@ const PinInput: React.FC<PinInputProps> = ({
         {showSuccessModal && (
           <ModalSuccess
             modalFor="Transaksi"
-            redirectTo="../receipt"
             description={[
-              'Yeay transaksi telah berhasil',
-              'Silahkan tunggu beberapa saat untuk bukti transaksi',
+              'Pin anda tervalidasi, silahkan tunggu proses transfer',
             ]}
           />
         )}
@@ -154,10 +152,13 @@ const PinInput: React.FC<PinInputProps> = ({
             <div className="fixed inset-0 bg-black opacity-50"></div>
             <div className="fixed inset-0 flex items-center justify-center">
               <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-                <h2 className="mb-4 text-center text-2xl font-semibold">
+                <h2
+                  className="mb-4 text-center text-2xl font-semibold"
+                  tabIndex={0}
+                >
                   Masukkan PIN
                 </h2>
-                <p className="mb-6 text-center text-grey">
+                <p className="mb-6 text-center text-grey" tabIndex={0}>
                   Pastikan pin sesuai dengan yang telah anda buat
                 </p>
                 <div className="mb-5 flex justify-center">
@@ -175,7 +176,9 @@ const PinInput: React.FC<PinInputProps> = ({
                   ))}
                 </div>
                 {error && (
-                  <div className="mb-4 text-center text-danger">{error}</div>
+                  <div className="mb-4 text-center text-danger" tabIndex={0}>
+                    {error}
+                  </div>
                 )}
                 <div className="mt-5 flex justify-center gap-10">
                   <ButtonSecondary
@@ -193,7 +196,7 @@ const PinInput: React.FC<PinInputProps> = ({
                     color="primary-dark-blue"
                     className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
                   >
-                    Kirim →
+                    Kirim <span aria-hidden={true}>→</span>
                   </ButtonPrimary>
                 </div>
               </div>

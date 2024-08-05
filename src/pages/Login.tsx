@@ -11,11 +11,23 @@ interface LoginFormValues {
 }
 
 const EyeSvgShow = () => {
-  return <img src="/images/icons/eye_show.svg" className="img-black" alt="" />;
+  return (
+    <img
+      src="/images/icons/eye_show.svg"
+      className="img-black"
+      alt="Tampilkan password"
+    />
+  );
 };
 
 const EyeSvgHidden = () => {
-  return <img src="/images/icons/eye_hide.svg" className="img-black" alt="" />;
+  return (
+    <img
+      src="/images/icons/eye_hide.svg"
+      className="img-black"
+      alt="Sembunyikan password"
+    />
+  );
 };
 
 const Login = () => {
@@ -141,7 +153,7 @@ const Login = () => {
                   className="absolute right-0 mx-4"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeSvgShow /> : <EyeSvgHidden />}
+                  {showPassword ? <EyeSvgHidden /> : <EyeSvgShow />}
                 </button>
               </span>
               {methods.formState.errors.password?.message && (

@@ -4,6 +4,7 @@ import PinInput from './Pin';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import { getAccountId } from '@/utils/getUserData';
+import moment from 'moment';
 
 const ADMIN_FEE = 0;
 
@@ -34,7 +35,6 @@ function Confirmation() {
   const navigate = useNavigate();
 
   const handlePinValidated = async () => {
-    const now = new Date();
     try {
       if (token) {
         const [sourceAccountId, beneficiaryAccountId] = await Promise.all([
@@ -42,17 +42,14 @@ function Confirmation() {
           getAccountId(api, toAccount, token),
         ]);
 
+        const transactionDate = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         const { data } = await api.post(
           `/api/transactions`,
           {
             account_id: sourceAccountId,
             beneficiary_account: beneficiaryAccountId,
             amount,
-            transaction_date:
-              now.toISOString().slice(0, 10) +
-              ' ' +
-              now.toLocaleTimeString().slice(0, 8) +
-              '.000',
+            transaction_date: transactionDate,
             note,
             saved,
           },
@@ -91,10 +88,16 @@ function Confirmation() {
             <div className="flex h-[45px] w-[45px] items-center justify-center rounded-full bg-primary-blue font-bold text-white">
               <span className="">{fromName[0]}</span>
             </div>
-            <span className="self-center text-[24px]">{fromName}</span>
+            <span
+              className="self-center text-[24px]"
+              tabIndex={0}
+              aria-label={'Nama pemilik rekening: ' + fromName}
+            >
+              {fromName}
+            </span>
           </div>
           <div className="grid basis-1/2 justify-items-end self-center">
-            <div className="text-xl">
+            <div className="text-xl" tabIndex={0}>
               {Math.abs(balance).toLocaleString('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
@@ -103,8 +106,15 @@ function Confirmation() {
           </div>
         </h2>
 
-        <table className="mt-[1.625rem] w-full text-left">
-          <caption className="flex items-center border-b border-opacity-20 text-dark-grey">
+        <table
+          className="mt-[1.625rem] w-full text-left"
+          aria-labelledby="detail-transaction"
+        >
+          <caption
+            className="flex items-center border-b border-opacity-20 text-dark-grey"
+            aria-label="Rincian Transaksi"
+            id="detail-transaction"
+          >
             Rincian Transaksi
           </caption>
           <tbody className="mb-5 mt-3.5 flex flex-col gap-[1rem]">

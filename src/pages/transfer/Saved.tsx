@@ -119,37 +119,39 @@ function Saved() {
   };
 
   return (
-    <div className="px-[2.6875rem] py-[4.625rem]">
+    <div className="">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-      <div className="mt-[4.0625rem] flex w-[30.75rem] flex-col">
+      <div className="mt-3 flex w-1/2 flex-col">
         <section
           className="flex flex-col gap-[1.125rem]"
           aria-labelledby="saved-account-to"
         >
-          <h2 className="text-2xl" id="saved-account-to">
+          <h2 className="text-xl-body" id="saved-account-to" tabIndex={0}>
             Rekening Tujuan
           </h2>
           <p
-            className={`${recipientAccountStatus === 'error' || recipientAccountStatus === 'invalid' ? 'text-base text-danger' : 'text-2xl font-semibold'}`}
+            className={`${recipientAccountStatus === 'error' || recipientAccountStatus === 'invalid' ? 'text-base text-danger' : 'text-xl-body font-semibold'}`}
           >
             {recipientAccountStatus === 'fetching' ? (
               <Skeleton className="h-8" />
             ) : recipientAccountStatus === 'found' ? (
               <>
-                {account.ownerName}
+                <span tabIndex={0}>{account.ownerName}</span>
                 <span
+                  tabIndex={0}
                   className="font-normal text-dark-grey"
                   aria-label={account.accountNumber.split('').join(' ')}
                 >
                   {' '}
-                  &bull; {account.accountNumber}
+                  <span aria-hidden={true}> &bull;</span>
+                  {account.accountNumber}
                 </span>
               </>
             ) : recipientAccountStatus === 'error' ? (
               <span className="inline-flex items-center" role="alert">
                 Error memuat data rekening tujuan, muat ulang?
-                <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                <span className="ml-1 inline-flex items-center rounded-lg p-0.5 hover:shadow-md">
                   <button
                     type="button"
                     aria-label="Tombol muat ulang data rekening tujuan"
@@ -180,17 +182,17 @@ function Saved() {
           className="mt-[1.0625rem]"
           aria-labelledby="saved-account-from"
         >
-          <h2 className="text-2xl" id="saved-account-from">
+          <h2 className="text-xl-body" id="saved-account-from" tabIndex={0}>
             Rekening Sumber
           </h2>
-          <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-3xl bg-[#E4EDFF] px-6 py-2.5">
-            <span className="flex gap-[0.3125rem] text-2xl text-primary-dark-blue">
+          <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-lg bg-[#E4EDFF] px-6 py-2.5">
+            <span className="flex gap-[0.3125rem] text-xl-body text-primary-dark-blue">
               {bankAccountFetchStatus === 'fetching' ? (
                 <Skeleton containerClassName="w-full" baseColor="#5D5D5D" />
               ) : bankAccountFetchStatus === 'error' ? (
                 <>
                   Gagal memuat data, ulangi?
-                  <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                  <span className="ml-1 inline-flex items-center rounded-lg p-0.5 hover:shadow-md">
                     <button
                       type="button"
                       aria-label="Tombol muat ulang data rekening tujuan"
@@ -207,12 +209,13 @@ function Saved() {
                 </>
               ) : (
                 <>
-                  {bankAccount?.ownerName}
-                  <img src="/images/icons/color=blue.svg" alt="Bank Icon" />
+                  <span tabIndex={0}>{bankAccount?.ownerName}</span>
+                  <img src="/images/icons/color=blue.svg" alt="" />
                 </>
               )}
             </span>
             <span
+              tabIndex={0}
               className="text-lg text-dark-grey"
               aria-label={
                 bankAccountFetchStatus === 'fetching'
@@ -236,7 +239,7 @@ function Saved() {
         <Form
           onSubmit={onSubmit}
           methods={methods}
-          className="flex w-[30.75rem] flex-col"
+          className="flex w-full flex-col"
           id="saved-input-form"
         >
           <fieldset
@@ -244,7 +247,7 @@ function Saved() {
             aria-labelledby="saved-input-amount"
             form="saved-input-form"
           >
-            <Label className="text-2xl" id="saved-input-amount">
+            <Label className="text-xl-body" id="saved-input-amount">
               Nominal Transfer
             </Label>
             <Input
@@ -254,7 +257,7 @@ function Saved() {
               placeholder="xxxxxxx"
               aria-label="Text input field rekening tujuan"
               type="number"
-              className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              className="no-increment-buttons mt-[0.3125rem] flex h-[3.75rem] w-full rounded-lg border px-[1.875rem] py-2.5 text-lg"
               min={0}
               max={100000000}
             />
@@ -270,7 +273,7 @@ function Saved() {
             aria-labelledby="saved-input-note"
             form="saved-input-form"
           >
-            <Label className="text-2xl" id="saved-input-note">
+            <Label className="text-xl-body" id="saved-input-note">
               Catatan (Optional)
             </Label>
             <Input
@@ -278,18 +281,18 @@ function Saved() {
               placeholder="Tambahkan catatan"
               aria-label="Text input field catatan (opsional)"
               type="text"
-              className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-3xl border px-[1.875rem] py-2.5 text-lg"
+              className="mt-[0.3125rem] flex h-[3.75rem] w-full rounded-lg border px-[1.875rem] py-2.5 text-lg"
             />
           </fieldset>
 
           {/* <div className="h-[3.25rem] mt-[0.6875rem] flex gap-2.5 items-center">
             <input {...register('simpanRekening')} type="checkbox" id="check" className='scale-150' />
-            <Label htmlFor="check" className='text-2xl'>Simpan Rekening</Label>
+            <Label htmlFor="check" className='text-xl-body'>Simpan Rekening</Label>
           </div> */}
 
           <Button
             type="submit"
-            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-3xl bg-primary-dark-blue px-2.5 py-[0.3125rem] text-2xl font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-lg bg-primary-dark-blue px-2.5 py-[0.3125rem] text-xl-body font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="Tombol lanjutkan"
           >
             Lanjutkan
