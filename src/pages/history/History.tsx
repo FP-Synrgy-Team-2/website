@@ -45,7 +45,7 @@ function History() {
     []
   );
   const [transactionId, setTransactionId] = useState<string | null>(null);
-  const { token, user_id: userId } = useAuth();
+  const { token, userId } = useAuth();
 
   const navigate = useNavigate();
 

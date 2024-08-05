@@ -2,32 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MutationRecord from './MutationRecord';
 import useAuth from '@/hooks/useAuth';
+import { TransactionProps, TransactionsProps } from '@/types/transaction';
+import { ButtonPrimary } from '@/components';
 
-interface TransactionProps {
-  transaction_id: string;
-  from: {
-    account_id: string;
-    owner_name: string;
-    account_number: string;
-  };
-  to: {
-    account_id: string;
-    owner_name: string;
-    account_number: string;
-  };
-  transaction_date: string;
-  amount: number;
-  admin_fee: number;
-  total: number;
-  note: string;
-  type: string;
-}
-
-interface TransactionsListProps {
-  transactions: TransactionProps[] | null;
-}
-
-function TransactionsList({ transactions }: TransactionsListProps) {
+function TransactionsList({ transactions }: TransactionsProps) {
   if (transactions) {
     return transactions.map((transaction: TransactionProps, index) => (
       <MutationRecord
@@ -53,11 +31,10 @@ const TableMutasi: React.FC = () => {
     startDate: string | null,
     endDate: string | null
   ) {
-    const URL = import.meta.env.VITE_API_URL;
     let transactions: null | TransactionProps[] = null;
     api
       .post(
-        URL + `/transactions/history/${userId}`,
+        `/transactions/history/${userId}`,
         {
           start_date: startDate,
           end_date: endDate,
@@ -82,27 +59,31 @@ const TableMutasi: React.FC = () => {
     const startDate = new Date(0).toISOString();
     const endDate = new Date().toISOString();
     getTransactions(userId, startDate, endDate);
-  }, [token]);
+  }, [token, userId]);
 
   return (
     <section className="flex w-182.5 flex-col gap-2.5">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg uppercase" aria-label="mutasi rekening">
+        <h2 className="text-xl-body uppercase" aria-label="mutasi rekening">
           Transaksi Akun
         </h2>
         <Link to="/history">
-          <button
-            className="h-12 w-42 rounded-xl bg-primary-blue p-2.5 text-center text-lg font-bold uppercase text-neutral-01"
+          <ButtonPrimary
+            className=""
             type="button"
             aria-label="tombol tampilkan semua"
           >
             Tampilkan Semua
-          </button>
+          </ButtonPrimary>
         </Link>
       </div>
-      <ul id="mutation-table" aria-label="daftar mutasi rekening terakhir">
-        <TransactionsList transactions={transactions} />
-      </ul>
+      {(transactions?.length ?? 0) > 0 ? (
+        <ul id="mutation-table" aria-label="daftar mutasi rekening terakhir">
+          <TransactionsList transactions={transactions} />
+        </ul>
+      ) : (
+        <p>Tidak ada riwayat transaksi</p>
+      )}
     </section>
   );
 };

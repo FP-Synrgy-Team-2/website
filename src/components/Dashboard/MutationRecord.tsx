@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import transferSVG from '../../assets/arrow-up-down.svg';
 
 type MutationRecordType = {
   bankName: string;
@@ -21,7 +20,7 @@ const MutationRecord: FC<MutationRecordType> = ({
       <div className="mb-2 flex gap-2.5 text-lg font-bold">
         <span
           className="box-content h-6 w-6 rounded-full bg-primary-light-blue bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${transferSVG})` }}
+          style={{ backgroundImage: `url('/images/icons/arrow-up-down.svg')` }}
         />
         Transfer
       </div>

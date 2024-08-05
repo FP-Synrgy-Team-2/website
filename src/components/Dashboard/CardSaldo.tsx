@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import CopyIcon from '../../assets/icons/Copy_alt.png';
-import HideEye from '../../assets/icons/hide_eye_fill.svg';
-import ShowEye from '../../assets/icons/show_eye.svg';
 
 type AccountData = {
   account_number: string;
@@ -50,11 +47,11 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
           <p className="text-sm-body font-thin" aria-label="Nomor rekening">
             Nomor Rekening
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
             <h1
               className="text-xl-body font-bold"
               id="rekening"
-              aria-label={accountData.account_number}
+              aria-label={'Nomor Rekening: ' + accountData.account_number}
             >
               {accountData.account_number}
             </h1>
@@ -68,7 +65,10 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
                   copied
                 </span>
               )}
-              <img src={CopyIcon} alt="tombol salin rekening" />
+              <img
+                src="/images/icons/Copy_alt.png"
+                alt="tombol salin rekening"
+              />
             </button>
           </div>
         </div>
@@ -76,7 +76,7 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
           <p className="text-sm-body font-thin" aria-label="Saldo">
             Saldo
           </p>
-          <div className="flex gap-2">
+          <div className="flex justify-between gap-2">
             <p className="text-sm-body font-thin" aria-label={'Rp. ' + saldo}>
               Rp.{' '}
               <span className="text-xl-body font-bold" id="saldo">
@@ -89,13 +89,13 @@ const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
             >
               {isSaldoHidden ? (
                 <img
-                  src={ShowEye}
+                  src="/images/icons/eye_show.svg"
                   alt="tombol tampilkan saldo"
                   aria-label="tombol tampilkan saldo"
                 />
               ) : (
                 <img
-                  src={HideEye}
+                  src="/images/icons/eye_hide.svg"
                   alt="tombol sembunyikan saldo"
                   aria-label="tombol sembunyikan saldo"
                 />

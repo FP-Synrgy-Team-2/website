@@ -1,5 +1,4 @@
 import ModalBase from './ModalBase';
-import xCircleFill from '@/assets/x-circle-fill.svg';
 import { FC } from 'react';
 
 type ModalFailType = {
@@ -15,7 +14,7 @@ const ModalFail: FC<ModalFailType> = ({
 }) => {
   return (
     <ModalBase
-      icon={xCircleFill}
+      icon="/images/icons/x-circle-fill.svg"
       mainText={`${modalFor} Gagal`}
       text={description}
       redirectInMs={5000}

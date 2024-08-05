@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import bannerSVG from '@/assets/banner.svg';
 
 type BannerContents = {
   title: string;
@@ -32,12 +31,12 @@ const Banner = () => {
     <section
       className="dash-banner"
       role="banner"
-      style={{ backgroundImage: `url(${bannerSVG})` }}
+      style={{ backgroundImage: `url('/images/icons/banner.svg')` }}
       aria-labelledby="banner-text"
       aria-label={bannerContents.ariaLabel}
       tabIndex={0}
     >
-      <article className="flex w-85 flex-col gap-3.75 self-center">
+      <article className="flex w-full flex-col gap-3.75 self-center">
         <h2 className="font-medium text-dark-grey">{bannerContents.title}</h2>
         <p
           className="text-xl font-normal"

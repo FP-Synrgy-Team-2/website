@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Breadcrumbs } from '@/components';
+import { Breadcrumbs, ButtonPrimary, ButtonSecondary } from '@/components';
 import PinInput from './Pin';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
@@ -51,7 +51,8 @@ function Confirmation() {
             transaction_date:
               now.toISOString().slice(0, 10) +
               ' ' +
-              now.toLocaleTimeString().slice(0, 8),
+              now.toLocaleTimeString().slice(0, 8) +
+              '.000',
             note,
             saved,
           },
@@ -82,13 +83,13 @@ function Confirmation() {
   };
 
   return (
-    <div className="px-[2.6875rem] py-[4.625rem]">
+    <>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <section className="w-[31.875rem] pt-12">
+      <section className="w-1/2">
         <h2 className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
-          <div className="flex basis-1/2 items-center gap-[20px]">
+          <div className="flex basis-1/2 items-center gap-2">
             <div className="flex h-[45px] w-[45px] items-center justify-center rounded-full bg-primary-blue font-bold text-white">
-              <span className="text-2xl">{fromName[0]}</span>
+              <span className="">{fromName[0]}</span>
             </div>
             <span className="self-center text-[24px]">{fromName}</span>
           </div>
@@ -102,11 +103,11 @@ function Confirmation() {
           </div>
         </h2>
 
-        <table className="mt-[1.625rem] w-full text-left text-2xl">
-          <caption className="flex h-[3.8125rem] items-center border-b border-opacity-20 text-dark-grey">
+        <table className="mt-[1.625rem] w-full text-left">
+          <caption className="flex items-center border-b border-opacity-20 text-dark-grey">
             Rincian Transaksi
           </caption>
-          <tbody className="mb-5 mt-3.5 flex flex-col gap-[1.6875rem]">
+          <tbody className="mb-5 mt-3.5 flex flex-col gap-[1rem]">
             {[
               ['Rekening Sumber', fromAccount],
               ['Rekening Tujuan', toAccount],
@@ -147,40 +148,19 @@ function Confirmation() {
           </tfoot>
         </table>
 
-        <div className="mt-[4.4375rem] flex justify-end gap-[1.875rem] text-2xl font-bold">
-          <button
-            className="h-[3.25rem] w-[10.4375rem] rounded-[1.875rem] border border-primary-dark-blue bg-white text-primary-dark-blue"
-            onClick={() => navigate(-1)}
-          >
+        <div className="mt-3 flex justify-end gap-[1.875rem] font-bold">
+          <ButtonSecondary className="h-12 w-48" onClick={() => navigate(-1)}>
             Kembali
-          </button>
-          <button
-            className="flex h-[3.25rem] w-[10.4375rem] items-center justify-center gap-2.5 rounded-[1.875rem] bg-primary-dark-blue text-white"
+          </ButtonSecondary>
+          <ButtonPrimary
+            className="flex h-12 w-48 items-center justify-center gap-2.5"
             onClick={handleClick}
           >
             Kirim
             <span>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M17 12H3"
-                  stroke="#FFFFFF"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M21.7152 11.7966L16.265 7.90356C15.7355 7.52535 15 7.90385 15 8.55455V15.4454C15 16.0961 15.7355 16.4746 16.265 16.0964L21.7152 12.2034C21.8548 12.1037 21.8548 11.8963 21.7152 11.7966Z"
-                  fill="#FFFFFF"
-                />
-              </svg>
+              <img src="/images/icons/send.svg" className="img-white" alt="" />
             </span>
-          </button>
+          </ButtonPrimary>
         </div>
       </section>
       {showPinInput && (
@@ -200,7 +180,7 @@ function Confirmation() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 

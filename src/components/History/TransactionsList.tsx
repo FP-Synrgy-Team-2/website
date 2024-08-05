@@ -1,26 +1,4 @@
-interface TransactionProps {
-  transaction_id: string;
-  from: {
-    account_id: string;
-    owner_name: string;
-    account_number: string;
-  };
-  to: {
-    account_id: string;
-    owner_name: string;
-    account_number: string;
-  };
-  transaction_date: string;
-  amount: number;
-  admin_fee: number;
-  total: number;
-  note: number;
-  type: string;
-}
-
-interface TransactionsProps {
-  transactions: TransactionProps[] | null;
-}
+import { TransactionsProps, TransactionProps } from '@/types/transaction';
 
 const returnLocalDateAndTime = (transactionDate: string) => {
   const dateObj = new Date(transactionDate);

@@ -3,8 +3,11 @@ import { ReactNode } from 'react';
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="container relative mx-auto flex h-screen justify-between">
-      <NavbarLogo className="absolute left-[68px] top-[50px] flex flex-col items-end" />
+    <div
+      className="container relative mx-auto flex h-screen justify-between"
+      id="login-page"
+    >
+      <NavbarLogo className="absolute left-[68px] top-[25px] flex flex-col items-end" />
       <div className="flex h-full w-1/2 items-center justify-center lg:w-3/4 md:w-full">
         {children}
       </div>
@@ -15,11 +18,6 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           className="h-full w-full object-cover"
         />
       </div>
-      {/* <img
-        src="images/login/blue_object_blc.webp"
-        alt=""
-        className="absolute bottom-0 left-0"
-      /> */}
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import useAuth from '@/hooks/useAuth';
+import { Protected } from '@/components';
 import DashboardLayouts from '@/layouts/DashboardLayouts';
 import ReceiptLayouts from '@/layouts/ReceiptLayouts';
-
-import { Protected } from '@/components';
-// import { useEffect, useState } from 'react';
 
 import {
   Dashboard,
@@ -20,9 +19,22 @@ import {
 } from './pages';
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <>
       <Routes>
+        <Route
+          index
+          element={
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
         <Route path="/login" element={<Login />} />
         <Route path="/logout" />
         <Route path="/forgot-password" element={<Logout />} />

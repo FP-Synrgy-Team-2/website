@@ -1,5 +1,4 @@
 import { Banner, SavedAccounts, CardSaldo, TableMutasi } from '@/components';
-import dashboardSVG from '@/assets/dashboard.svg';
 import { useEffect, useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 
@@ -30,7 +29,7 @@ function Dashboard() {
     <main
       id="dashboard-main"
       className=""
-      style={{ backgroundImage: `url(${dashboardSVG})` }}
+      style={{ backgroundImage: `url('/images/icons/dashboard.svg')` }}
     >
       <div className="flex w-265 justify-between">
         {accountData && <CardSaldo accountData={accountData} />}
