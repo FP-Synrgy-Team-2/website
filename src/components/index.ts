@@ -18,7 +18,6 @@ import Label from '@/components/General/Label';
 import Banner from '@/components/Dashboard/Banner';
 import SavedAccountCard from '@/components/Dashboard/SavedAccountCard';
 import SavedAccounts from '@/components/Dashboard/SavedAccounts';
-import ServiceCard from '@/components/Dashboard/ServiceCard';
 
 import CardSaldo from '@/components/Dashboard/CardSaldo';
 import TableMutasi from '@/components/Dashboard/TableMutasi';
@@ -47,5 +46,4 @@ export {
   TableMutasi,
   SavedAccountCard,
   SavedAccounts,
-  ServiceCard,
 };
