@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import { Button, ModalSuccess } from '@/components';
+import { ButtonPrimary, ButtonSecondary, ModalSuccess } from '@/components';
 import useAuth from '@/hooks/useAuth';
 import { getAccountId } from '@/utils/getUserData';
 import { useNavigate } from 'react-router-dom';
@@ -119,7 +119,6 @@ const PinInput: React.FC<PinInputProps> = ({
       accountNumber: data.fromAccount,
       pin: pin.join(''),
     });
-    console.log(isValid);
 
     if (!isValid) {
       setError('PIN tidak valid');
@@ -130,7 +129,6 @@ const PinInput: React.FC<PinInputProps> = ({
       }, 3000);
     } else {
       setError('');
-      console.log('PIN Submitted:', pin.join(''));
       setShowSuccessModal(true);
       onPinValidated();
     }
@@ -180,7 +178,7 @@ const PinInput: React.FC<PinInputProps> = ({
                   <div className="mb-4 text-center text-danger">{error}</div>
                 )}
                 <div className="mt-5 flex justify-center gap-10">
-                  <Button
+                  <ButtonSecondary
                     onClick={() => {
                       setPin(Array(6).fill(''));
                       closePinInput();
@@ -189,14 +187,14 @@ const PinInput: React.FC<PinInputProps> = ({
                     className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
                   >
                     Kembali
-                  </Button>
-                  <Button
+                  </ButtonSecondary>
+                  <ButtonPrimary
                     onClick={handleSubmit}
                     color="primary-dark-blue"
                     className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
                   >
                     Kirim →
-                  </Button>
+                  </ButtonPrimary>
                 </div>
               </div>
             </div>

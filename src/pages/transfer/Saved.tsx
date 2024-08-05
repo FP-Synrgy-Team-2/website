@@ -3,9 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { BankAccount, SavedAccount } from '@/types';
 import { Breadcrumbs, Form, Label, Input, Button } from '@/components';
-import colorBlueSVG from '../../assets/icons/color=blue.svg';
 import Skeleton from 'react-loading-skeleton';
-import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 import useAuth from '@/hooks/useAuth';
 import { snakeToCamelCase } from '@/utils/formatter';
 
@@ -159,7 +157,10 @@ function Saved() {
                       fetchRecipientAccountStatus();
                     }}
                   >
-                    <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                    <img
+                      src="/images/iconsarrow-clockwise.svg"
+                      alt="Muat ulang"
+                    />
                   </button>
                 </span>
               </span>
@@ -197,14 +198,17 @@ function Saved() {
                         fetchBankAccount();
                       }}
                     >
-                      <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                      <img
+                        src="/images/icons/arrow-clockwise.svg"
+                        alt="Muat ulang"
+                      />
                     </button>
                   </span>
                 </>
               ) : (
                 <>
                   {bankAccount?.ownerName}
-                  <img src={colorBlueSVG} alt="Bank Icon" />
+                  <img src="/images/icons/color=blue.svg" alt="Bank Icon" />
                 </>
               )}
             </span>
@@ -298,50 +302,3 @@ function Saved() {
 }
 
 export default Saved;
-
-{
-  /* {recipientAccountStatus === 'fetching' ? (
-          <div className="mt-10 flex flex-col gap-[1.125rem]">
-            <Skeleton className="h-8" />
-            <Skeleton className="h-8" />
-          </div>
-        ) : recipientAccountStatus === 'found' ? (
-          <div className="mt-16 flex flex-col gap-[1.125rem]">
-            <Label className="text-2xl">Rekening Tujuan</Label>
-            <p className="text-2xl font-semibold">
-              {account.ownerName}
-              <span className="font-normal text-dark-grey" aria-label={account.accountNumber.split('').join(' ')}>
-                {' '}
-                &bull; {account.accountNumber}
-              </span>
-            </p>
-          </div>
-        ) : (
-          <p className="mt-10 flex items-center text-danger" role="alert">
-            {recipientAccountStatus === 'error' ? (
-              <>
-                Error memuat data rekening tujuan, muat ulang?
-                <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
-                  <button
-                    type="button"
-                    aria-label="Tombol muat ulang data rekening tujuan"
-                    onClick={() => {
-                      fetchRecipientAccountStatus();
-                    }}
-                  >
-                    <img src={arrowClockwiseSVG} alt="Muat ulang" />
-                  </button>
-                </span>
-              </>
-            ) : (
-              <span className="relative inline-flex items-center">
-                {recipientAccountStatus === 'invalid'
-                  ? 'Rekening tujuan tidak valid, mengalihkan '
-                  : 'Rekening tujuan tidak ditemukan, mengalihkan'}
-                <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
-                <p className="sr-only">Memuat data rekening</p>
-              </span>
-            )}
-          </p>
-        )} */
-}

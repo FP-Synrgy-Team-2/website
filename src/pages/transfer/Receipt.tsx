@@ -1,28 +1,54 @@
-import { Breadcrumbs, Button } from '@/components';
+import { Breadcrumbs, ButtonPrimary, ButtonSecondary } from '@/components';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
-// import { getUserData } from '@/utils/getUserData';
+import { getAccountNumber } from '@/utils/getUserData';
+
+interface BeneficiaryAccount {
+  account_id: string;
+  account_number: string;
+  owner_name: string;
+}
 
 interface TransactionData {
   account_id: string;
-  beneficiary_account: string;
+  beneficiary_account: BeneficiaryAccount;
   amount: number;
   admin_fee: number;
   note: string;
   total: number;
+  transaction_date: Date;
 }
 
 const Receipt: React.FC = () => {
   const navigate = useNavigate();
-  const { api: axios, token } = useAuth();
+  const { api: axios, token, userId } = useAuth();
+  const [accountNumber, setAccountNumber] = useState<string | null>(null);
 
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
   ];
 
+  const formatDate = (date: Date): string => {
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(newDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatHour = (date: Date): string => {
+    const newDate = new Date(date);
+    const hours = String(newDate.getHours()).padStart(2, '0');
+    const minutes = String(newDate.getMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  };
+
   const formatNumber = (num: number): string => {
+    if (num === 0) return '0';
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
   };
 
@@ -30,42 +56,32 @@ const Receipt: React.FC = () => {
   const transactionId = id || '';
 
   const handleDownload = () => {
-    console.log('Download receipt');
     navigate(`/transfer/invoice/${transactionId}`);
   };
 
-  const URL = import.meta.env.VITE_API_URL;
   const [data, setData] = useState<TransactionData | null>(null);
-  const [beneficiary_name, setBeneficiaryName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const transactionResponse = await axios.get(
-          `${URL}/transactions/${transactionId}`,
+          `/api/transactions/${transactionId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const transactionData = transactionResponse.data;
 
-        if (transactionData.beneficiary_account) {
-          const bankAccountResponse = await axios.get(
-            `${URL}/bank-accounts/account/${transactionData.beneficiary_account}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const bankAccountData = bankAccountResponse.data;
-          setBeneficiaryName(bankAccountData.owner_name || '');
-        }
+        const transactionData = transactionResponse.data.data;
+
+        const [accountNumber] = await Promise.all([
+          getAccountNumber(axios, userId, token),
+        ]);
+        setAccountNumber(accountNumber.account_number);
         setData(transactionData);
       } catch (error) {
         console.error('Error fetching invoice data:', error);
       }
     };
     fetchData();
-  }, [URL, transactionId]);
+  }, [transactionId, axios, token, userId]);
 
   return (
     <>
@@ -81,9 +97,9 @@ const Receipt: React.FC = () => {
           </div>
           <h1 className="text-lg font-bold">Tranksaksi Berhasil</h1>
           <div className="my-2 flex items-center gap-[15px] text-lg text-dark-grey">
-            <p>10 Juni 2024</p>
+            <p>{data ? formatDate(data.transaction_date) : '-'}</p>
             <div className="h-[10px] w-[10px] rounded-full bg-dot-grey"></div>
-            <p>10.30</p>
+            <p>{data ? formatHour(data.transaction_date) : '-'}</p>
           </div>
         </div>
 
@@ -99,11 +115,11 @@ const Receipt: React.FC = () => {
             <p className="my-3">Catatan</p>
             <p className="my-3">Total</p>
           </div>
-          {data && beneficiary_name && (
+          {data && data.beneficiary_account.owner_name && (
             <div className="mx-auto text-dark-grey">
-              <p className="my-3">{data.account_id}</p>
-              <p className="my-3">{data.beneficiary_account}</p>
-              <p className="my-3">{beneficiary_name}</p>
+              <p className="my-3">{accountNumber}</p>
+              <p className="my-3">{data.beneficiary_account.account_number}</p>
+              <p className="my-3">{data.beneficiary_account.owner_name}</p>
               <p className="my-3">Rp {formatNumber(data.amount)}</p>
               <p className="my-3">Rp {formatNumber(data.admin_fee)}</p>
               <p className="my-3">{data.note}</p>
@@ -129,19 +145,15 @@ const Receipt: React.FC = () => {
       </div>
       <div className="my-5 flex p-3">
         <div className="flex gap-7 self-center">
-          <Button
-            color="primary-dark-blue"
-            className="h-[52] w-[167px] rounded-[30px] border border-primary-dark-blue bg-white px-10 py-3 font-bold text-primary-dark-blue"
-          >
+          <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
             Kembali
-          </Button>
-          <Button
-            color="primary-dark-blue"
-            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px] border border-primary-dark-blue px-10 py-3 font-bold text-white"
+          </ButtonSecondary>
+          <ButtonPrimary
+            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px]"
             onClick={handleDownload}
           >
             <img src="/images/icons/download.svg" alt="" /> Unduh
-          </Button>
+          </ButtonPrimary>
         </div>
       </div>
     </>

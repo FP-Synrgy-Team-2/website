@@ -20,23 +20,29 @@ function DownloadInvoice() {
   }, [dataLoaded]);
 
   useEffect(() => {
-    if (dataLoaded && dimensions) {
+    if (dataLoaded && dimensions && captureRef.current) {
       const element = captureRef.current;
-      if (element) {
-        html2canvas(element, {
-          width: dimensions.width,
-          height: dimensions.height,
-        }).then((canvas) => {
+
+      html2canvas(element, {
+        width: dimensions.width,
+        height: dimensions.height,
+        scrollX: 0,
+        scrollY: 0,
+        useCORS: true, // This helps with cross-origin images
+      })
+        .then((canvas) => {
           const link = document.createElement('a');
           link.download = 'invoice.png';
           link.href = canvas.toDataURL('image/png');
           link.click();
-          // Navigate back after download
-          navigate(-1);
+          navigate(-1); // Navigate back after download
+        })
+        .catch((error) => {
+          console.error('Error generating canvas:', error);
         });
-      }
     }
   }, [dataLoaded, dimensions, navigate]);
+
   return <Invoice ref={captureRef} onDataLoaded={() => setDataLoaded(true)} />;
 }
 
