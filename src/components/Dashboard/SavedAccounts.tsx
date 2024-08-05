@@ -4,40 +4,11 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { snakeToCamelCase } from '@/utils/formatter';
 import { SavedAccount } from '@/types';
-import arrowClockwiseSVG from '../../assets/arrow-clockwise.svg';
 import useAuth from '@/hooks/useAuth';
-
-// const savedAccounts = [
-//   {
-//     account_number: '2448901238',
-//     owner_name: 'ZAKIYANSYAH',
-//     saved_account_id: '11111111'
-//   },
-//   {
-//     account_number: '19827635112',
-//     owner_name: 'JOHN',
-//     saved_account_id: '11111111'
-//   },
-//   {
-//     account_number: '19827635112',
-//     owner_name: 'BUDI',
-//     saved_account_id: '11111111'
-//   },
-//   {
-//     account_number: '19827635112',
-//     owner_name: 'DANI',
-//     saved_account_id: '11111111'
-//   },
-//   {
-//     account_number: '19827635112',
-//     owner_name: 'DANI',
-//     saved_account_id: '11111111'
-//   },
-// ].map(a => snakeToCamelCase<SavedAccount>(a))
 
 const SavedAccounts = () => {
   const [accounts, setAccounts] = useState<SavedAccount[]>([]);
-  const { api: axios, userId, token } = useAuth()
+  const { api: axios, userId, token } = useAuth();
   const [isFetching, setIsFetching] = useState(true);
   const [isErrorFetching, setIsErrorFetcing] = useState(false);
   const [fetchResult, setFetchResult] = useState('');
@@ -47,8 +18,8 @@ const SavedAccounts = () => {
       setIsFetching(true);
       const res = await axios.get(`/api/saved-accounts/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (Array.isArray(res.data.data))
         setAccounts(
@@ -116,7 +87,10 @@ const SavedAccounts = () => {
                     fetchAccounts();
                   }}
                 >
-                  <img src={arrowClockwiseSVG} alt="Muat ulang" />
+                  <img
+                    src="/images/icons/arrow-clockwise.svg"
+                    alt="Muat ulang"
+                  />
                 </button>
               </span>
             </>

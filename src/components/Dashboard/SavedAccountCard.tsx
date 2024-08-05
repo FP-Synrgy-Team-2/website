@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import personSvg from '@/assets/person-fill.svg';
 import DashboardCard from './DashboardCard';
 import { useNavigate } from 'react-router-dom';
 import { SavedAccount } from '@/types';
@@ -30,7 +29,7 @@ const SavedAccountCard: FC<SavedAccountCardProps> = ({
 
   return (
     <DashboardCard
-      image={image ? image : personSvg}
+      image={image ? image : '/images/icons/person-fill.svg'}
       text={ownerName.split(' ')[0]}
       size={image ? '3.125rem' : '2.1875rem'}
       ariaLabel={`Tombol transfer ke ${ownerName.toLowerCase()}`}

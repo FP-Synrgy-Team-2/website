@@ -18,7 +18,7 @@ function Sidebar() {
     {
       name: 'Beranda',
       icon: '/images/icons/home.svg',
-      link: '/',
+      link: '/dashboard',
       alt: 'Logo Beranda',
     },
     {
