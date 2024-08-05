@@ -55,15 +55,13 @@ function Sidebar() {
                   : 'hover:bg-primary-dark-blue hover:text-white'
               } ${item.className ?? ''}`}
               aria-label={'Tombol ' + item.name}
+              role="link"
             >
               <img
                 src={item.icon}
-                aria-hidden={true}
                 className={`${isActive ? 'img-white' : ''}`}
               />
-              <span className="body-md" aria-hidden={true}>
-                {item.name}
-              </span>
+              <span className="body-md">{item.name}</span>
             </Link>
           );
         })}
@@ -71,15 +69,10 @@ function Sidebar() {
         <button
           onClick={logout}
           className={`sidebar-item body-md mt-auto flex items-center gap-5 rounded-md p-3 hover:bg-danger hover:text-white`}
+          aria-label="Keluar"
         >
-          <img
-            src="/images/icons/arrow-right.svg"
-            alt="Logo Keluar"
-            aria-hidden={true}
-          />
-          <span className="body-md" aria-hidden={true}>
-            Keluar
-          </span>
+          <img src="/images/icons/arrow-right.svg" alt="Logo Keluar" />
+          <span className="body-md">Keluar</span>
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { FC } from 'react';
 type ModalSuccessType = {
   modalFor: string;
   description: string[];
-  redirectTo: string;
+  redirectTo?: string;
 };
 
 const ModalSuccess: FC<ModalSuccessType> = ({

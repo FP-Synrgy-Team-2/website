@@ -5,8 +5,8 @@ type ModalBaseProps = {
   mainText: string;
   text: string[];
   icon: string;
-  redirectTo: string;
-  redirectInMs: number;
+  redirectTo?: string;
+  redirectInMs?: number;
 };
 
 const ModalBase: FC<ModalBaseProps> = ({
@@ -19,7 +19,8 @@ const ModalBase: FC<ModalBaseProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => navigate(redirectTo), redirectInMs);
+    if (redirectTo && redirectInMs)
+      setTimeout(() => navigate(redirectTo), redirectInMs);
   }, [navigate, redirectTo, redirectInMs]);
 
   return (

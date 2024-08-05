@@ -64,14 +64,18 @@ const TableMutasi: React.FC = () => {
   return (
     <section className="flex w-182.5 flex-col gap-2.5">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl-body uppercase" aria-label="mutasi rekening">
+        <h2
+          className="text-xl-body uppercase"
+          aria-label="mutasi rekening"
+          tabIndex={0}
+        >
           Transaksi Akun
         </h2>
         <Link to="/history">
           <ButtonPrimary
             className=""
             type="button"
-            aria-label="tombol tampilkan semua"
+            aria-label="tombol tampilkan semua transaksi"
           >
             Tampilkan Semua
           </ButtonPrimary>

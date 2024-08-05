@@ -1,6 +1,6 @@
 import { Breadcrumbs, ButtonPrimary, ButtonSecondary } from '@/components';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import { getAccountNumber } from '@/utils/getUserData';
 
@@ -74,7 +74,7 @@ const Receipt: React.FC = () => {
         const [accountNumber] = await Promise.all([
           getAccountNumber(axios, userId, token),
         ]);
-        setAccountNumber(accountNumber.account_number);
+        setAccountNumber(accountNumber);
         setData(transactionData);
       } catch (error) {
         console.error('Error fetching invoice data:', error);
@@ -112,8 +112,6 @@ const Receipt: React.FC = () => {
             <p className="my-3">Nama penerima</p>
             <p className="my-3">Nominal Transfer</p>
             <p className="my-3">Biaya Admin</p>
-            <p className="my-3">Catatan</p>
-            <p className="my-3">Total</p>
           </div>
           {data && data.beneficiary_account.owner_name && (
             <div className="mx-auto text-dark-grey">
@@ -122,8 +120,6 @@ const Receipt: React.FC = () => {
               <p className="my-3">{data.beneficiary_account.owner_name}</p>
               <p className="my-3">Rp {formatNumber(data.amount)}</p>
               <p className="my-3">Rp {formatNumber(data.admin_fee)}</p>
-              <p className="my-3">{data.note}</p>
-              <p className="my-3">Rp {formatNumber(data.total)}</p>
             </div>
           )}
         </div>
@@ -145,9 +141,11 @@ const Receipt: React.FC = () => {
       </div>
       <div className="my-5 flex p-3">
         <div className="flex gap-7 self-center">
-          <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
-            Kembali
-          </ButtonSecondary>
+          <Link to="/dashboard">
+            <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
+              Dashboard
+            </ButtonSecondary>
+          </Link>
           <ButtonPrimary
             className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px]"
             onClick={handleDownload}

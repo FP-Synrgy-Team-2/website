@@ -110,9 +110,10 @@ function TransferForm() {
 
       <div className="flex w-[30.75rem] flex-col">
         <section className="">
-          <h2>Rekening Sumber</h2>
+          <h2 tabIndex={0}>Rekening Sumber</h2>
           <p className="relative mt-2.5 flex h-[5.3281rem] w-full flex-col justify-center gap-[0.3125rem] rounded-xl bg-[#E4EDFF] px-6 py-2.5">
             <span
+              tabIndex={0}
               className={`flex gap-[0.3125rem] ${bankAccountFetchStatus === 'error' ? 'text-lg text-danger' : 'text-xl-body text-primary-dark-blue'}`}
             >
               {bankAccountFetchStatus === 'fetching' ? (
@@ -143,13 +144,15 @@ function TransferForm() {
               )}
             </span>
             <span
+              tabIndex={0}
               className="text-lg text-dark-grey"
               aria-label={
                 bankAccountFetchStatus === 'fetching'
                   ? 'memuat data rekening sumber'
                   : bankAccountFetchStatus === 'error'
                     ? 'error'
-                    : bankAccount?.accountNumber.split('').join(' ')
+                    : 'Nomor rekening sumber:' +
+                      bankAccount?.accountNumber.split('').join(' ')
               }
             >
               {bankAccountFetchStatus === 'fetching' ? (
@@ -193,7 +196,9 @@ function TransferForm() {
               {isValidating && (
                 <>
                   <span className="spinner absolute right-[-2rem] h-4 w-4 border-4 border-primary-dark-blue" />
-                  <p className="sr-only">Memuat data rekening</p>
+                  <p className="sr-only" tabIndex={0}>
+                    Memuat data rekening
+                  </p>
                 </>
               )}
             </span>
@@ -255,7 +260,11 @@ function TransferForm() {
               id="check"
               className="scale-150"
             />
-            <Label htmlFor="check" className="" aria-label="new-input-save">
+            <Label
+              htmlFor="check"
+              className=""
+              aria-label="Tombol simpan rekening"
+            >
               Simpan Rekening
             </Label>
           </fieldset>

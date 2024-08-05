@@ -47,14 +47,11 @@ function Transfer() {
           },
         ]}
       />
-      <h2
-        className="mb-[1.8125rem] mt-10 text-2xl"
-        aria-label="Rekening tujuan"
-      >
+      <h2 className="mb-[1.8125rem] mt-10" aria-label="Rekening tujuan">
         Rekening tujuan
       </h2>
       <Link to={'/transfer/new'} aria-label="tombol transfer rekening baru">
-        <ButtonPrimary className="flex h-[5.328rem] w-[30.75rem] items-center gap-[0.375rem] rounded-2xl border-[0.5px] border-grey bg-primary-blue px-4 py-3 text-2xl text-neutral-01">
+        <ButtonPrimary className="flex h-[4rem] w-[30.75rem] items-center gap-[0.375rem] rounded-xl border-[0.5px] border-grey bg-primary-blue px-4 py-3 text-neutral-01">
           <img
             src="images/icons/plus-circle.svg"
             alt=""
@@ -64,14 +61,14 @@ function Transfer() {
         </ButtonPrimary>
       </Link>
       <h2
-        className="mb-6 mt-[1.3rem] text-2xl"
+        className="mb-6 mt-[1.3rem]"
         aria-label="pilih dari daftar rekening tersimpan"
       >
         Atau pilih dari daftar rekening tersimpan
       </h2>
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className={`flex h-[6.25rem] w-[31.25rem] items-center justify-between rounded-[20px] border-[0.5px] border-grey bg-transparent px-4 py-6 text-2xl text-grey disabled:bg-[#efefef]`}
+        className={`flex h-[4rem] w-[31.25rem] items-center justify-between rounded-xl border-[0.5px] border-grey bg-transparent px-4 py-6 text-grey disabled:bg-[#efefef]`}
         disabled={accounts.length === 0}
         aria-label="tombol pilih nomor rekening yang tersimpan"
       >
