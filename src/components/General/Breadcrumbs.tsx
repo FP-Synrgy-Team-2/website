@@ -6,7 +6,7 @@ type BreadCrumbProps = {
 };
 const Breadcrumbs: FC<BreadCrumbProps> = ({ breadcrumbs }) => {
   return (
-    <div className="text-4xl font-normal">
+    <div className="mb-10 text-md-display font-normal capitalize">
       {breadcrumbs.map((breadcrumb, index) => (
         <span key={index}>
           {index > 0 && <span className="separator">{' > '}</span>}

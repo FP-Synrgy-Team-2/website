@@ -1,17 +1,87 @@
-import { Breadcrumbs, Button } from '@/components';
-import { useNavigate } from 'react-router-dom';
+import { Breadcrumbs, ButtonPrimary, ButtonSecondary } from '@/components';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAuth from '@/hooks/useAuth';
+import { getAccountNumber } from '@/utils/getUserData';
 
-function Receipt() {
+interface BeneficiaryAccount {
+  account_id: string;
+  account_number: string;
+  owner_name: string;
+}
+
+interface TransactionData {
+  account_id: string;
+  beneficiary_account: BeneficiaryAccount;
+  amount: number;
+  admin_fee: number;
+  note: string;
+  total: number;
+  transaction_date: Date;
+}
+
+const Receipt: React.FC = () => {
   const navigate = useNavigate();
+  const { api: axios, token, userId } = useAuth();
+  const [accountNumber, setAccountNumber] = useState<string | null>(null);
+
   const breadcrumbs = [
     { label: 'Transfer', path: '/transfer' },
     { label: 'Input Data Transfer', path: '/transfer/new' },
   ];
 
-  const handleDownload = () => {
-    console.log('Download receipt');
-    navigate('/transfer/invoice/1');
+  const formatDate = (date: Date): string => {
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(newDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   };
+
+  const formatHour = (date: Date): string => {
+    const newDate = new Date(date);
+    const hours = String(newDate.getHours()).padStart(2, '0');
+    const minutes = String(newDate.getMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  };
+
+  const formatNumber = (num: number): string => {
+    if (num === 0) return '0';
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  };
+
+  const { id } = useParams<{ id: string }>();
+  const transactionId = id || '';
+
+  const handleDownload = () => {
+    navigate(`/transfer/invoice/${transactionId}`);
+  };
+
+  const [data, setData] = useState<TransactionData | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transactionResponse = await axios.get(
+          `/api/transactions/${transactionId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const transactionData = transactionResponse.data.data;
+
+        const [accountNumber] = await Promise.all([
+          getAccountNumber(axios, userId, token),
+        ]);
+        setAccountNumber(accountNumber.account_number);
+        setData(transactionData);
+      } catch (error) {
+        console.error('Error fetching invoice data:', error);
+      }
+    };
+    fetchData();
+  }, [transactionId, axios, token, userId]);
 
   return (
     <>
@@ -27,9 +97,9 @@ function Receipt() {
           </div>
           <h1 className="text-lg font-bold">Tranksaksi Berhasil</h1>
           <div className="my-2 flex items-center gap-[15px] text-lg text-dark-grey">
-            <p>10 Juni 2024</p>
+            <p>{data ? formatDate(data.transaction_date) : '-'}</p>
             <div className="h-[10px] w-[10px] rounded-full bg-dot-grey"></div>
-            <p>10.30</p>
+            <p>{data ? formatHour(data.transaction_date) : '-'}</p>
           </div>
         </div>
 
@@ -45,15 +115,17 @@ function Receipt() {
             <p className="my-3">Catatan</p>
             <p className="my-3">Total</p>
           </div>
-          <div className="mx-auto text-dark-grey">
-            <p className="my-3">8923445590</p>
-            <p className="my-3">2448901238</p>
-            <p className="my-3">John</p>
-            <p className="my-3">Rp 100.000</p>
-            <p className="my-3">Rp 0</p>
-            <p className="my-3">Bayar makanan</p>
-            <p className="my-3">Rp 100.000</p>
-          </div>
+          {data && data.beneficiary_account.owner_name && (
+            <div className="mx-auto text-dark-grey">
+              <p className="my-3">{accountNumber}</p>
+              <p className="my-3">{data.beneficiary_account.account_number}</p>
+              <p className="my-3">{data.beneficiary_account.owner_name}</p>
+              <p className="my-3">Rp {formatNumber(data.amount)}</p>
+              <p className="my-3">Rp {formatNumber(data.admin_fee)}</p>
+              <p className="my-3">{data.note}</p>
+              <p className="my-3">Rp {formatNumber(data.total)}</p>
+            </div>
+          )}
         </div>
 
         <div className="border-b-2 border-grey"></div>
@@ -63,31 +135,29 @@ function Receipt() {
             <p className="my-3">Catatan</p>
             <p className="my-3">Total</p>
           </div>
-          <div className="mx-auto text-dark-grey">
-            <p className="my-3">Bayar makanan</p>
-            <p className="my-3">Rp 100.000</p>
-          </div>
+          {data && (
+            <div className="mx-auto text-dark-grey">
+              <p className="my-3">{data.note}</p>
+              <p className="my-3">Rp {formatNumber(data.total)}</p>
+            </div>
+          )}
         </div>
       </div>
       <div className="my-5 flex p-3">
         <div className="flex gap-7 self-center">
-          <Button
-            color="primary-dark-blue"
-            className="h-[52] w-[167px] rounded-[30px] border border-primary-dark-blue bg-white px-10 py-3 font-bold text-primary-dark-blue"
-          >
+          <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
             Kembali
-          </Button>
-          <Button
-            color="primary-dark-blue"
-            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px] border border-primary-dark-blue px-10 py-3 font-bold text-white"
+          </ButtonSecondary>
+          <ButtonPrimary
+            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px]"
             onClick={handleDownload}
           >
             <img src="/images/icons/download.svg" alt="" /> Unduh
-          </Button>
+          </ButtonPrimary>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Receipt;

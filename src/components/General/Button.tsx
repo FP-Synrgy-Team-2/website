@@ -1,12 +1,19 @@
 import { FC, ButtonHTMLAttributes } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color: string;
+  children: React.ReactNode;
 }
 
-const Button: FC<ButtonProps> = ({ color, className, children, ...rest }) => {
+const Button: FC<ButtonProps> = ({ children, className, ...rest }) => {
   return (
-    <button className={`btn bg-${color} ${className} px-4 py-2`} {...rest}>
+    <button
+      className={twMerge(
+        `btn rounded-xl px-4 py-2 text-center text-md-body font-semibold focus:outline-none focus:ring-2`,
+        className
+      )}
+      {...rest}
+    >
       {children}
     </button>
   );

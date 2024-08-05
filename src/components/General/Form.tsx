@@ -12,10 +12,19 @@ interface FormProps<T extends FieldValues>
   onSubmit: SubmitHandler<T>;
   children: React.ReactNode;
   methods: UseFormReturn<T>;
+  className?: string;
+  ariaLabel?: string;
 }
 
 const FormContent = <T extends FieldValues>(
-  { onSubmit, children, className, methods, ...props }: FormProps<T>,
+  {
+    onSubmit,
+    children,
+    className = '',
+    methods,
+    ariaLabel,
+    ...props
+  }: FormProps<T>,
   ref: React.Ref<HTMLFormElement>
 ) => {
   return (
@@ -23,7 +32,8 @@ const FormContent = <T extends FieldValues>(
       <form
         ref={ref}
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={twMerge('space-y-2', className)}
+        className={twMerge('w-full', className)}
+        aria-label={ariaLabel}
         {...props}
       >
         {children}

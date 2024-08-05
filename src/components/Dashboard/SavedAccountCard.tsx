@@ -1,18 +1,17 @@
 import { FC } from 'react';
-import personSvg from '@/assets/person-fill.svg';
 import DashboardCard from './DashboardCard';
 import { useNavigate } from 'react-router-dom';
+import { SavedAccount } from '@/types';
 
-type SavedAccountCardProps = {
-  name: string;
+interface SavedAccountCardProps extends SavedAccount {
   image: string;
-  accountNumber: number;
-};
+}
 
 const SavedAccountCard: FC<SavedAccountCardProps> = ({
-  name,
+  ownerName,
   image,
   accountNumber,
+  savedAccountId,
 }) => {
   const navigate = useNavigate();
 
@@ -20,8 +19,9 @@ const SavedAccountCard: FC<SavedAccountCardProps> = ({
     navigate('/transfer/saved', {
       state: {
         account: {
-          owner_name: name,
-          account_number: accountNumber,
+          savedAccountId,
+          ownerName,
+          accountNumber,
         },
       },
     });
@@ -29,11 +29,10 @@ const SavedAccountCard: FC<SavedAccountCardProps> = ({
 
   return (
     <DashboardCard
-      image={image ? image : personSvg}
-      text={name}
+      image={image ? image : '/images/icons/person-fill.svg'}
+      text={ownerName.split(' ')[0]}
       size={image ? '3.125rem' : '2.1875rem'}
-      alt={`${name}'s avatar`}
-      ariaLabel={`Transfer ke ${name}`}
+      ariaLabel={`Tombol transfer ke ${ownerName.toLowerCase()}`}
       onClickFn={onClickFn}
     />
   );

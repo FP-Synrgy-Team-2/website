@@ -11,7 +11,7 @@ const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
       <label
         ref={ref}
         className={twMerge(
-          'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+          'leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
           className
         )}
         {...props}

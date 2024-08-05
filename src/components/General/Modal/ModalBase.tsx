@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type ModalBaseProps = {
@@ -20,33 +20,36 @@ const ModalBase: FC<ModalBaseProps> = ({
 
   useEffect(() => {
     setTimeout(() => navigate(redirectTo), redirectInMs);
-  }, []);
+  }, [navigate, redirectTo, redirectInMs]);
 
   return (
-    <dialog className="modal">
-      <img
-        src={icon}
-        alt={`${mainText}'s icon`}
-        className="h-42 w-42 self-center"
-      />
-      <h2
-        className="self-center font-bold leading-10"
-        style={{ fontSize: '1.875rem' }}
-      >
-        {mainText}
-      </h2>
-      <p
-        className="w-140 self-center text-center text-grey"
-        style={{ lineHeight: '2rem', fontSize: '1.5rem' }}
-      >
-        {text.map((t) => (
-          <>
-            {t}
-            <br />
-          </>
-        ))}
-      </p>
-    </dialog>
+    <>
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <dialog className="fixed inset-0 flex flex-col items-center justify-center gap-5 rounded-lg p-8">
+        <img
+          src={icon}
+          alt={`${mainText}'s icon`}
+          className="w-42 self-center"
+        />
+        <h2
+          className="self-center font-bold leading-10"
+          style={{ fontSize: '1.875rem' }}
+        >
+          {mainText}
+        </h2>
+        <p
+          className="self-center text-center text-sm text-grey"
+          // style={{ lineHeight: '2rem', fontSize: '1.5rem' }}
+        >
+          {text.map((t, index) => (
+            <React.Fragment key={index}>
+              {t}
+              <br />
+            </React.Fragment>
+          ))}
+        </p>
+      </dialog>
+    </>
   );
 };
 

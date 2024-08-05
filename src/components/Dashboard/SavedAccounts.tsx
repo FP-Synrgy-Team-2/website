@@ -1,67 +1,100 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SavedAccountCard from './SavedAccountCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
-interface Account {
-  name: string;
-  image: string;
-}
-
-export type { Account };
+import { snakeToCamelCase } from '@/utils/formatter';
+import { SavedAccount } from '@/types';
+import useAuth from '@/hooks/useAuth';
 
 const SavedAccounts = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accounts, setAccounts] = useState<SavedAccount[]>([]);
+  const { api: axios, userId, token } = useAuth();
+  const [isFetching, setIsFetching] = useState(true);
+  const [isErrorFetching, setIsErrorFetcing] = useState(false);
+  const [fetchResult, setFetchResult] = useState('');
 
-  const data: Account[] = [
-    { name: 'Maxine', image: '/vite.svg' },
-    { name: 'Oscar', image: '' },
-    { name: 'Kevin', image: '' },
-    { name: 'Stanley', image: '' },
-    { name: 'Chloe', image: '/vite.svg' },
-    { name: 'Dwight', image: '' },
-    { name: 'Violet', image: '' },
-    { name: 'Darryl', image: '' },
-    { name: 'Caitlyn', image: '' },
-    { name: 'Leslie', image: '' },
-    { name: 'Franklin', image: '' },
-    { name: 'Ron', image: '' },
-    { name: 'Donna', image: '' },
-  ];
+  const fetchAccounts = useCallback(async () => {
+    try {
+      setIsFetching(true);
+      const res = await axios.get(`/api/saved-accounts/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (Array.isArray(res.data.data))
+        setAccounts(
+          Array.from(res.data.data).map((account) =>
+            snakeToCamelCase<SavedAccount>(account as { [key: string]: string })
+          )
+        );
+      if (!accounts.length) setFetchResult('Belum ada rekening yang tersimpan');
 
-  const generateRandom10Digits = () => {
-    let randomDigits = '';
-    for (let i = 0; i < 10; i++) {
-      randomDigits += Math.floor(Math.random() * 10).toString();
+      setIsErrorFetcing(false);
+    } catch (err) {
+      console.error(err);
+      setFetchResult('Memuat gagal');
+      setIsErrorFetcing(true);
+    } finally {
+      setIsFetching(false);
     }
-    return parseInt(randomDigits);
-  };
+  }, [setAccounts, setIsFetching, setIsErrorFetcing, userId, setFetchResult]);
 
   useEffect(() => {
-    const populate = async () => {
-      setTimeout(() => setAccounts(data), 3000);
-    };
-
-    populate();
-  }, []);
+    fetchAccounts().finally(() => console.log(isErrorFetching, fetchResult));
+  }, [fetchAccounts]);
 
   return (
     <section
       className="mt-2.5 flex flex-col gap-4.5"
       id="saved-accounts"
-      aria-label="Dafter Rekening Tersimpan"
+      tabIndex={0}
+      aria-labelledby="saved-account-list"
     >
       <h2 className="text-xl">REKENING TERSIMPAN</h2>
-      <ul className="flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll">
-        {accounts.length != 0 ? (
-          accounts.map((a, i) => (
-            <SavedAccountCard
-              image={a.image}
-              name={a.name}
-              key={i}
-              accountNumber={generateRandom10Digits()}
-            />
-          ))
+      <ul
+        className={
+          isErrorFetching || accounts.length === 0
+            ? 'flex items-center text-lg'
+            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll'
+        }
+        role={isErrorFetching ? 'alert' : 'list'}
+        id="saved-account-list"
+        aria-label={`Daftar rekening tersimpan:${!isFetching ? fetchResult : 'sedang memuat data'}`}
+      >
+        {!isFetching ? (
+          !isErrorFetching ? (
+            accounts.length !== 0 ? (
+              accounts.map((a, i) => (
+                <SavedAccountCard
+                  image={''}
+                  ownerName={a.ownerName}
+                  key={i}
+                  accountNumber={a.accountNumber}
+                  savedAccountId={a.savedAccountId}
+                />
+              ))
+            ) : (
+              <>{fetchResult}</>
+            )
+          ) : (
+            <>
+              {fetchResult}, ulangi?{' '}
+              <span className="ml-1 inline-flex items-center rounded-full p-0.5 hover:shadow-md">
+                <button
+                  type="button"
+                  aria-label="Tombol muat ulang daftar rekening tersimpan"
+                  onClick={() => {
+                    fetchAccounts();
+                  }}
+                >
+                  <img
+                    src="/images/icons/arrow-clockwise.svg"
+                    alt="Muat ulang"
+                  />
+                </button>
+              </span>
+            </>
+          )
         ) : (
           <Skeleton
             className="h-27.5 w-25 rounded-xl"

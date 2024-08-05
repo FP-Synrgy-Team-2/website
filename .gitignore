@@ -26,3 +26,5 @@ dist-ssr
 # Private File
 .env
 package-lock.json
+
+.history

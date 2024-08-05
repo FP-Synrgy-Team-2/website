@@ -11,7 +11,7 @@
 
 @layer components {
   #dashboard-main {
-    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat py-12.5 pl-8.25 pr-20;
+    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat;
   }
 
   #mutation-table {
@@ -20,15 +20,6 @@
 
   #saved-accounts {
     @apply h-104 w-55;
-  }
-
-  #saved-accounts > ul {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  #saved-accounts > ul::-webkit-scrollbar {
-    display: none;
   }
 
   .helper-box {
@@ -95,6 +86,130 @@
       background: #555;
     }
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-increment-buttons::-webkit-inner-spin-button,
+  .no-increment-buttons::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  .no-increment-buttons {
+    -moz-appearance: textfield;
+  }
+
+  .spinner {
+    display: inline-block;
+    border-radius: 50%;
+    animation:
+      spinner-bulqg1 0.8s infinite linear alternate,
+      spinner-oaa3wk 1.6s infinite linear;
+  }
+
+  @keyframes spinner-bulqg1 {
+    0% {
+      clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+    }
+
+    12.5% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 0%,
+        100% 0%,
+        100% 0%
+      );
+    }
+
+    25% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 100%,
+        100% 100%,
+        100% 100%
+      );
+    }
+
+    50% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+
+    62.5% {
+      clip-path: polygon(
+        50% 50%,
+        100% 0,
+        100% 0%,
+        100% 0%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+
+    75% {
+      clip-path: polygon(
+        50% 50%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+
+    100% {
+      clip-path: polygon(
+        50% 50%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+  }
+
+  @keyframes spinner-oaa3wk {
+    0% {
+      transform: scaleY(1) rotate(0deg);
+    }
+
+    49.99% {
+      transform: scaleY(1) rotate(135deg);
+    }
+
+    50% {
+      transform: scaleY(-1) rotate(0deg);
+    }
+
+    100% {
+      transform: scaleY(-1) rotate(-135deg);
+    }
+  }
 }
 
 * {
@@ -102,10 +217,28 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  /* Inter font declaration */
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter/Inter.ttf');
+  src: url('./assets/fonts/Inter/Inter.ttf') format('truetype');
+}
+
 .sidebar-item:hover img,
 .img-white {
   filter: brightness(0) saturate(100%) invert(92%) sepia(92%) saturate(1%)
     hue-rotate(131deg) brightness(111%) contrast(99%);
+}
+
+#login-page {
+  background-image: url('images/login/blue_object_blc.webp');
+  background-position: bottom left;
+  background-size: 50%;
+  background-repeat: no-repeat;
+}
+
+.img-black {
+  filter: invert(100%);
 }
 
 #receipt {
@@ -121,4 +254,34 @@
 
 .receipt-value {
   @apply text-dark-grey;
+}
+
+/* calender */
+.react-calendar {
+  border: none;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__month-view__weekdays {
+  font-weight: 100;
+
+  color: #3c3c43;
+}
+.react-calendar__tile {
+  max-width: initial !important;
+  padding: 10px 6.6667px;
+  background: none;
+}
+
+.react-calendar__tile--active {
+  background: #3182ce;
+  color: white;
+}
+
+.react-calendar__tile--now {
+  background: #ebf4ff;
+  color: black;
 }

@@ -1,17 +1,18 @@
 import { FC } from 'react';
-import transferSVG from '../../assets/arrow-up-down.svg';
 
 type MutationRecordType = {
   bankName: string;
   accountNumber: number;
-  amount: number;
+  total: number;
+  type: string;
   time: Date;
 };
 
 const MutationRecord: FC<MutationRecordType> = ({
   bankName,
   accountNumber,
-  amount,
+  total,
+  type,
   time,
 }) => {
   return (
@@ -19,15 +20,15 @@ const MutationRecord: FC<MutationRecordType> = ({
       <div className="mb-2 flex gap-2.5 text-lg font-bold">
         <span
           className="box-content h-6 w-6 rounded-full bg-primary-light-blue bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${transferSVG})` }}
+          style={{ backgroundImage: `url('/images/icons/arrow-up-down.svg')` }}
         />
         Transfer
       </div>
       <div className="text-md flex items-center justify-between font-regular">
         {bankName} - {accountNumber}
         <span>
-          {amount > 0 ? '+' : '-'}{' '}
-          {Math.abs(amount).toLocaleString('id-ID', {
+          {type === 'Pengeluaran' ? '-' : '+'}{' '}
+          {Math.abs(total).toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR',
           })}

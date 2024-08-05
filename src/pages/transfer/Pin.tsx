@@ -1,10 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+import { ButtonPrimary, ButtonSecondary, ModalSuccess } from '@/components';
+import useAuth from '@/hooks/useAuth';
+import { getAccountId } from '@/utils/getUserData';
 import { useNavigate } from 'react-router-dom';
+import Loading from '@/components/General/Loading';
 
-const PinInput: React.FC = () => {
+interface pinValidationProps {
+  accountNumber: string;
+  pin: string;
+}
+
+interface PinInputProps {
+  showPinInput: boolean;
+  closePinInput: () => void;
+  onPinValidated: () => void;
+  data: {
+    balance: number;
+    fromAccount: string;
+    fromName: string;
+    toAccount: string;
+    toName: string;
+    amount: number;
+    note?: string;
+    saved: boolean;
+  };
+}
+
+const PinInput: React.FC<PinInputProps> = ({
+  showPinInput,
+  closePinInput,
+  onPinValidated,
+  data,
+}) => {
   const [pin, setPin] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState<string>('');
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null));
+  const { api: axios, token } = useAuth();
+
+  const validatePin = async ({ accountNumber, pin }: pinValidationProps) => {
+    try {
+      const response = await axios.post(
+        'api/bank-accounts/pin-validation',
+        { account_number: accountNumber, pin },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.status;
+    } catch (error) {
+      console.error('Error validating PIN:', error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const validate = async () => {
+      setIsLoading(true);
+      try {
+        if (token) {
+          await getAccountId(axios, data.fromAccount, token);
+          await getAccountId(axios, data.toAccount, token);
+        }
+      } catch (err) {
+        console.error(err);
+        setTimeout(() => {
+          navigate('/transfer', { replace: true });
+        }, 3000);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    validate();
+    inputRefs.current[0]?.focus();
+  }, []);
+
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (event.key === 'ArrowLeft' && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (event.key === 'ArrowRight' && index < pin.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
 
   const handleChange = (value: string, index: number) => {
     if (/^[0-9]?$/.test(value)) {
@@ -13,57 +99,109 @@ const PinInput: React.FC = () => {
       setPin(newPin);
       setError(''); // Clear error when user starts typing
     }
-  };
-
-  const handleSubmit = () => {
-    if (pin.includes('') || pin.some((digit) => !/^[0-9]$/.test(digit))) {
-      setError('PIN tidak valid');
-    } else {
-      setError('');
-      console.log('PIN Submitted:', pin.join(''));
-      navigate('/transfer/receipt', { replace: true });
+    if (index < pin.length - 1 && value !== '') {
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-        <h2 className="mb-4 text-center text-2xl font-semibold">
-          Masukkan PIN
-        </h2>
-        <p className="mb-6 text-center">
-          Pastikan pin sesuai dengan yang telah anda buat
-        </p>
-        <div className="mb-5 flex justify-center">
-          {pin.map((digit, index) => (
-            <input
-              key={index}
-              type="password"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(e.target.value, index)}
-              className="mx-1 h-10 w-10 border-b-2 border-gray-300 text-center focus:border-blue-500 focus:outline-none"
-            />
-          ))}
-        </div>
-        {error && <div className="mb-4 text-center text-red-500">{error}</div>}
-        <div className="mt-5 flex justify-between">
-          <button
-            onClick={() => setPin(Array(6).fill(''))}
-            className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
-          >
-            Kembali
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-          >
-            Kirim →
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  const handleSubmit = async () => {
+    if (pin.includes('') || pin.some((digit) => !/^[0-9]$/.test(digit))) {
+      setError('PIN tidak valid');
+      setTimeout(() => {
+        setPin(Array(6).fill(''));
+        setError('');
+        inputRefs.current[0]?.focus();
+      }, 3000);
+      return;
+    }
+
+    const isValid = await validatePin({
+      accountNumber: data.fromAccount,
+      pin: pin.join(''),
+    });
+
+    if (!isValid) {
+      setError('PIN tidak valid');
+      setTimeout(() => {
+        setPin(Array(6).fill(''));
+        setError('');
+        inputRefs.current[0]?.focus();
+      }, 3000);
+    } else {
+      setError('');
+      setShowSuccessModal(true);
+      onPinValidated();
+    }
+  };
+
+  if (isLoading) return <Loading size="5vw" bgSize="100vh" />;
+  else
+    return (
+      <>
+        {showSuccessModal && (
+          <ModalSuccess
+            modalFor="Transaksi"
+            redirectTo="../receipt"
+            description={[
+              'Yeay transaksi telah berhasil',
+              'Silahkan tunggu beberapa saat untuk bukti transaksi',
+            ]}
+          />
+        )}
+
+        {showPinInput && !showSuccessModal && (
+          <>
+            <div className="fixed inset-0 bg-black opacity-50"></div>
+            <div className="fixed inset-0 flex items-center justify-center">
+              <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+                <h2 className="mb-4 text-center text-2xl font-semibold">
+                  Masukkan PIN
+                </h2>
+                <p className="mb-6 text-center text-grey">
+                  Pastikan pin sesuai dengan yang telah anda buat
+                </p>
+                <div className="mb-5 flex justify-center">
+                  {pin.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      type="password"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleChange(e.target.value, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className={`mx-1 h-10 w-10 border-b-2 text-center focus:border-blue-500 focus:outline-none ${error ? 'border-danger text-danger' : 'border-gray'} `}
+                    />
+                  ))}
+                </div>
+                {error && (
+                  <div className="mb-4 text-center text-danger">{error}</div>
+                )}
+                <div className="mt-5 flex justify-center gap-10">
+                  <ButtonSecondary
+                    onClick={() => {
+                      setPin(Array(6).fill(''));
+                      closePinInput();
+                    }}
+                    color="neutral-01"
+                    className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
+                  >
+                    Kembali
+                  </ButtonSecondary>
+                  <ButtonPrimary
+                    onClick={handleSubmit}
+                    color="primary-dark-blue"
+                    className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
+                  >
+                    Kirim →
+                  </ButtonPrimary>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </>
+    );
 };
 
 export default PinInput;

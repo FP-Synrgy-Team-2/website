@@ -1,5 +1,4 @@
 import ModalBase from './ModalBase';
-import checkCircleFill from '@/assets/check-circle-fill.svg';
 import { FC } from 'react';
 
 type ModalSuccessType = {
@@ -15,7 +14,7 @@ const ModalSuccess: FC<ModalSuccessType> = ({
 }) => {
   return (
     <ModalBase
-      icon={checkCircleFill}
+      icon="/images/icons/check-circle-fill.svg"
       mainText={`${modalFor} Berhasil`}
       text={description}
       redirectInMs={5000}
