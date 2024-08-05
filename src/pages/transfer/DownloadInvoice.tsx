@@ -13,6 +13,7 @@ function DownloadInvoice() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('dataLoaded:', dataLoaded);
     if (dataLoaded && captureRef.current) {
       const { offsetWidth: width, offsetHeight: height } = captureRef.current;
       setDimensions({ width, height });
