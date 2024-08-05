@@ -4,14 +4,16 @@ import transferSVG from '../../assets/arrow-up-down.svg';
 type MutationRecordType = {
   bankName: string;
   accountNumber: number;
-  amount: number;
+  total: number;
+  type: string;
   time: Date;
 };
 
 const MutationRecord: FC<MutationRecordType> = ({
   bankName,
   accountNumber,
-  amount,
+  total,
+  type,
   time,
 }) => {
   return (
@@ -26,8 +28,8 @@ const MutationRecord: FC<MutationRecordType> = ({
       <div className="text-md flex items-center justify-between font-regular">
         {bankName} - {accountNumber}
         <span>
-          {amount > 0 ? '+' : '-'}{' '}
-          {Math.abs(amount).toLocaleString('id-ID', {
+          {type === 'Pengeluaran' ? '-' : '+'}{' '}
+          {Math.abs(total).toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR',
           })}
