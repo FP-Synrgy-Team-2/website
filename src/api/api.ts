@@ -59,7 +59,7 @@ export class Api {
             try {
               const refreshToken = Cookies.get('refresh-token');
               if (refreshToken && refreshToken.split('.').length === 3) {
-                const res = await axios.get(
+                const res = await customAxios.get(
                   `/api/refresh-token?refresh_token=${Cookies.get('refresh-token')}`
                 );
                 Cookies.set('refresh-token', res.data.refresh_token);

@@ -94,7 +94,7 @@ function TransferForm() {
         fromAccount: bankAccount.accountNumber,
         fromName: bankAccount.ownerName,
         toAccount: formData.noRek,
-        toName: bankAccount.ownerName,
+        toName: recipientAccount.ownerName,
         amount: formData.nominal,
         note: formData.catatan || undefined,
         saved: formData.simpanRekening,
