@@ -27,7 +27,7 @@ function Transfer() {
         )
       );
     else setFetchStatusMessage('Belum ada rekening yang tersimpan');
-  }, [setAccounts, setFetchStatusMessage, userId]);
+  }, [setAccounts, setFetchStatusMessage, userId, axios, token]);
 
   useEffect(() => {
     fetchSavedAccounts().catch((err) => {

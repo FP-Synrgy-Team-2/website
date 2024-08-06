@@ -2,9 +2,9 @@ import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type ModalBaseProps = {
-  mainText: string;
+  mainText: string | React.ReactNode;
   text: string[];
-  icon: string;
+  icon?: string;
   redirectTo?: string;
   redirectInMs?: number;
 };
@@ -27,11 +27,13 @@ const ModalBase: FC<ModalBaseProps> = ({
     <>
       <div className="fixed inset-0 bg-black opacity-50"></div>
       <dialog className="fixed inset-0 flex flex-col items-center justify-center gap-5 rounded-lg p-8">
-        <img
-          src={icon}
-          alt={`${mainText}'s icon`}
-          className="w-42 self-center"
-        />
+        {icon && (
+          <img
+            src={icon}
+            alt={`${mainText}'s icon`}
+            className={'w-42 self-center'}
+          />
+        )}
         <h2
           className="self-center font-bold leading-10"
           style={{ fontSize: '1.875rem' }}

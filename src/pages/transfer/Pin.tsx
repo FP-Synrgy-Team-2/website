@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import { ButtonPrimary, ButtonSecondary, ModalSuccess } from '@/components';
+import { ButtonPrimary, ButtonSecondary, ModalBase } from '@/components';
 import useAuth from '@/hooks/useAuth';
 import { getAccountId } from '@/utils/getUserData';
 import { useNavigate } from 'react-router-dom';
@@ -139,14 +139,11 @@ const PinInput: React.FC<PinInputProps> = ({
     return (
       <>
         {showSuccessModal && (
-          <ModalSuccess
-            modalFor="Transaksi"
-            description={[
-              'Pin anda tervalidasi, silahkan tunggu proses transfer',
-            ]}
+          <ModalBase
+            mainText={<Loading size="2rem" bgSize="50px" />}
+            text={['Transaksi anda sedang diproses']}
           />
         )}
-
         {showPinInput && !showSuccessModal && (
           <>
             <div className="fixed inset-0 bg-black opacity-50"></div>
