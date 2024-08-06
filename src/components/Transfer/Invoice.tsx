@@ -140,7 +140,7 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
         </main>
       </div>
     ) : (
-      <p>Data transaksi tidak tersedia</p>
+      <p>Memuat data</p>
     );
   }
 );
