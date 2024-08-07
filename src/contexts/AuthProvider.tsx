@@ -23,6 +23,17 @@ export type AuthContextType = {
   setAuthResErrors: React.Dispatch<React.SetStateAction<ResponseError | null>>;
   api: Api;
 };
+interface JwtPayload {
+  aud: string[];
+  user_id: string;
+  user_name: string;
+  scope: string[];
+  ati: string;
+  exp: number; // Expiry time in Unix timestamp
+  authorities: string[];
+  jti: string;
+  client_id: string;
+}
 
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
@@ -40,9 +51,28 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [token]
   );
 
+  const getToken = () => Cookies.get('refresh-token');
+
+  const isTokenExpired = (token: string) => {
+    if (!token) return true;
+
+    try {
+      const decoded: JwtPayload = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decoded.exp < currentTime;
+    } catch (error) {
+      return true;
+    }
+  };
+
   const refreshToken = React.useCallback(async () => {
     try {
-      if (!Cookies.get('refresh-token')) throw new Error('Not authenticated');
+      const token = getToken();
+      if (!token || isTokenExpired(token)) {
+        // Remove expired token from cookies
+        Cookies.remove('refresh-token');
+        throw new Error('Not authenticated or token expired');
+      }
 
       const response = await api.get(
         `/api/refresh-token?refresh_token=${Cookies.get('refresh-token')}`
