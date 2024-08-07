@@ -134,74 +134,78 @@ const PinInput: React.FC<PinInputProps> = ({
     }
   };
 
-  if (isLoading) return <Loading size="5vw" bgSize="100vh" />;
-  else
-    return (
-      <>
-        {showSuccessModal && (
-          <ModalBase
-            mainText={<Loading size="2rem" bgSize="50px" />}
-            text={['Transaksi anda sedang diproses']}
-          />
-        )}
-        {showPinInput && !showSuccessModal && (
-          <>
-            <div className="fixed inset-0 bg-black opacity-50"></div>
-            <div className="fixed inset-0 flex items-center justify-center">
-              <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-                <h2
-                  className="mb-4 text-center text-2xl font-semibold"
-                  tabIndex={0}
+  // if (isLoading) return <Loading size="5vw" bgSize="100vh" />;
+  return (
+    <>
+      {isLoading && (
+        <div className="fixed inset-0 bg-white bg-opacity-80">
+          <Loading size="5vw" bgSize="100vh" />
+        </div>
+      )}
+      {showSuccessModal && (
+        <ModalBase
+          mainText={<Loading size="2rem" bgSize="50px" />}
+          text={['Transaksi anda sedang diproses']}
+        />
+      )}
+      {!isLoading && showPinInput && !showSuccessModal && (
+        <>
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="fixed inset-0 flex items-center justify-center">
+            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+              <h2
+                className="mb-4 text-center text-2xl font-semibold"
+                tabIndex={0}
+              >
+                Masukkan PIN
+              </h2>
+              <p className="mb-6 text-center text-grey" tabIndex={0}>
+                Pastikan pin sesuai dengan yang telah anda buat
+              </p>
+              <div className="mb-5 flex justify-center">
+                {pin.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    type="password"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(e.target.value, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    className={`mx-1 h-10 w-10 border-b-2 text-center focus:border-blue-500 focus:outline-none ${error ? 'border-danger text-danger' : 'border-gray'} `}
+                  />
+                ))}
+              </div>
+              {error && (
+                <div className="mb-4 text-center text-danger" tabIndex={0}>
+                  {error}
+                </div>
+              )}
+              <div className="mt-5 flex justify-center gap-10">
+                <ButtonSecondary
+                  onClick={() => {
+                    setPin(Array(6).fill(''));
+                    closePinInput();
+                  }}
+                  color="neutral-01"
+                  className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
                 >
-                  Masukkan PIN
-                </h2>
-                <p className="mb-6 text-center text-grey" tabIndex={0}>
-                  Pastikan pin sesuai dengan yang telah anda buat
-                </p>
-                <div className="mb-5 flex justify-center">
-                  {pin.map((digit, index) => (
-                    <input
-                      key={index}
-                      ref={(el) => (inputRefs.current[index] = el)}
-                      type="password"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      className={`mx-1 h-10 w-10 border-b-2 text-center focus:border-blue-500 focus:outline-none ${error ? 'border-danger text-danger' : 'border-gray'} `}
-                    />
-                  ))}
-                </div>
-                {error && (
-                  <div className="mb-4 text-center text-danger" tabIndex={0}>
-                    {error}
-                  </div>
-                )}
-                <div className="mt-5 flex justify-center gap-10">
-                  <ButtonSecondary
-                    onClick={() => {
-                      setPin(Array(6).fill(''));
-                      closePinInput();
-                    }}
-                    color="neutral-01"
-                    className="w-25 rounded-full border border-primary-dark-blue font-bold text-primary-dark-blue hover:bg-gray-300"
-                  >
-                    Kembali
-                  </ButtonSecondary>
-                  <ButtonPrimary
-                    onClick={handleSubmit}
-                    color="primary-dark-blue"
-                    className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
-                  >
-                    Kirim <span aria-hidden={true}>→</span>
-                  </ButtonPrimary>
-                </div>
+                  Kembali
+                </ButtonSecondary>
+                <ButtonPrimary
+                  onClick={handleSubmit}
+                  color="primary-dark-blue"
+                  className="w-25 rounded-full font-bold text-white hover:bg-blue-600"
+                >
+                  Kirim <span aria-hidden={true}>→</span>
+                </ButtonPrimary>
               </div>
             </div>
-          </>
-        )}
-      </>
-    );
+          </div>
+        </>
+      )}
+    </>
+  );
 };
 
 export default PinInput;
