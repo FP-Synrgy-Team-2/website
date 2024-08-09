@@ -34,7 +34,7 @@ const TableMutasi: React.FC = () => {
     let transactions: null | TransactionProps[] = null;
     api
       .post(
-        `/transactions/history/${userId}`,
+        `/api/transactions/history/${userId}`,
         {
           start_date: startDate,
           end_date: endDate,
