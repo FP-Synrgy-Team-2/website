@@ -85,7 +85,7 @@ function History() {
     let transactions: null | TransactionProps[] = null;
     axios
       .post(
-        URL + `/api/transactions/history/${userId}`,
+        URL + `/transactions/history/${userId}`,
         {
           start_date: startDate,
           end_date: endDate,
