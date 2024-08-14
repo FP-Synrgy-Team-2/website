@@ -11,7 +11,11 @@ function TransactionsList({ transactions }: TransactionsProps) {
       <MutationRecord
         key={`transaction-${index}`}
         bankName="BCA"
-        accountNumber={872726241}
+        accountNumber={
+          transaction.type == 'Pengeluaran'
+            ? transaction.to.account_number
+            : transaction.from.account_number
+        }
         total={transaction.total}
         type={transaction.type}
         time={new Date(transaction.transaction_date)}

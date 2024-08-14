@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 type MutationRecordType = {
   bankName: string;
-  accountNumber: number;
+  accountNumber: string;
   total: number;
   type: string;
   time: Date;

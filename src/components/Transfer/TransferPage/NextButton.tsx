@@ -1,15 +1,15 @@
-import Button from '@/components/General/Button';
+import { ButtonPrimary } from '@/components';
 import { memo } from 'react';
 
 const NextButton = () => {
   return (
-    <Button
+    <ButtonPrimary
       type="submit"
-      className="mt-[3.9375rem] h-[3.25rem] w-[10.4375rem] self-center rounded-lg bg-primary-dark-blue px-2.5 py-[0.3125rem] text-xl-body font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      className="self-center rounded-lg"
       aria-label="Tombol lanjutkan"
     >
       {'Lanjutkan'}
-    </Button>
+    </ButtonPrimary>
   );
 };
 

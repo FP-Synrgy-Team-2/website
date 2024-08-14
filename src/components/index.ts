@@ -24,6 +24,9 @@ import TableMutasi from '@/components/Dashboard/TableMutasi';
 
 import Invoice from '@/components/Transfer/Invoice';
 
+import TransactionsList from '@/components/History/TransactionsList';
+import TransactionData from '@/components/History/TransactionData';
+
 export {
   Banner,
   Breadcrumbs,
@@ -46,4 +49,6 @@ export {
   TableMutasi,
   SavedAccountCard,
   SavedAccounts,
+  TransactionData,
+  TransactionsList,
 };
