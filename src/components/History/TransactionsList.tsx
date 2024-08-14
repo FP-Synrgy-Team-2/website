@@ -28,13 +28,14 @@ function TransactionsList({
         data-transaction={JSON.stringify(transaction)}
         key={`transaction-${index}`}
         className={`flex cursor-pointer flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2 ${activeTransaction?.transaction_id === transaction.transaction_id ? 'bg-primary-light-blue' : ''} `}
-        aria-label={`Transfer BCA - 872726231 ${transaction.type === 'Pengeluaran' ? '-' : '+'} ${transaction.total} ${returnLocalDateAndTime(transaction.transaction_date)}`}
       >
         <div className="flex gap-x-2.5">
           <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue">
             <img src="/images/icons/arrow-up-down.svg" alt="" />
           </div>
-          <span className="text-2xl font-bold">Transfer</span>
+          <span className="text-2xl font-bold">
+            {transaction.type === 'Pengeluaran' ? 'Transfer' : 'Terima Uang'}
+          </span>
         </div>
 
         <div className="flex justify-between gap-x-[5px]">

@@ -22,7 +22,7 @@ const MutationRecord: FC<MutationRecordType> = ({
           className="box-content h-6 w-6 rounded-full bg-primary-light-blue bg-center bg-no-repeat"
           style={{ backgroundImage: `url('/images/icons/arrow-up-down.svg')` }}
         />
-        Transfer
+        {type === 'Pengeluaran' ? 'Transfer' : 'Terima Uang'}
       </div>
       <div className="text-md flex items-center justify-between font-regular">
         {bankName} - {accountNumber}
