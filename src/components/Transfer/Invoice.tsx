@@ -3,6 +3,7 @@ import { NavbarLogo } from '@/components';
 import { useEffect, useState, forwardRef } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { getAccountNumber } from '@/utils/getUserData';
+import formatRupiah from '@/utils/formatRupiah';
 
 interface BeneficiaryAccount {
   account_id: string;
@@ -58,11 +59,6 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
       return `${hours}:${minutes}`;
     };
 
-    const formatNumber = (num: number): string => {
-      if (num === 0) return '0';
-      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    };
-
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -87,7 +83,7 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
         }
       };
       fetchData();
-    }, [URL, transactionId, axios, token]);
+    }, [transactionId, axios, token, userId, props]);
 
     return dataLoaded ? (
       <div ref={ref} className="h-[600px] w-[1150px]">
@@ -111,29 +107,27 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
             </h2>
             <div className="mt-6 flex max-w-[50vw] gap-4">
               <div className="receipt-label w-1/2">
-                <div className="">Rekening Sumber</div>
-                <div className="">Rekening Tujuan</div>
-                <div className="">Nama Penerima</div>
-                <div className="">Nominal Transfer</div>
-                <div className="">Biaya Admin</div>
-                <div className="">Catatan</div>
-                <div className="">Tanggal Transaksi</div>
+                <div>Rekening Sumber</div>
+                <div>Rekening Tujuan</div>
+                <div>Nama Penerima</div>
+                <div>Nominal Transfer</div>
+                <div>Biaya Admin</div>
+                {data.note && <div>Catatan</div>}
+                <div>Tanggal Transaksi</div>
                 <div className="font-bold">Total</div>
               </div>
               <div className="receipt-value w-1/2">
-                <div className="">{accountNumber}</div>
-                <div className="">
-                  {data.beneficiary_account.account_number}
-                </div>
-                <div className="">{data.beneficiary_account.owner_name}</div>
-                <div className="">Rp {formatNumber(data.amount)}</div>
-                <div className="">Rp {formatNumber(data.admin_fee)}</div>
-                <div className="">{data.note}</div>
-                <div className="">
+                <div>{accountNumber}</div>
+                <div>{data.beneficiary_account.account_number}</div>
+                <div>{data.beneficiary_account.owner_name}</div>
+                <div>{formatRupiah(data.amount)}</div>
+                <div>{formatRupiah(data.admin_fee)}</div>
+                {data.note && <div>{data.note}</div>}
+                <div>
                   {formatDate(data.transaction_date)}{' '}
                   {formatHour(data.transaction_date)}
                 </div>
-                <div className="font-bold">Rp {formatNumber(data.total)}</div>
+                <div className="font-bold">{formatRupiah(data.total)}</div>
               </div>
             </div>
           </div>
