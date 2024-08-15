@@ -1,5 +1,4 @@
 import useAuth from '@/hooks/useAuth';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -64,11 +63,10 @@ function History() {
     startDate: string | null,
     endDate: string | null
   ) {
-    const URL = import.meta.env.VITE_API_URL;
     let transactions: null | TransactionProps[] = null;
-    axios
+    api
       .post(
-        URL + `/api/transactions/history/${userId}`,
+        `/api/transactions/history/${userId}`,
         {
           start_date: startDate,
           end_date: endDate,
