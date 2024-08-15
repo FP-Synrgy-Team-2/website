@@ -2,7 +2,7 @@ import { TransactionProps } from '@/types/transaction';
 import formatRupiah from '@/utils/formatRupiah';
 
 interface TransactionListProps {
-  transactions: TransactionProps | null;
+  transactions: TransactionProps[] | null;
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   activeTransaction: TransactionProps | null;
 }
@@ -22,7 +22,7 @@ function TransactionsList({
   activeTransaction,
 }: TransactionListProps) {
   if (transactions) {
-    return transactions.map((transaction: TransactionProps, index) => (
+    return transactions.map((transaction: TransactionProps, index: number) => (
       <div
         onClick={handleClick}
         data-transaction={JSON.stringify(transaction)}
