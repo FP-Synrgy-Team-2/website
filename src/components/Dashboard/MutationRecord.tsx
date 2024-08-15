@@ -24,9 +24,9 @@ const MutationRecord: FC<MutationRecordType> = ({
         />
         {type === 'Pengeluaran' ? 'Transfer' : 'Terima Uang'}
       </div>
-      <div className="text-md flex items-center justify-between font-regular">
+      <div className="text-md flex items-center justify-between font-regular sm:flex-col sm:items-start">
         {bankName} - {accountNumber}
-        <span>
+        <span className="place-self-end">
           {type === 'Pengeluaran' ? '-' : '+'}{' '}
           {Math.abs(total).toLocaleString('id-ID', {
             style: 'currency',

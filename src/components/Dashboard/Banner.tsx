@@ -29,7 +29,7 @@ const Banner = () => {
 
   return bannerContents ? (
     <section
-      className="dash-banner"
+      className="dash-banner sm:w-85"
       role="banner"
       style={{ backgroundImage: `url('/images/icons/banner.svg')` }}
       aria-labelledby="banner-text"
@@ -48,7 +48,7 @@ const Banner = () => {
       </article>
     </section>
   ) : (
-    <Skeleton className="h-50.75 w-155" />
+    <Skeleton className="h-50.75 w-155 sm:w-85" />
   );
 };
 

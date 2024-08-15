@@ -55,7 +55,7 @@ const SavedAccounts = () => {
         className={
           isErrorFetching || accounts.length === 0
             ? 'flex items-center text-lg'
-            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll'
+            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll sm:grid sm:max-h-60 sm:grid-cols-3'
         }
         role={isErrorFetching ? 'alert' : 'list'}
         id="saved-account-list"
