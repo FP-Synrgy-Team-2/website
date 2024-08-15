@@ -66,7 +66,7 @@ const TableMutasi: React.FC = () => {
   }, [token, userId]);
 
   return (
-    <section className="flex w-182.5 flex-col gap-2.5">
+    <section className="flex w-182.5 flex-col gap-2.5 sm:w-85">
       <div className="flex items-center justify-between">
         <h2
           className="text-xl-body uppercase"

@@ -31,13 +31,15 @@ function Dashboard() {
       className=""
       style={{ backgroundImage: `url('/images/icons/dashboard.svg')` }}
     >
-      <div className="flex w-265 justify-between">
+      <div className="flex w-265 justify-between sm:w-screen sm:flex-col sm:items-center sm:gap-4">
         {accountData && <CardSaldo accountData={accountData} />}
         <Banner />
       </div>
-      <div className="flex w-265 justify-between">
+      <div className="flex w-265 justify-between sm:w-screen sm:flex-col sm:items-center sm:gap-4">
         <TableMutasi />
-        <SavedAccounts />
+        <div className="sm:item-start sm:order-first sm:flex sm:w-full sm:p-5">
+          <SavedAccounts />
+        </div>
       </div>
     </main>
   );
