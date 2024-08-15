@@ -87,12 +87,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(response.data.access_token);
         setAuthResErrors(null);
       } else {
-        Cookies.remove('refresh-token');
         setToken(null);
         setAuthResErrors(response.data);
       }
     } catch {
-      Cookies.remove('refresh-token');
       setToken(null);
       setAuthResErrors({
         code: 500,
