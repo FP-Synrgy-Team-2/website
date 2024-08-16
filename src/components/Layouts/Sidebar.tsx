@@ -38,7 +38,7 @@ function Sidebar() {
   return (
     <>
       <div
-        className={`fixed flex h-full w-1/6 flex-col pb-16 pe-6 transition-transform ease-in-out sm:top-0 sm:z-50 sm:w-52 sm:bg-white sm:${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed flex h-full w-1/6 flex-col pb-16 pe-6 transition-transform ease-in-out sm:top-0 sm:z-50 sm:w-52 sm:bg-white ${isOpen ? 'sm:translate-x-0' : 'sm:-translate-x-full'}`}
       >
         <div className="ms-3 sm:flex sm:justify-center">
           <NavbarLogo />
