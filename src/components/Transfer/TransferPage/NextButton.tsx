@@ -5,7 +5,7 @@ const NextButton = () => {
   return (
     <ButtonPrimary
       type="submit"
-      className="self-center rounded-lg"
+      className="mt-3 self-center rounded-lg"
       aria-label="Tombol lanjutkan"
     >
       {'Lanjutkan'}
