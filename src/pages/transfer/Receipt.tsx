@@ -67,75 +67,97 @@ const Receipt: React.FC = () => {
     fetchData();
   }, [transactionId, axios, token, userId]);
 
+  const rows = data
+    ? [
+        { label: 'Rekening Sumber', value: accountNumber },
+        { label: 'Rekening Tujuan', value: data.from.account_number },
+        { label: 'Nama penerima', value: data.from.owner_name },
+        { label: 'Nominal Transfer', value: `Rp ${formatNumber(data.amount)}` },
+        { label: 'Biaya Admin', value: `Rp ${formatNumber(data.admin_fee)}` },
+        { label: 'Catatan', value: data.note },
+        { label: 'Total', value: `Rp ${formatNumber(data.total)}` },
+      ]
+    : [];
+
   return (
     <>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      {data ? (
-        <div className="container w-[638px] rounded-[20px] border border-grey p-8 shadow-2xl">
-          <div className="my-3 flex flex-col items-center p-3">
-            <div className="my-2 flex h-[70px] w-[70px] rounded-full bg-success">
-              <img
-                src="/images/icons/checklist.png"
-                alt="Berhasil"
-                className="m-auto"
-              />
+      <div className="w-[638px] sm:mx-4 sm:w-auto">
+        {data ? (
+          <div className="rounded-[20px] border border-grey p-8 shadow-2xl sm:p-4">
+            <div className="my-3 flex flex-col items-center p-3">
+              <div className="my-2 flex h-[70px] w-[70px] rounded-full bg-success">
+                <img
+                  src="/images/icons/checklist.png"
+                  alt="Berhasil"
+                  className="m-auto"
+                />
+              </div>
+              <h1 className="text-lg font-bold">Tranksaksi Berhasil</h1>
+              <div className="my-2 flex items-center gap-[15px] text-lg text-dark-grey">
+                <p>{formatDate(data.transaction_date)}</p>
+                <div className="h-[10px] w-[10px] rounded-full bg-dot-grey"></div>
+                <p>{formatHour(data.transaction_date)}</p>
+              </div>
             </div>
-            <h1 className="text-lg font-bold">Tranksaksi Berhasil</h1>
-            <div className="my-2 flex items-center gap-[15px] text-lg text-dark-grey">
-              <p>{data ? formatDate(data.transaction_date) : '-'}</p>
-              <div className="h-[10px] w-[10px] rounded-full bg-dot-grey"></div>
-              <p>{data ? formatHour(data.transaction_date) : '-'}</p>
+            <div className="border-b-4 border-grey"></div>
+            <div className="mb-3 p-3 text-lg sm:p-0 sm:pt-2">
+              <table className="w-full table-fixed">
+                <tbody>
+                  {rows.slice(0, 5).map((row, index) => (
+                    <tr
+                      key={index}
+                      className="mb-2 text-left sm:flex sm:items-center sm:justify-start"
+                    >
+                      <th className="w-50 text-muted-black sm:w-40">
+                        {row.label}
+                      </th>
+                      <td className="w-50 text-dark-grey">{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mb-3 border-t-2 border-grey p-3 sm:p-0 sm:pt-2">
+              <table className="w-full table-fixed">
+                <tbody>
+                  {rows.slice(5).map((row, index) => (
+                    <tr
+                      key={index}
+                      className="mb-2 text-left sm:flex sm:items-center sm:justify-start"
+                    >
+                      <th className="w-50 text-muted-black sm:w-40">
+                        {row.label}
+                      </th>
+                      <td className="w-50 text-dark-grey">{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div className="border-b-4 border-grey"></div>
-          <div className="mt-3 flex gap-[40px] p-3 text-lg">
-            <div className="text-muted-black">
-              <p className="my-3">Rekening Sumber</p>
-              <p className="my-3">Rekening Tujuan</p>
-              <p className="my-3">Nama penerima</p>
-              <p className="my-3">Nominal Transfer</p>
-              <p className="my-3">Biaya Admin</p>
-            </div>
-            <div className="mx-auto text-dark-grey">
-              <p className="my-3">{accountNumber}</p>
-              <p className="my-3">{data.from.account_number}</p>
-              <p className="my-3">{data.from.owner_name}</p>
-              <p className="my-3">Rp {formatNumber(data.amount)}</p>
-              <p className="my-3">Rp {formatNumber(data.admin_fee)}</p>
-            </div>
-          </div>
-          <div className="border-b-2 border-grey"></div>
-          <div className="mb-5 flex gap-[40px] p-3 text-lg">
-            <div className="text-muted-black">
-              <p className="my-3">Catatan</p>
-              <p className="my-3">Total</p>
-            </div>
-            <div className="mx-auto text-dark-grey">
-              <p className="my-3">{data.note}</p>
-              <p className="my-3">Rp {formatNumber(data.total)}</p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <p>Memuat data</p>
-      )}
+        ) : (
+          <p>Memuat data</p>
+        )}
 
-      <div className="my-5 flex p-3">
-        <div className="flex gap-7 self-center">
-          <Link to="/dashboard">
-            <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
-              Dashboard
-            </ButtonSecondary>
-          </Link>
-          <ButtonPrimary
-            className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px]"
-            onClick={handleDownload}
-          >
-            <img src="/images/icons/download.svg" alt="" /> Unduh
-          </ButtonPrimary>
+        <div className="mt-5 flex p-3">
+          <div className="flex gap-7 self-center">
+            <Link to="/dashboard">
+              <ButtonSecondary className="h-[52] w-[167px] rounded-[30px]">
+                Dashboard
+              </ButtonSecondary>
+            </Link>
+            <ButtonPrimary
+              className="flex h-[52] w-[167px] items-center justify-center gap-4 rounded-[30px]"
+              onClick={handleDownload}
+            >
+              <img src="/images/icons/download.svg" alt="" /> Unduh
+            </ButtonPrimary>
+          </div>
         </div>
       </div>
     </>
   );
 };
+
 export default Receipt;
