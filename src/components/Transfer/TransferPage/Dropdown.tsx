@@ -1,11 +1,16 @@
 import useAuth from '@/hooks/useAuth';
 import { SavedAccount } from '@/types';
+import { cn } from '@/utils';
 import { snakeToCamelCase } from '@/utils/formatter';
 import { memo, useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
 
-const Dropdown = () => {
+interface DropdownProps {
+  style?: string;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ style }) => {
   const { api, token, userId } = useAuth();
   const [accounts, setAccounts] = useState<SavedAccount[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -60,7 +65,10 @@ const Dropdown = () => {
           className={
             isFetching
               ? ''
-              : `flex h-[4rem] w-[31.25rem] items-center justify-between rounded-xl border-[0.5px] border-grey bg-transparent px-4 py-6 text-grey disabled:bg-[#efefef]`
+              : cn(
+                  style,
+                  `flex h-[4rem] w-[31.25rem] items-center justify-between rounded-xl border-[0.5px] border-grey bg-transparent px-4 py-6 text-grey disabled:bg-[#efefef]`
+                )
           }
           aria-live="polite"
           aria-busy={isFetching}
@@ -75,7 +83,7 @@ const Dropdown = () => {
                 ? 'Belum ada nomor rekening yang tersimpan'
                 : 'Pilih nomor rekening yang tersimpan'}
               <img
-                src="images/icons/arrow_drop_down_big.svg"
+                src="/images/icons/arrow_drop_down_big.svg"
                 alt="icon panah"
                 className={`transition-transform duration-100 ease-in-out ${showDropdown ? 'rotate-180' : ''}`}
                 aria-hidden
