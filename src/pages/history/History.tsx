@@ -248,41 +248,31 @@ function History() {
         </div>
 
         {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
+          <div className="modal-container">
+            <div className="modal-content">
               <h2 className="mb-6 text-center text-xl font-semibold">
                 Filter Mutasi
               </h2>
-              <div className="mb-6 flex justify-between gap-[150px]">
-                <div className="text-center">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="startDate"
-                  >
-                    Tanggal Mulai
-                  </label>
+              <div className="modal-content-grid mb-6">
+                <div className="calendar-container">
+                  <label htmlFor="startDate">Tanggal Mulai</label>
                   <Calendar
                     onChange={handleDateChange(setStartDate)}
                     value={startDate}
                     className="react-calendar"
                   />
-                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                  <button className="mt-4 rounded border border-primary-dark-blue bg-white py-2 font-bold text-primary-dark-blue focus:outline-none">
                     {formatDate(startDate)}
                   </button>
                 </div>
-                <div className="text-center">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="endDate"
-                  >
-                    Tanggal Akhir
-                  </label>
+                <div className="calendar-container">
+                  <label htmlFor="endDate">Tanggal Akhir</label>
                   <Calendar
                     onChange={handleDateChange(setEndDate)}
                     value={endDate}
                     className="react-calendar"
                   />
-                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+                  <button className="mt-4 rounded border border-primary-dark-blue bg-white py-2 font-bold text-primary-dark-blue focus:outline-none">
                     {formatDate(endDate)}
                   </button>
                 </div>
@@ -290,7 +280,7 @@ function History() {
               <div className="flex justify-center">
                 <button
                   onClick={handleApplyFilter}
-                  className="focus:shadow-outline w-1/4 rounded bg-primary-dark-blue px-2 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                  className="w-full rounded bg-primary-dark-blue py-2 font-bold text-white hover:bg-blue-700"
                 >
                   Gunakan Filter
                 </button>
