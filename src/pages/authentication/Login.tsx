@@ -1,9 +1,9 @@
-import { ButtonPrimary, Form, Input, Label } from '@/components';
+import { ButtonPrimary, Form, Input, Label, NavbarLogo } from '@/components';
 import useAuth from '@/hooks/useAuth';
 import AuthLayout from '@/layouts/AuthLayout';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 interface LoginFormValues {
   username: string;
@@ -68,6 +68,7 @@ const Login = () => {
     <>
       {!isAuthenticated ? (
         <AuthLayout>
+          <NavbarLogo className="absolute left-[68px] top-[25px] flex flex-col items-end" />
           <Form
             methods={methods}
             onSubmit={onSubmit}
@@ -162,12 +163,12 @@ const Login = () => {
                 </p>
               )}
             </div>
-            {/* <Link
+            <Link
               to={'/forgot-password'}
               className="my-4 inline-block text-xl-body text-primary-dark-blue underline underline-offset-8"
             >
               Lupa Password?
-            </Link> */}
+            </Link>
             <ButtonPrimary
               type="submit"
               className="my-4 w-full p-3 text-xl-body font-bold text-white"

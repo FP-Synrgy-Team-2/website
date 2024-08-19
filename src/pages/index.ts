@@ -1,6 +1,7 @@
 import Dashboard from './Dashboard';
-import Login from './Login';
-import Logout from './Logout';
+import Login from './authentication/Login';
+import ForgotPassword from './authentication/ForgotPassword';
+import Logout from './authentication/Logout';
 import {
   Confirmation,
   New,
@@ -18,6 +19,7 @@ export {
   Dashboard,
   Login,
   Logout,
+  ForgotPassword,
 
   // History
   History,

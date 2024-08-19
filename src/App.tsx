@@ -10,12 +10,13 @@ import {
   History,
   Confirmation,
   New,
-  Logout,
   Receipt,
   Saved,
   DownloadInvoice,
   TransferPage,
   Error404,
+  ForgotPassword,
+  Logout,
 } from './pages';
 
 function App() {
@@ -36,8 +37,8 @@ function App() {
         />
 
         <Route path="/login" element={<Login />} />
-        <Route path="/logout" />
-        <Route path="/forgot-password" element={<Logout />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route
           path="/"
