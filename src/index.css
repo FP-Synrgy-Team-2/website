@@ -11,7 +11,7 @@
 
 @layer components {
   #dashboard-main {
-    @apply flex min-h-screen flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat;
+    @apply flex min-h-screen flex-col bg-contain bg-right-bottom bg-no-repeat;
   }
 
   #mutation-table {
@@ -19,7 +19,7 @@
   }
 
   #saved-accounts {
-    @apply h-104 w-55 sm:h-auto sm:w-screen;
+    @apply h-104 w-55 sm:h-auto;
   }
 
   .helper-box {

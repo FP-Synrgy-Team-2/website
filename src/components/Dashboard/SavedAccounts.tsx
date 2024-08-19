@@ -45,7 +45,7 @@ const SavedAccounts = () => {
 
   return (
     <section
-      className="mt-2.5 flex flex-col gap-4.5"
+      className="mt-2.5 flex flex-col gap-4.5 sm:mx-4 sm:mt-0"
       id="saved-accounts"
       tabIndex={0}
       aria-labelledby="saved-account-list"
@@ -55,7 +55,7 @@ const SavedAccounts = () => {
         className={
           isErrorFetching || accounts.length === 0
             ? 'flex items-center text-lg'
-            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll sm:grid sm:max-h-60 sm:grid-cols-3'
+            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll sm:grid sm:max-h-60 sm:w-screen sm:grid-flow-col sm:justify-start sm:gap-x-4 sm:overflow-x-scroll'
         }
         role={isErrorFetching ? 'alert' : 'list'}
         id="saved-account-list"
@@ -97,8 +97,8 @@ const SavedAccounts = () => {
           )
         ) : (
           <Skeleton
-            className="h-27.5 w-25 rounded-xl"
-            containerClassName="flex flex-wrap justify-between w-full gap-y-5"
+            className="h-27.5 w-25 rounded-xl sm:h-0"
+            containerClassName="flex flex-wrap justify-between w-full gap-y-5 sm:gap-y-0"
             count={6}
           />
         )}
