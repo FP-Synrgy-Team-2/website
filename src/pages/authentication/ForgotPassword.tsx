@@ -1,5 +1,6 @@
 import { ButtonPrimary, Form, Input, Label } from '@/components';
 import useAuth from '@/hooks/useAuth';
+import usePassword from '@/hooks/usePassword';
 import AuthLayout from '@/layouts/AuthLayout';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
@@ -20,6 +21,7 @@ const ForgotPassword = () => {
   const [error, setError] = useState<ErrorResponse | null>(null);
   const methods = useForm<ForgotPasswordFormValues>({ mode: 'onChange' });
   const { api } = useAuth();
+  const { setEmail } = usePassword();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async (data) => {
@@ -29,7 +31,8 @@ const ForgotPassword = () => {
       });
       if (res.status === 200) {
         setError(null);
-        navigate('/pin');
+        setEmail(data.email);
+        navigate('/forgot-password/otp');
       }
     } catch (error) {
       setError({

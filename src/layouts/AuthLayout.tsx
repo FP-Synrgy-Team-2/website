@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
+  const location = useLocation();
   return (
     <div
       className="container relative mx-auto flex h-screen justify-between"
@@ -11,7 +13,11 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
       </div>
       <div aria-label="banner login" className="h-full w-1/2 lg:w-1/4 md:w-0">
         <img
-          src="images/login/login_image.webp"
+          src={
+            location.pathname.split('/')[1] !== 'forgot-password'
+              ? 'images/login/login_image.webp'
+              : '../images/login/login_image.webp'
+          }
           alt=""
           className="h-full w-full object-cover"
         />

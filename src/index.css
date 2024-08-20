@@ -87,6 +87,11 @@
     }
   }
 
+  .input-otp {
+    -webkit-text-security: disc;
+    text-security: disc;
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
