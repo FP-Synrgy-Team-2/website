@@ -29,6 +29,16 @@ function History() {
     useState<TransactionProps | null>(null);
   const { token, userId, api } = useAuth();
 
+  const [screenIsLarge, setScreenIsLarge] = useState<boolean>(
+    window.innerWidth >= 1023 ? true : false
+  );
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1023) setScreenIsLarge(true);
+      else setScreenIsLarge(false);
+    });
+  }, []);
+
   const handleDateChange = (
     setter: React.Dispatch<React.SetStateAction<Date | null>>
   ) => {
@@ -104,7 +114,7 @@ function History() {
     fetchData();
   }, [token]);
   return (
-    <main className="flex flex-col gap-y-20">
+    <div className="relative flex flex-col gap-y-20 pr-20 lg:gap-y-10 sm:pl-6 sm:pr-6">
       <section className="flex flex-col gap-y-2.5">
         <h2
           className="font-Inter text-xl-body font-medium text-neutral-03"
@@ -112,8 +122,8 @@ function History() {
         >
           AKUN
         </h2>
-        <div className="flex items-end justify-between">
-          <div className="flex">
+        <div className="grid grid-cols-2 lg:grid-cols-1 lg:gap-y-5">
+          <div className="flex justify-self-start">
             {accountData && (
               <div className="flex flex-col gap-y-[5px] rounded-[10px] border border-black bg-primary-blue px-[30px] py-2.5">
                 <span className="text-xl-body font-bold italic text-primary-light-blue">
@@ -128,15 +138,20 @@ function History() {
               </div>
             )}
           </div>
+
           <button
-            className="relative h-min rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5"
+            className="relative h-min w-max justify-self-end rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5 lg:justify-self-start md:py-[2.5px] md:pl-7 md:pr-2.5"
             aria-label="tombol filter"
             onClick={() => setShowModal(true)}
           >
-            <div className="absolute left-3 top-[18px]">
-              <img src="/images/icons/filter.svg" alt="" />
+            <div className="absolute left-3 top-[18px] md:left-1 md:top-3">
+              <img
+                src="/images/icons/filter.svg"
+                alt=""
+                className="md:scale-75"
+              />
             </div>
-            <span className="text-md-display font-bold text-primary-dark-blue">
+            <span className="text-md-display font-bold text-primary-dark-blue md:text-sm-display">
               Filter
             </span>
           </button>
@@ -150,18 +165,28 @@ function History() {
           MUTASI REKENING
         </h2>
         <div className="flex justify-between gap-x-[30px]">
-          <div className="flex w-full flex-col gap-y-[30px]">
+          <div
+            className={
+              activeTransaction || !screenIsLarge
+                ? 'flex w-full flex-col gap-y-[30px]'
+                : 'flex w-1/2 flex-col gap-y-[30px]'
+            }
+          >
             <TransactionsList
               handleClick={handleClick}
               transactions={transactions}
               activeTransaction={activeTransaction}
             />
           </div>
-          <div className="w-full">
-            <TransactionData transaction={activeTransaction} />
-          </div>
+          {activeTransaction && (
+            <div className="w-full lg:hidden">
+              <TransactionData
+                transaction={activeTransaction}
+                setActiveTransaction={setActiveTransaction}
+              />
+            </div>
+          )}
         </div>
-
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
@@ -217,7 +242,15 @@ function History() {
           </div>
         )}
       </section>
-    </main>
+      {activeTransaction && (
+        <div className="fixed bottom-0 left-0 right-0 top-0 hidden items-center bg-white lg:flex">
+          <TransactionData
+            transaction={activeTransaction}
+            setActiveTransaction={setActiveTransaction}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
