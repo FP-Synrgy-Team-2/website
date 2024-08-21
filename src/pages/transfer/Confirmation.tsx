@@ -42,7 +42,9 @@ function Confirmation() {
           getAccountId(api, toAccount, token),
         ]);
 
-        const transactionDate = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+        const transactionDate = moment()
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss.SSS');
         const { data } = await api.post(
           `/api/transactions`,
           {

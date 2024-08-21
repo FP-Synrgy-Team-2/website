@@ -63,7 +63,7 @@ function TransactionData({
                 </div>
               </div>
               <div className="h-0 w-full rounded-[3px] border-[3px] border-neutral-03 border-opacity-30"></div>
-              <div className="grid grid-cols-[170px_126px] gap-x-[7.5px] gap-y-[15px] px-[30px] text-xl-body sm:gap-x-[2.5px] sm:text-md-body">
+              <div className="grid w-full grid-cols-[auto_auto] gap-x-[7.5px] gap-y-[15px] px-[10px] text-xl-body sm:gap-x-[2.5px] sm:text-md-body">
                 <span className="text-muted-black">Rekening Sumber</span>
                 <span className="text-dark-grey">
                   {transaction.from.account_number}

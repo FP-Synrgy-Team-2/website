@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { Invoice } from '@/components';
+import moment from 'moment';
 
 function DownloadInvoice() {
   const captureRef = useRef<HTMLDivElement>(null);
@@ -13,7 +14,6 @@ function DownloadInvoice() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('dataLoaded:', dataLoaded);
     if (dataLoaded && captureRef.current) {
       const { offsetWidth: width, offsetHeight: height } = captureRef.current;
       setDimensions({ width, height });
@@ -33,7 +33,8 @@ function DownloadInvoice() {
       })
         .then((canvas) => {
           const link = document.createElement('a');
-          link.download = 'invoice.png';
+          const currentDate = moment().format('YYYY-MM-DD_HH-mm-ss');
+          link.download = 'Invoice_' + currentDate + '.png';
           link.href = canvas.toDataURL('image/png');
           link.click();
           navigate(-1); // Navigate back after download

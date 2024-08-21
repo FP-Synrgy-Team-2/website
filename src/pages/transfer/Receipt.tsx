@@ -70,8 +70,8 @@ const Receipt: React.FC = () => {
   const rows = data
     ? [
         { label: 'Rekening Sumber', value: accountNumber },
-        { label: 'Rekening Tujuan', value: data.from.account_number },
-        { label: 'Nama penerima', value: data.from.owner_name },
+        { label: 'Rekening Tujuan', value: data.to.account_number },
+        { label: 'Nama penerima', value: data.to.owner_name },
         { label: 'Nominal Transfer', value: `Rp ${formatNumber(data.amount)}` },
         { label: 'Biaya Admin', value: `Rp ${formatNumber(data.admin_fee)}` },
         { label: 'Catatan', value: data.note },
