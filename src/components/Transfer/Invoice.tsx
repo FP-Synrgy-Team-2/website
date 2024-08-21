@@ -3,8 +3,20 @@ import { NavbarLogo } from '@/components';
 import { useEffect, useState, forwardRef } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { getAccountNumber } from '@/utils/getUserData';
-import formatRupiah from '@/utils/formatRupiah';
 import { TransactionProps } from '@/types/transaction';
+const formatHour = (date: string) => {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleTimeString('id-ID', { hour12: false }).slice(0, -3);
+};
+
+const formatDate = (date: string) => {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
 
 const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
   (props, ref) => {
@@ -33,23 +45,6 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
     });
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
-    const formatDate = (date: string): string => {
-      const newDate = new Date(date);
-      const year = newDate.getFullYear();
-      const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-      const day = String(newDate.getDate()).padStart(2, '0');
-
-      return `${year}-${month}-${day}`;
-    };
-
-    const formatHour = (date: string): string => {
-      const newDate = new Date(date);
-      const hours = String(newDate.getHours()).padStart(2, '0');
-      const minutes = String(newDate.getMinutes()).padStart(2, '0');
-
-      return `${hours}:${minutes}`;
-    };
-
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -76,6 +71,30 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
       fetchData();
     }, [transactionId, axios, token, userId, props]);
 
+    const formatNumber = (num: number): string => {
+      if (num === 0) return '0';
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    };
+
+    const rows = data
+      ? [
+          { label: 'Rekening Sumber', value: accountNumber },
+          { label: 'Rekening Tujuan', value: data.to.account_number },
+          { label: 'Nama penerima', value: data.to.owner_name },
+          {
+            label: 'Nominal Transfer',
+            value: `Rp ${formatNumber(data.amount)}`,
+          },
+          { label: 'Biaya Admin', value: `Rp ${formatNumber(data.admin_fee)}` },
+          { label: 'Catatan', value: data.note },
+          {
+            label: 'Tanggal Transaksi',
+            value: `${formatDate(data.transaction_date) + ' ' + formatHour(data.transaction_date)}`,
+          },
+          { label: 'Total', value: `Rp ${formatNumber(data.total)}` },
+        ]
+      : [];
+
     return dataLoaded ? (
       <div ref={ref} className="h-[600px] w-[1150px]">
         <main
@@ -96,30 +115,35 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
             <h2 className="text-xs-display font-regular">
               Invoice ini merupakan bukti pembayaran yang sah
             </h2>
-            <div className="mt-6 flex max-w-[50vw] gap-4">
-              <div className="receipt-label w-1/2">
-                <div>Rekening Sumber</div>
-                <div>Rekening Tujuan</div>
-                <div>Nama Penerima</div>
-                <div>Nominal Transfer</div>
-                <div>Biaya Admin</div>
-                {data.note && <div>Catatan</div>}
-                <div>Tanggal Transaksi</div>
-                <div className="font-bold">Total</div>
-              </div>
-              <div className="receipt-value w-1/2">
-                <div>{accountNumber}</div>
-                <div>{data.to.account_number}</div>
-                <div>{data.to.owner_name}</div>
-                <div>{formatRupiah(data.amount)}</div>
-                <div>{formatRupiah(data.admin_fee)}</div>
-                {data.note && <div>{data.note}</div>}
-                <div>
-                  {formatDate(data.transaction_date)}{' '}
-                  {formatHour(data.transaction_date)}
-                </div>
-                <div className="font-bold">{formatRupiah(data.total)}</div>
-              </div>
+            <div className="mt-3 w-1/2 text-lg-body font-regular text-dark-grey">
+              <table className="w-full table-fixed">
+                <tbody>
+                  {rows.slice(0, 5).map((row, index) => (
+                    <tr
+                      key={index}
+                      className="mb-2 text-left sm:flex sm:items-center sm:justify-start"
+                    >
+                      <th className="w-50 font-regular sm:w-40">{row.label}</th>
+                      <td className="w-50 font-regular">{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="w-1/2 text-lg-body font-regular text-dark-grey">
+              <table className="w-full table-fixed">
+                <tbody>
+                  {rows.slice(5).map((row, index) => (
+                    <tr
+                      key={index}
+                      className="mb-2 text-left sm:flex sm:items-center sm:justify-start"
+                    >
+                      <th className="w-50 font-regular sm:w-40">{row.label}</th>
+                      <td className="w-50 font-regular">{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </main>
