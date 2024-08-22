@@ -37,6 +37,7 @@ const TableMutasi: React.FC = () => {
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );
+  const MAX_TRANSACTIONS = 4;
 
   async function getTransactions(
     userId: string | null,
@@ -60,8 +61,9 @@ const TableMutasi: React.FC = () => {
       .then((res) => {
         transactions = res.data.data;
         if (transactions && Array.isArray(transactions)) {
-          if (transactions.length <= 8) setTransactions(transactions);
-          else setTransactions(transactions.splice(0, 8));
+          if (transactions.length <= MAX_TRANSACTIONS)
+            setTransactions(transactions);
+          else setTransactions(transactions.splice(0, MAX_TRANSACTIONS));
         } else setTransactions(null);
       })
       .catch((err) => console.log(err));
