@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 type MutationRecordType = {
   bankName: string;
-  accountNumber: number;
+  accountNumber: string;
   total: number;
   type: string;
   time: Date;
@@ -22,11 +22,11 @@ const MutationRecord: FC<MutationRecordType> = ({
           className="box-content h-6 w-6 rounded-full bg-primary-light-blue bg-center bg-no-repeat"
           style={{ backgroundImage: `url('/images/icons/arrow-up-down.svg')` }}
         />
-        Transfer
+        {type === 'Pengeluaran' ? 'Transfer' : 'Terima Uang'}
       </div>
-      <div className="text-md flex items-center justify-between font-regular">
+      <div className="text-md flex items-center justify-between font-regular sm:flex-col sm:items-start">
         {bankName} - {accountNumber}
-        <span>
+        <span className="place-self-end">
           {type === 'Pengeluaran' ? '-' : '+'}{' '}
           {Math.abs(total).toLocaleString('id-ID', {
             style: 'currency',

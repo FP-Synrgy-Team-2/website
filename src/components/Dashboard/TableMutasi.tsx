@@ -11,12 +11,24 @@ function TransactionsList({ transactions }: TransactionsProps) {
       <MutationRecord
         key={`transaction-${index}`}
         bankName="BCA"
-        accountNumber={872726241}
+        accountNumber={
+          transaction.type == 'Pengeluaran'
+            ? transaction.to.account_number
+            : transaction.from.account_number
+        }
         total={transaction.total}
         type={transaction.type}
         time={new Date(transaction.transaction_date)}
       />
     ));
+  } else {
+    return (
+      <li className="mutation-record">
+        <div className="mb-2 flex gap-2.5 text-lg font-bold">
+          Tidak Ada Transaksi
+        </div>
+      </li>
+    );
   }
 }
 
@@ -25,6 +37,7 @@ const TableMutasi: React.FC = () => {
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );
+  const MAX_TRANSACTIONS = 4;
 
   async function getTransactions(
     userId: string | null,
@@ -48,8 +61,9 @@ const TableMutasi: React.FC = () => {
       .then((res) => {
         transactions = res.data.data;
         if (transactions && Array.isArray(transactions)) {
-          if (transactions.length <= 8) setTransactions(transactions);
-          else setTransactions(transactions.splice(0, 8));
+          if (transactions.length <= MAX_TRANSACTIONS)
+            setTransactions(transactions);
+          else setTransactions(transactions.splice(0, MAX_TRANSACTIONS));
         } else setTransactions(null);
       })
       .catch((err) => console.log(err));
@@ -62,7 +76,7 @@ const TableMutasi: React.FC = () => {
   }, [token, userId]);
 
   return (
-    <section className="flex w-182.5 flex-col gap-2.5">
+    <section className="flex w-182.5 flex-col gap-2.5 sm:w-85">
       <div className="flex items-center justify-between">
         <h2
           className="text-xl-body uppercase"

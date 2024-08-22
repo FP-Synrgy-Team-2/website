@@ -42,7 +42,9 @@ function Confirmation() {
           getAccountId(api, toAccount, token),
         ]);
 
-        const transactionDate = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+        const transactionDate = moment()
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss.SSS');
         const { data } = await api.post(
           `/api/transactions`,
           {
@@ -82,12 +84,12 @@ function Confirmation() {
   return (
     <>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <section className="w-1/2">
+      <section className="w-1/2 sm:mx-4 sm:w-auto">
         <h2 className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
           <div className="flex basis-1/2 items-center gap-2">
-            <div className="flex h-[45px] w-[45px] items-center justify-center rounded-full bg-primary-blue font-bold text-white">
-              <span className="">{fromName[0]}</span>
-            </div>
+            <span className="inline-flex size-11 items-center justify-center rounded-full bg-primary-blue font-bold text-white">
+              {fromName[0]}
+            </span>
             <span
               className="self-center text-[24px]"
               tabIndex={0}
@@ -107,7 +109,7 @@ function Confirmation() {
         </h2>
 
         <table
-          className="mt-[1.625rem] w-full text-left"
+          className="mt-[1.625rem] w-full table-fixed text-left"
           aria-labelledby="detail-transaction"
         >
           <caption
@@ -138,8 +140,11 @@ function Confirmation() {
               ],
               ['Catatan', note],
             ].map((r, i) => (
-              <tr key={i} className="flex text-left">
-                <th className="w-[16.375rem] font-normal">{r[0]}</th>
+              <tr
+                key={i}
+                className="text-left sm:flex sm:items-center sm:justify-start"
+              >
+                <th className="w-[16.375rem] font-normal sm:w-40">{r[0]}</th>
                 <td className="text-dark-grey">{r[1]}</td>
               </tr>
             ))}

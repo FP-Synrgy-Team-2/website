@@ -14,7 +14,7 @@ interface TransactionProps {
   amount: number;
   admin_fee: number;
   total: number;
-  note: number;
+  note: string;
   type: string;
 }
 

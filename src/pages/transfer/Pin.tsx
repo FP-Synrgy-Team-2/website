@@ -5,6 +5,7 @@ import useAuth from '@/hooks/useAuth';
 import { getAccountId } from '@/utils/getUserData';
 import { useNavigate } from 'react-router-dom';
 import Loading from '@/components/General/Loading';
+import { cn } from '@/utils';
 
 interface pinValidationProps {
   accountNumber: string;
@@ -25,6 +26,7 @@ interface PinInputProps {
     note?: string;
     saved: boolean;
   };
+  style?: string;
 }
 
 const PinInput: React.FC<PinInputProps> = ({
@@ -32,6 +34,7 @@ const PinInput: React.FC<PinInputProps> = ({
   closePinInput,
   onPinValidated,
   data,
+  style,
 }) => {
   const [pin, setPin] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState<string>('');
@@ -151,7 +154,12 @@ const PinInput: React.FC<PinInputProps> = ({
       {!isLoading && showPinInput && !showSuccessModal && (
         <>
           <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="fixed inset-0 flex items-center justify-center">
+          <div
+            className={cn(
+              style,
+              'fixed inset-0 flex items-center justify-center sm:mx-4'
+            )}
+          >
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
               <h2
                 className="mb-4 text-center text-2xl font-semibold"
