@@ -21,6 +21,14 @@ function TransactionsList({ transactions }: TransactionsProps) {
         time={new Date(transaction.transaction_date)}
       />
     ));
+  } else {
+    return (
+      <li className="mutation-record">
+        <div className="mb-2 flex gap-2.5 text-lg font-bold">
+          Tidak Ada Transaksi
+        </div>
+      </li>
+    );
   }
 }
 

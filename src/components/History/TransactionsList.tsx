@@ -38,7 +38,7 @@ function TransactionsList({
           </span>
         </div>
 
-        <div className="flex justify-between gap-x-[5px] text-xl-body xl:text-md-body">
+        <div className="grid grid-cols-3 justify-between gap-x-[5px] text-xl-body xl:text-md-body sm:grid-cols-1">
           <span>
             BCA -{' '}
             {transaction.type === 'Pengeluaran'
@@ -53,6 +53,17 @@ function TransactionsList({
         </div>
       </div>
     ));
+  } else {
+    return (
+      <div
+        onClick={handleClick}
+        className={`flex justify-center rounded-[10px] border-2 border-danger bg-danger bg-opacity-20 px-[11px] py-2`}
+      >
+        <span className="text-2xl font-bold text-danger xl:text-xl">
+          Tidak Ada Transaksi
+        </span>
+      </div>
+    );
   }
 }
 

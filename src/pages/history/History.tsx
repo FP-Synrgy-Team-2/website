@@ -1,26 +1,14 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { ButtonPrimary, TransactionData, TransactionsList } from '@/components';
+import { TransactionData, TransactionsList } from '@/components';
 import { TransactionProps } from '@/types/transaction';
 import { AccountData } from '@/types/accounts';
-type Value = CalendarProps['value'];
-
-const formatDate = (date: Date | null) => {
-  if (!date) return '';
-  const options: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  };
-  return new Intl.DateTimeFormat('id-ID', options).format(date);
-};
+import FilterModal from '@/components/History/FilterModal';
+import Loading from '@/components/General/Loading';
 
 function History() {
   const [showModal, setShowModal] = useState(false);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
   );
@@ -39,28 +27,7 @@ function History() {
     });
   }, []);
 
-  const handleDateChange = (
-    setter: React.Dispatch<React.SetStateAction<Date | null>>
-  ) => {
-    return (
-      value: Value,
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-      if (!Array.isArray(value) && value instanceof Date && event) {
-        setter(value);
-      }
-    };
-  };
-
-  const handleApplyFilter = () => {
-    setShowModal(false);
-    if (startDate && endDate)
-      getTransactions(
-        userId,
-        startDate.toLocaleDateString('en-CA'),
-        endDate.toLocaleDateString('en-CA')
-      );
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     const transaction = e.currentTarget.getAttribute('data-transaction');
@@ -93,7 +60,10 @@ function History() {
           setTransactions(transactions);
         } else setTransactions(null);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.code === 404) setTransactions(null);
+      });
   }
 
   const fetchData = async () => {
@@ -113,7 +83,11 @@ function History() {
     getTransactions(userId, startDate, endDate);
     fetchData();
   }, [token]);
-  return (
+  return isLoading ? (
+    <div className="absolute bottom-0 left-0 right-0 top-0">
+      <Loading size="5vw" bgSize="100vh" />
+    </div>
+  ) : (
     <div className="relative flex flex-col gap-y-20 pr-20 lg:gap-y-10 sm:pl-6 sm:pr-6">
       <section className="flex flex-col gap-y-2.5">
         <h2
@@ -187,60 +161,12 @@ function History() {
             </div>
           )}
         </div>
-        {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
-              <h2 className="mb-6 text-center text-xl font-semibold">
-                Filter Mutasi
-              </h2>
-              <div className="mb-6 flex justify-between gap-[150px]">
-                <div className="text-center">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="startDate"
-                  >
-                    Tanggal Mulai
-                  </label>
-                  <Calendar
-                    onChange={handleDateChange(setStartDate)}
-                    value={startDate}
-                    className="react-calendar"
-                  />
-                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
-                    {formatDate(startDate)}
-                  </button>
-                </div>
-                <div className="text-center">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="endDate"
-                  >
-                    Tanggal Akhir
-                  </label>
-                  <Calendar
-                    onChange={handleDateChange(setEndDate)}
-                    value={endDate}
-                    className="react-calendar"
-                  />
-                  <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
-                    {formatDate(endDate)}
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <ButtonPrimary onClick={handleApplyFilter}>
-                  Gunakan Filter
-                </ButtonPrimary>
-              </div>
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-        )}
+        <FilterModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          setTransactions={setTransactions}
+          setLoading={setIsLoading}
+        />
       </section>
       {activeTransaction && (
         <div className="fixed bottom-0 left-0 right-0 top-0 hidden items-center bg-white lg:flex">
