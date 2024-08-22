@@ -101,41 +101,39 @@ function FilterModal({
 
   if (showModal)
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="relative w-[800px] rounded-lg bg-white p-8 shadow-md">
+      <div className="modal-container">
+        <div className="modal-content relative">
+          <span
+            onClick={() => setShowModal(false)}
+            className="absolute right-6 top-4 cursor-pointer"
+          >
+            <span className="not-sr-only">x</span>
+            <span className="sr-only">Tutup filter</span>
+          </span>
+
           <h2 className="mb-6 text-center text-xl font-semibold">
             Filter Mutasi
           </h2>
-          <div className="mb-6 flex justify-between gap-[150px]">
-            <div className="text-center">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="startDate"
-              >
-                Tanggal Mulai
-              </label>
+          <div className="modal-content-grid mb-6">
+            <div className="calendar-container">
+              <label htmlFor="startDate">Tanggal Mulai</label>
               <Calendar
                 onChange={handleDateChange(setStartDate)}
                 value={startDate}
-                className="react-calendar"
+                className="react-calendar w-full"
               />
-              <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+              <button className="mt-4 rounded border border-primary-dark-blue bg-white py-2 font-bold text-primary-dark-blue focus:outline-none">
                 {formatDate(startDate)}
               </button>
             </div>
-            <div className="text-center">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="endDate"
-              >
-                Tanggal Akhir
-              </label>
+            <div className="calendar-container">
+              <label htmlFor="endDate">Tanggal Akhir</label>
               <Calendar
                 onChange={handleDateChange(setEndDate)}
                 value={endDate}
-                className="react-calendar"
+                className="react-calendar w-full"
               />
-              <button className="focus:shadow-outline mt-4 rounded border border-primary-dark-blue bg-white px-5 py-2 font-bold text-primary-dark-blue focus:outline-none">
+              <button className="mt-4 rounded border border-primary-dark-blue bg-white py-2 font-bold text-primary-dark-blue focus:outline-none">
                 {formatDate(endDate)}
               </button>
             </div>
@@ -145,12 +143,6 @@ function FilterModal({
               Gunakan Filter
             </ButtonPrimary>
           </div>
-          <button
-            onClick={() => setShowModal(false)}
-            className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
-          >
-            ×
-          </button>
         </div>
       </div>
     );

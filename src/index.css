@@ -257,31 +257,99 @@
 }
 
 /* calender */
-.react-calendar {
-  border: none;
-  width: 100%;
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
   background-color: white;
+  padding: 20px;
+  width: 100%;
+  max-width: 750px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Tidak ada scroll di tampilan desktop */
 }
 
-.react-calendar__month-view__weekdays {
-  font-weight: 100;
-
-  color: #3c3c43;
+/* Mengatur layout responsif untuk grid */
+.modal-content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto; /* Scroll diaktifkan hanya pada ponsel */
+  }
+
+  .modal-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calendar-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calendar-container label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .modal-content button {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
 .react-calendar__tile {
-  max-width: initial !important;
-  padding: 10px 6.6667px;
+  padding: 12px 8px;
   background: none;
+  text-align: center;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 .react-calendar__tile--active {
   background: #3182ce;
   color: white;
+  border-radius: 50%;
 }
 
 .react-calendar__tile--now {
   background: #ebf4ff;
   color: black;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .react-calendar__tile {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .react-calendar__tile {
+    padding: 8px 4px;
+    font-size: 10px;
+  }
 }
