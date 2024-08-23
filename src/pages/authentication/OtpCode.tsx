@@ -1,9 +1,11 @@
 import { Form, Input } from '@/components';
-// import useAuth from '@/hooks/useAuth';
-// import usePassword from '@/hooks/usePassword';
+import useAuth from '@/hooks/useAuth';
+import usePassword from '@/hooks/usePassword';
 import AuthLayout from '@/layouts/AuthLayout';
-import React from 'react';
+import { AxiosError } from 'axios';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 
 interface OtpCodeFormValues {
@@ -15,13 +17,39 @@ interface OtpCodeFormValues {
   otp6: string;
 }
 
+type ErrorResponse = {
+  code: number;
+  message: string;
+  status: boolean;
+};
+
 const OtpCode = () => {
+  const [error, setError] = useState<ErrorResponse | null>(null);
+  const [timer, setTimer] = useState<number>(60);
   const methods = useForm<OtpCodeFormValues>();
-  // const { api } = useAuth();
-  // const { email } = usePassword();
-  // const navigate = useNavigate();
+  const { api } = useAuth();
+  const { email, setOtp } = usePassword();
+  const navigate = useNavigate();
 
   const focusRef = React.useRef<number>(1);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const timerId = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+
+      return () => clearInterval(timerId);
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    methods.setFocus('otp1');
+    if (!email) {
+      navigate('/forgot-password', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email]);
 
   const handleOtpKeydown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -71,8 +99,53 @@ const OtpCode = () => {
     }
   };
 
+  const handleClick = async () => {
+    try {
+      const res = await api.post('/api/auth/password', {
+        email_address: email,
+      });
+      if (res.status === 200) {
+        focusRef.current = 1;
+        methods.reset();
+        methods.setFocus('otp1');
+        setError(null);
+        setTimer(60);
+      }
+    } catch (error) {
+      setError({
+        code: ((error as AxiosError).response?.data as ErrorResponse).code,
+        message: ((error as AxiosError).response?.data as ErrorResponse)
+          .message,
+        status: ((error as AxiosError).response?.data as ErrorResponse).status,
+      });
+    }
+  };
+
   const onSubmit: SubmitHandler<OtpCodeFormValues> = async (data) => {
-    console.log(Object.values(data).join(''));
+    try {
+      const res = await api.post('/api/auth/password/otp', {
+        otp: Object.values(data).join(''),
+      });
+      if (res.status === 200) {
+        setError(null);
+        setOtp(Object.values(data).join(''));
+        navigate('/forgot-password/reset');
+      }
+    } catch (error) {
+      setError({
+        code: ((error as AxiosError).response?.data as ErrorResponse).code,
+        message: ((error as AxiosError).response?.data as ErrorResponse)
+          .message,
+        status: ((error as AxiosError).response?.data as ErrorResponse).status,
+      });
+    }
+    // console.log(Object.values(data).join(''));
+  };
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `0${minutes}:${remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}`;
   };
 
   return (
@@ -120,6 +193,26 @@ const OtpCode = () => {
             />
           ))}
         </div>
+        <div className="flex w-full justify-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              handleClick();
+            }}
+            className="my-4 inline-block text-xl-body text-primary-dark-blue underline underline-offset-8 disabled:text-grey"
+            disabled={timer !== 0}
+          >
+            Kirim ulang kode
+          </button>
+          <span className="my-4 inline-block text-xl-body text-primary-dark-blue">
+            {formatTime(timer)}
+          </span>
+        </div>
+        {error && (
+          <span className="mt-4 inline-block w-full rounded-md border border-danger bg-danger bg-opacity-20 px-4 py-3 text-danger">
+            {error.message}
+          </span>
+        )}
       </Form>
     </AuthLayout>
   );
