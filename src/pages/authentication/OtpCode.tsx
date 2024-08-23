@@ -139,7 +139,6 @@ const OtpCode = () => {
         status: ((error as AxiosError).response?.data as ErrorResponse).status,
       });
     }
-    // console.log(Object.values(data).join(''));
   };
 
   const formatTime = (seconds: number) => {
@@ -170,7 +169,7 @@ const OtpCode = () => {
           </p>
           <p
             className="text-lg-body font-regular opacity-40"
-            aria-label="Langkah dua dari tiga"
+            aria-label="Masukkan kode yang telah dikirimkan melalui email"
           >
             Masukkan kode yang telah dikirimkan melalui e-mail
           </p>

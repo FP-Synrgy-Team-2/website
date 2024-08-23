@@ -70,7 +70,10 @@ const ForgotPassword = () => {
             >
               Step 1/3
             </p>
-            <p className="text-lg-body font-regular opacity-40">
+            <p
+              className="text-lg-body font-regular opacity-40"
+              aria-label="Lengkapi data berikut untuk mengatur ulang password"
+            >
               Lengkapi data berikut untuk mengatur ulang password
             </p>
           </div>

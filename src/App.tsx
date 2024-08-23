@@ -20,6 +20,7 @@ import {
 } from './pages';
 import PasswordProvider from './contexts/PasswordProvider';
 import OtpCode from './pages/authentication/OtpCode';
+import ResetPassword from './pages/authentication/ResetPassword';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -43,6 +44,7 @@ function App() {
         <Route path="/forgot-password" element={<PasswordProvider />}>
           <Route index element={<ForgotPassword />} />
           <Route path="otp" element={<OtpCode />} />
+          <Route path="reset" element={<ResetPassword />} />
         </Route>
 
         <Route
