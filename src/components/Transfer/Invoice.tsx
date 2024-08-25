@@ -42,6 +42,7 @@ const Invoice = forwardRef<HTMLDivElement, { onDataLoaded: () => void }>(
       transaction_date: '',
       transaction_id: '',
       type: '',
+      transactional_type: '',
     });
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
