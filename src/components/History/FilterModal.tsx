@@ -1,29 +1,15 @@
 import { useTransactions } from '@/contexts/TransactionContext';
-import useAuth from '@/hooks/useAuth';
 import Calendar, { CalendarProps } from 'react-calendar';
-import { TransactionProps } from '@/types/transaction';
 import { ButtonPrimary } from '@/components';
 import { useState } from 'react';
+import { formatDate } from '@/utils/formatter';
 
 type Value = CalendarProps['value'];
 
-const formatDate = (date: Date | null) => {
-  if (!date) return '';
-  const options: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  };
-  return new Intl.DateTimeFormat('id-ID', options).format(date);
-};
-
 function FilterModal() {
-  const { token, userId, api } = useAuth();
   const {
     showModal,
     setShowModal,
-    setTransactions,
-    setIsLoading,
     startDate: startDateGlobal,
     setStartDate: setStartDateGlobal,
     endDate: endDateGlobal,
@@ -45,14 +31,8 @@ function FilterModal() {
         setShowModal(true);
         return;
       } else {
-        setStartDateGlobal(startDate);
-        setEndDateGlobal(endDate);
-
-        getTransactions(
-          userId,
-          startDate.toLocaleDateString('en-CA'),
-          endDate.toLocaleDateString('en-CA')
-        );
+        setStartDateGlobal(new Date(startDate));
+        setEndDateGlobal(new Date(endDate));
       }
   };
 
@@ -68,41 +48,6 @@ function FilterModal() {
       }
     };
   };
-
-  async function getTransactions(
-    userId: string | null,
-    startDate: string | null,
-    endDate: string | null
-  ) {
-    let transactions: null | TransactionProps[] = null;
-    setIsLoading(true);
-
-    api
-      .post(
-        `/api/transactions/history/${userId}`,
-        {
-          start_date: startDate,
-          end_date: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        transactions = res.data.data;
-        if (transactions) {
-          setTransactions(transactions);
-        } else setTransactions(null);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.data.code === 404) setTransactions(null);
-        setIsLoading(false);
-      });
-  }
 
   if (showModal)
     return (

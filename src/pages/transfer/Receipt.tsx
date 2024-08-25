@@ -93,7 +93,7 @@ const Receipt: React.FC = () => {
                   className="m-auto"
                 />
               </div>
-              <h1 className="text-lg font-bold">Tranksaksi Berhasil</h1>
+              <h1 className="text-lg font-bold">Transaksi Berhasil</h1>
               <div className="my-2 flex items-center gap-[15px] text-lg text-dark-grey">
                 <p>{formatDate(data.transaction_date)}</p>
                 <div className="h-[10px] w-[10px] rounded-full bg-dot-grey"></div>
