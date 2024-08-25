@@ -25,6 +25,7 @@ export const camelToSnake = <R>(obj: { [key: string]: any }): R => {
 };
 
 export const formatDate = (date: string | Date | null): string => {
+  if (date === null) return '';
   const formattedDate = new Date(date);
   return formattedDate.toLocaleDateString('id-ID', {
     year: 'numeric',
