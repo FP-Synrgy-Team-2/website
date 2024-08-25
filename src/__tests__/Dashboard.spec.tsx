@@ -45,6 +45,15 @@ describe('Dashboard Component', () => {
     mockAxios.onGet('/api/bank-accounts/user/mock-user-id').reply(200, {
       data: { account_number: '1234567890', balance: 1000 },
     });
+    mockAxios.onGet('/api/saved-accounts/mock-user-id').reply(200, {
+      data: [
+        {
+          account_id: '1234567890',
+          account_number: '1234567890',
+          owner_name: 'Chery',
+        },
+      ],
+    });
 
     mockAxios.onPost('/api/transactions/history/mock-user-id').reply(200, {
       data: [
