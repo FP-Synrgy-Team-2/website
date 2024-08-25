@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FC } from 'react';
 
 type AccountData = {
   account_number: string;
@@ -9,7 +9,7 @@ type CardSaldoProps = {
   accountData: AccountData;
 };
 
-const CardSaldo: React.FC<CardSaldoProps> = ({ accountData }) => {
+const CardSaldo: FC<CardSaldoProps> = ({ accountData }) => {
   const [isSaldoHidden, setIsSaldoHidden] = useState<boolean>(false);
   const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false);
 

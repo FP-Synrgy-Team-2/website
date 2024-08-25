@@ -1,12 +1,12 @@
-import React from 'react';
+import { forwardRef, InputHTMLAttributes, MutableRefObject } from 'react';
 import { RegisterOptions, useFormContext } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   validation?: RegisterOptions;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ validation, className, ...props }, ref) => {
     const { register } = useFormContext();
     const registration = register(props.name!, validation);
@@ -24,8 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             if (typeof ref === 'function') {
               ref(e);
             } else {
-              (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-                e;
+              (ref as MutableRefObject<HTMLInputElement | null>).current = e;
             }
           }
         }}

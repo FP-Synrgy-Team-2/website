@@ -1,11 +1,11 @@
-import React from 'react';
+import { forwardRef, LabelHTMLAttributes, ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  children: React.ReactNode;
+interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
+  children: ReactNode;
 }
 
-const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+const Label = forwardRef<HTMLLabelElement, LabelProps>(
   ({ children, className, ...props }, ref) => {
     return (
       <label

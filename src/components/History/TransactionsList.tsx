@@ -1,6 +1,7 @@
 import { TransactionProps } from '@/types/transaction';
 import { formatRupiah } from '@/utils/formatter';
 import { useTransactions } from '@/contexts/TransactionContext';
+import { MouseEvent } from 'react';
 
 const returnLocalDateAndTime = (transactionDate: string) => {
   const dateObj = new Date(transactionDate);
@@ -14,7 +15,7 @@ const returnLocalDateAndTime = (transactionDate: string) => {
 function TransactionsList() {
   const { activeTransaction, transactions, setActiveTransaction } =
     useTransactions();
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (e: MouseEvent<HTMLElement>) => {
     const transaction = e.currentTarget.getAttribute('data-transaction');
     const parsedTransaction = transaction ? JSON.parse(transaction) : null;
     setActiveTransaction(parsedTransaction);

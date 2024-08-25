@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, FC, KeyboardEvent } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { ButtonPrimary, ButtonSecondary, ModalBase } from '@/components';
 import useAuth from '@/hooks/useAuth';
@@ -29,7 +29,7 @@ interface PinInputProps {
   style?: string;
 }
 
-const PinInput: React.FC<PinInputProps> = ({
+const PinInput: FC<PinInputProps> = ({
   showPinInput,
   closePinInput,
   onPinValidated,
@@ -85,7 +85,7 @@ const PinInput: React.FC<PinInputProps> = ({
   }, []);
 
   const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>,
+    event: KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
     if (event.key === 'ArrowLeft' && index > 0) {

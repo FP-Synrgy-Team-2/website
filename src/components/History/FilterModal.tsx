@@ -1,7 +1,7 @@
 import { useTransactions } from '@/contexts/TransactionContext';
 import Calendar, { CalendarProps } from 'react-calendar';
 import { ButtonPrimary } from '@/components';
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction, MouseEvent } from 'react';
 import { formatDate } from '@/utils/formatter';
 
 type Value = CalendarProps['value'];
@@ -36,13 +36,8 @@ function FilterModal() {
       }
   };
 
-  const handleDateChange = (
-    setter: React.Dispatch<React.SetStateAction<Date | null>>
-  ) => {
-    return (
-      value: Value,
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
+  const handleDateChange = (setter: Dispatch<SetStateAction<Date | null>>) => {
+    return (value: Value, event: MouseEvent<HTMLButtonElement>) => {
       if (!Array.isArray(value) && value instanceof Date && event) {
         setter(value);
       }

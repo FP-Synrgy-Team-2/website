@@ -5,12 +5,13 @@ import { snakeToCamelCase } from '@/utils/formatter';
 import { memo, useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 
 interface DropdownProps {
   style?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ style }) => {
+const Dropdown: FC<DropdownProps> = ({ style }) => {
   const { api, token, userId } = useAuth();
   const [accounts, setAccounts] = useState<SavedAccount[]>([]);
   const [isFetching, setIsFetching] = useState(false);

@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect, ReactNode, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type ModalBaseProps = {
-  mainText: string | React.ReactNode;
+  mainText: string | ReactNode;
   text: string[];
   icon?: string;
   redirectTo?: string;
@@ -45,10 +45,10 @@ const ModalBase: FC<ModalBaseProps> = ({
           // style={{ lineHeight: '2rem', fontSize: '1.5rem' }}
         >
           {text.map((t, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {t}
               <br />
-            </React.Fragment>
+            </Fragment>
           ))}
         </p>
       </dialog>

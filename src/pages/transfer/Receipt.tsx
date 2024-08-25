@@ -1,11 +1,11 @@
 import { Breadcrumbs, ButtonPrimary, ButtonSecondary } from '@/components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import { getAccountNumber } from '@/utils/getUserData';
 import { TransactionProps } from '@/types/transaction';
 
-const Receipt: React.FC = () => {
+const Receipt: FC = () => {
   const navigate = useNavigate();
   const { api: axios, token, userId } = useAuth();
   const [accountNumber, setAccountNumber] = useState<string | null>(null);

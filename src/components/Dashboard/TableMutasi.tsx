@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Link } from 'react-router-dom';
 import MutationRecord from './MutationRecord';
 import useAuth from '@/hooks/useAuth';
@@ -32,7 +32,7 @@ function TransactionsList({ transactions }: TransactionsProps) {
   }
 }
 
-const TableMutasi: React.FC = () => {
+const TableMutasi: FC = () => {
   const { api, token, userId } = useAuth();
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(
     []
