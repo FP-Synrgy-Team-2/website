@@ -1,5 +1,5 @@
 import { TransactionProps } from '@/types/transaction';
-import formatRupiah from '@/utils/formatRupiah';
+import { formatRupiah } from '@/utils/formatter';
 
 interface TransactionListProps {
   transactions: TransactionProps[] | null;

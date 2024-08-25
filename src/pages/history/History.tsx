@@ -9,6 +9,8 @@ import {
   TransactionsProvider,
   useTransactions,
 } from '@/contexts/TransactionContext';
+import { Button } from '@/components';
+import { formatDateAPI } from '@/utils/formatter';
 
 function HistoryPage() {
   const {
@@ -19,9 +21,12 @@ function HistoryPage() {
     activeTransaction,
     setActiveTransaction,
     isLoading,
+    setIsLoading,
     setShowModal,
     startDate,
     endDate,
+    setStartDate,
+    setEndDate,
   } = useTransactions();
   const { token, userId, api } = useAuth();
 
@@ -41,11 +46,17 @@ function HistoryPage() {
     setActiveTransaction(parsedTransaction);
   };
 
+  const handleRemoveFilter = () => {
+    setStartDate(new Date(0));
+    setEndDate(new Date());
+  };
+
   async function getTransactions(
     userId: string | null,
     startDate: string | null,
     endDate: string | null
   ) {
+    setIsLoading(true);
     let transactions: null | TransactionProps[] = null;
     api
       .post(
@@ -65,10 +76,12 @@ function HistoryPage() {
         if (transactions) {
           setTransactions(transactions);
         } else setTransactions(null);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
         if (err.response.data.code === 404) setTransactions(null);
+        setIsLoading(false);
       });
   }
 
@@ -79,14 +92,16 @@ function HistoryPage() {
       });
       setAccountData(response.data.data);
     } catch (error) {
-      console.error('Error fetching invoice data:', error);
+      console.error('Error fetching user data:', error);
     }
   };
 
   useEffect(() => {
-    console.log(startDate);
     if (startDate && endDate) {
-      getTransactions(userId, startDate.toISOString(), endDate.toISOString());
+      const startDateString = formatDateAPI(startDate);
+      const endDateString = formatDateAPI(endDate);
+
+      getTransactions(userId, startDateString, endDateString);
     }
     fetchData();
   }, [token, userId, startDate, endDate]);
@@ -121,22 +136,41 @@ function HistoryPage() {
             )}
           </div>
 
-          <button
-            className="relative h-min w-max justify-self-end rounded-[10px] bg-primary-light-blue py-[5px] pl-14 pr-5 lg:justify-self-start md:py-[2.5px] md:pl-7 md:pr-2.5"
-            aria-label="tombol filter"
-            onClick={() => setShowModal(true)}
-          >
-            <div className="absolute left-3 top-[18px] md:left-1 md:top-3">
-              <img
-                src="/images/icons/filter.svg"
-                alt=""
-                className="md:scale-75"
-              />
-            </div>
-            <span className="text-md-display font-bold text-primary-dark-blue md:text-sm-display">
-              Filter
-            </span>
-          </button>
+          <div className="flex w-max flex-col items-end gap-2 justify-self-end lg:flex-row lg:justify-self-start">
+            <Button
+              className="flex h-min w-max flex-row items-center justify-center gap-3 bg-primary-light-blue"
+              aria-label="tombol filter"
+              onClick={() => setShowModal(true)}
+            >
+              <div className="">
+                <img
+                  src="/images/icons/filter.svg"
+                  alt=""
+                  className="md:scale-75"
+                />
+              </div>
+              <span className="text-xs-display font-bold text-primary-dark-blue">
+                Filter
+              </span>
+            </Button>
+
+            {startDate?.getTime() != 0 && endDate?.getTime() != 0 && (
+              <Button
+                className="flex h-min w-max flex-row items-center justify-center gap-3 bg-danger"
+                aria-label="tombol hapus filter"
+                onClick={handleRemoveFilter}
+              >
+                <div className="">
+                  <img
+                    src="/images/icons/close-icon.svg"
+                    alt=""
+                    className="scale-125"
+                  />
+                </div>
+                <span className="text-xs-display text-white">Hapus Filter</span>
+              </Button>
+            )}
+          </div>
         </div>
       </section>
       <section className="flex flex-col gap-y-2.5 pb-10">
