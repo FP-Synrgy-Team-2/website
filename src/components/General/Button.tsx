@@ -1,8 +1,8 @@
-import { FC, ButtonHTMLAttributes } from 'react';
+import { FC, ButtonHTMLAttributes, ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const Button: FC<ButtonProps> = ({ children, className, ...rest }) => {

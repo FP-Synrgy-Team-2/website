@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, CSSProperties } from 'react';
 
 interface CardProps {
   color?: string;
@@ -6,7 +6,7 @@ interface CardProps {
     id?: string;
     title?: string;
     className?: string;
-    style?: React.CSSProperties;
+    style?: CSSProperties;
   };
   children: ReactNode;
 }

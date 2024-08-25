@@ -1,4 +1,4 @@
-import React from 'react';
+import { FormHTMLAttributes, ReactNode, forwardRef, Ref } from 'react';
 import {
   FieldValues,
   FormProvider,
@@ -8,9 +8,9 @@ import {
 import { twMerge } from 'tailwind-merge';
 
 interface FormProps<T extends FieldValues>
-  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+  extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit: SubmitHandler<T>;
-  children: React.ReactNode;
+  children: ReactNode;
   methods: UseFormReturn<T>;
   className?: string;
   ariaLabel?: string;
@@ -25,7 +25,7 @@ const FormContent = <T extends FieldValues>(
     ariaLabel,
     ...props
   }: FormProps<T>,
-  ref: React.Ref<HTMLFormElement>
+  ref: Ref<HTMLFormElement>
 ) => {
   return (
     <FormProvider {...methods}>
@@ -42,8 +42,8 @@ const FormContent = <T extends FieldValues>(
   );
 };
 
-const Form = React.forwardRef(FormContent) as <T extends FieldValues>(
-  props: FormProps<T> & { ref?: React.Ref<HTMLFormElement> }
+const Form = forwardRef(FormContent) as <T extends FieldValues>(
+  props: FormProps<T> & { ref?: Ref<HTMLFormElement> }
 ) => ReturnType<typeof FormContent>;
 
 export default Form;

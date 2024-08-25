@@ -1,4 +1,13 @@
-import React from 'react';
+import {
+  Dispatch,
+  createContext,
+  SetStateAction,
+  useState,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Api } from '@/api/api';
 import { ResponseError } from '@/types/response';
@@ -6,10 +15,11 @@ import Cookies from 'js-cookie';
 import Loading from '@/components/General/Loading';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJWTPayload } from '@/types';
+import { VITE_API_URL } from '@/constants';
 
 export type AuthContextType = {
   isAuthenticated: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
   login: (
     body: { username: string; password: string },
     onSuccess: string,
@@ -20,7 +30,7 @@ export type AuthContextType = {
   userId: string | null;
   token: string | null;
   authResErrors: ResponseError | null;
-  setAuthResErrors: React.Dispatch<React.SetStateAction<ResponseError | null>>;
+  setAuthResErrors: Dispatch<SetStateAction<ResponseError | null>>;
   api: Api;
 };
 interface JwtPayload {
@@ -35,21 +45,19 @@ interface JwtPayload {
   client_id: string;
 }
 
-export const AuthContext = React.createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = React.useState<string | null>(null);
-  const [authResErrors, setAuthResErrors] =
-    React.useState<ResponseError | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [userId, setUserId] = React.useState<string | null>(null);
+const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setToken] = useState<string | null>(null);
+  const [authResErrors, setAuthResErrors] = useState<ResponseError | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userId, setUserId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // custom api to be used when your request needs auth
-  const api = React.useMemo(
-    () => new Api(import.meta.env.VITE_API_URL, token, setToken),
-    [token]
-  );
+  const api = useMemo(() => new Api(VITE_API_URL, token, setToken), [token]);
 
   const getToken = () => Cookies.get('refresh-token');
 
@@ -65,7 +73,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const refreshToken = React.useCallback(async () => {
+  const refreshToken = useCallback(async () => {
     try {
       const token = getToken();
       if (!token || isTokenExpired(token)) {
@@ -103,7 +111,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [api, setToken, setAuthResErrors, setLoading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!token) refreshToken();
 
     // commented out as access token refreshing is auto-handled by axios interceptor, look at Api class for details

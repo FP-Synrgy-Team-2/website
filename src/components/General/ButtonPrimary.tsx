@@ -1,8 +1,8 @@
-import { FC, ButtonHTMLAttributes } from 'react';
+import { FC, ButtonHTMLAttributes, ReactNode } from 'react';
 import { Button } from '@/components';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ButtonPrimary: FC<ButtonProps> = ({ children, className, ...rest }) => {

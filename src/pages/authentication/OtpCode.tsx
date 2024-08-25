@@ -3,7 +3,7 @@ import useAuth from '@/hooks/useAuth';
 import usePassword from '@/hooks/usePassword';
 import AuthLayout from '@/layouts/AuthLayout';
 import { AxiosError } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, KeyboardEvent, FocusEvent } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const OtpCode = () => {
   const { email, setOtp } = usePassword();
   const navigate = useNavigate();
 
-  const focusRef = React.useRef<number>(1);
+  const focusRef = useRef<number>(1);
 
   useEffect(() => {
     if (timer > 0) {
@@ -52,7 +52,7 @@ const OtpCode = () => {
   }, [email]);
 
   const handleOtpKeydown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
+    e: KeyboardEvent<HTMLInputElement>,
     fieldIndex: number
   ) => {
     const isNumbericKey = /^[0-9]$/.test(e.key);
@@ -91,7 +91,7 @@ const OtpCode = () => {
   };
 
   const handleOtpFocus = (
-    e: React.FocusEvent<HTMLInputElement>,
+    e: FocusEvent<HTMLInputElement>,
     fieldIndex: number
   ) => {
     if (fieldIndex !== focusRef.current) {

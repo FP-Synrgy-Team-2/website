@@ -1,27 +1,30 @@
-// TransactionsContext.tsx
-import React, { createContext, useContext, useState } from 'react';
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { TransactionProps } from '@/types/transaction';
 import { AccountData } from '@/types/accounts';
 
 interface TransactionsContextProps {
   transactions: TransactionProps[] | null;
-  setTransactions: React.Dispatch<
-    React.SetStateAction<TransactionProps[] | null>
-  >;
+  setTransactions: Dispatch<SetStateAction<TransactionProps[] | null>>;
   accountData: AccountData | null;
-  setAccountData: React.Dispatch<React.SetStateAction<AccountData | null>>;
+  setAccountData: Dispatch<SetStateAction<AccountData | null>>;
   activeTransaction: TransactionProps | null;
-  setActiveTransaction: React.Dispatch<
-    React.SetStateAction<TransactionProps | null>
-  >;
+  setActiveTransaction: Dispatch<SetStateAction<TransactionProps | null>>;
   startDate: Date | null;
-  setStartDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setStartDate: Dispatch<SetStateAction<Date | null>>;
   endDate: Date | null;
-  setEndDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setEndDate: Dispatch<SetStateAction<Date | null>>;
   isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
   showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const TransactionsContext = createContext<TransactionsContextProps | undefined>(
@@ -38,7 +41,7 @@ export const useTransactions = () => {
   return context;
 };
 
-export const TransactionsProvider: React.FC<{ children: React.ReactNode }> = ({
+export const TransactionsProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [transactions, setTransactions] = useState<TransactionProps[] | null>(

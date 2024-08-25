@@ -1,4 +1,4 @@
-import { JwtPayload } from "jwt-decode";
+import { JwtPayload } from 'jwt-decode';
 
 interface SavedAccount {
   savedAccountId: string;
@@ -28,8 +28,8 @@ interface User {
 }
 
 interface CustomJWTPayload extends JwtPayload {
-  user_id: string,
-  username: string
+  user_id: string;
+  username: string;
 }
 
 export type { SavedAccount, BankAccount, User, Session, CustomJWTPayload };

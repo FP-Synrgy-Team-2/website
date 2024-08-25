@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 import { AuthContextType } from '@/contexts/AuthProvider';
 
-export const AuthContext = React.createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
