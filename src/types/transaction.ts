@@ -16,6 +16,7 @@ interface TransactionProps {
   total: number;
   note: string;
   type: string;
+  transactional_type: string;
 }
 
 interface TransactionsProps {
