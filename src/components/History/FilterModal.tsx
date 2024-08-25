@@ -1,19 +1,11 @@
+import { useTransactions } from '@/contexts/TransactionContext';
 import useAuth from '@/hooks/useAuth';
-import { useState } from 'react';
 import Calendar, { CalendarProps } from 'react-calendar';
 import { TransactionProps } from '@/types/transaction';
-import ButtonPrimary from '../General/ButtonPrimary';
+import { ButtonPrimary } from '@/components';
+import { useState } from 'react';
 
 type Value = CalendarProps['value'];
-
-interface FilterModalProps {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setTransactions: React.Dispatch<
-    React.SetStateAction<TransactionProps[] | null>
-  >;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 const formatDate = (date: Date | null) => {
   if (!date) return '';
@@ -25,16 +17,25 @@ const formatDate = (date: Date | null) => {
   return new Intl.DateTimeFormat('id-ID', options).format(date);
 };
 
-function FilterModal({
-  showModal,
-  setShowModal,
-  setTransactions,
-  setLoading,
-}: FilterModalProps) {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-
+function FilterModal() {
   const { token, userId, api } = useAuth();
+  const {
+    showModal,
+    setShowModal,
+    setTransactions,
+    setIsLoading,
+    startDate: startDateGlobal,
+    setStartDate: setStartDateGlobal,
+    endDate: endDateGlobal,
+    setEndDate: setEndDateGlobal,
+  } = useTransactions();
+
+  const [startDate, setStartDate] = useState<Date | null>(
+    startDateGlobal?.getTime() === 0 ? new Date() : startDateGlobal
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    endDateGlobal?.getTime() === 0 ? new Date() : endDateGlobal
+  );
 
   const handleApplyFilter = () => {
     setShowModal(false);
@@ -44,6 +45,9 @@ function FilterModal({
         setShowModal(true);
         return;
       } else {
+        setStartDateGlobal(startDate);
+        setEndDateGlobal(endDate);
+
         getTransactions(
           userId,
           startDate.toLocaleDateString('en-CA'),
@@ -71,7 +75,8 @@ function FilterModal({
     endDate: string | null
   ) {
     let transactions: null | TransactionProps[] = null;
-    setLoading(true);
+    setIsLoading(true);
+
     api
       .post(
         `/api/transactions/history/${userId}`,
@@ -90,12 +95,12 @@ function FilterModal({
         if (transactions) {
           setTransactions(transactions);
         } else setTransactions(null);
-        setLoading(false);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
         if (err.response.data.code === 404) setTransactions(null);
-        setLoading(false);
+        setIsLoading(false);
       });
   }
 

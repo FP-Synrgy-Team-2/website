@@ -3,18 +3,26 @@ import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { TransactionData, TransactionsList } from '@/components';
 import { TransactionProps } from '@/types/transaction';
-import { AccountData } from '@/types/accounts';
 import FilterModal from '@/components/History/FilterModal';
 import Loading from '@/components/General/Loading';
+import {
+  TransactionsProvider,
+  useTransactions,
+} from '@/contexts/TransactionContext';
 
-function History() {
-  const [showModal, setShowModal] = useState(false);
-  const [transactions, setTransactions] = useState<TransactionProps[] | null>(
-    []
-  );
-  const [accountData, setAccountData] = useState<AccountData | null>(null);
-  const [activeTransaction, setActiveTransaction] =
-    useState<TransactionProps | null>(null);
+function HistoryPage() {
+  const {
+    transactions,
+    setTransactions,
+    accountData,
+    setAccountData,
+    activeTransaction,
+    setActiveTransaction,
+    isLoading,
+    setShowModal,
+    startDate,
+    endDate,
+  } = useTransactions();
   const { token, userId, api } = useAuth();
 
   const [screenIsLarge, setScreenIsLarge] = useState<boolean>(
@@ -26,8 +34,6 @@ function History() {
       else setScreenIsLarge(false);
     });
   }, []);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     const transaction = e.currentTarget.getAttribute('data-transaction');
@@ -78,11 +84,13 @@ function History() {
   };
 
   useEffect(() => {
-    const startDate = new Date(0).toISOString();
-    const endDate = new Date().toISOString();
-    getTransactions(userId, startDate, endDate);
+    console.log(startDate);
+    if (startDate && endDate) {
+      getTransactions(userId, startDate.toISOString(), endDate.toISOString());
+    }
     fetchData();
-  }, [token]);
+  }, [token, userId, startDate, endDate]);
+
   return isLoading ? (
     <div className="absolute bottom-0 left-0 right-0 top-0">
       <Loading size="5vw" bgSize="100vh" />
@@ -154,30 +162,25 @@ function History() {
           </div>
           {activeTransaction && (
             <div className="w-full lg:hidden">
-              <TransactionData
-                transaction={activeTransaction}
-                setActiveTransaction={setActiveTransaction}
-              />
+              <TransactionData />
             </div>
           )}
         </div>
-        <FilterModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          setTransactions={setTransactions}
-          setLoading={setIsLoading}
-        />
+        <FilterModal />
       </section>
       {activeTransaction && (
         <div className="fixed bottom-0 left-0 right-0 top-0 hidden items-center bg-white lg:flex">
-          <TransactionData
-            transaction={activeTransaction}
-            setActiveTransaction={setActiveTransaction}
-          />
+          <TransactionData />
         </div>
       )}
     </div>
   );
 }
 
-export default History;
+export default function History() {
+  return (
+    <TransactionsProvider>
+      <HistoryPage />
+    </TransactionsProvider>
+  );
+}

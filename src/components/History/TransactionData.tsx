@@ -1,28 +1,19 @@
 import { ButtonPrimary, ButtonSecondary } from '@/components';
-import { TransactionProps } from '@/types/transaction';
 import { useNavigate } from 'react-router-dom';
 import formatRupiah from '@/utils/formatRupiah';
+import { useTransactions } from '@/contexts/TransactionContext';
 
-interface TransactionDataProps {
-  transaction: TransactionProps | null;
-  setActiveTransaction: React.Dispatch<
-    React.SetStateAction<TransactionProps | null>
-  >;
-}
-
-function TransactionData({
-  transaction,
-  setActiveTransaction,
-}: TransactionDataProps) {
+function TransactionData() {
   const navigate = useNavigate();
+  const { activeTransaction, setActiveTransaction } = useTransactions();
 
   const handleClose = () => {
     setActiveTransaction(null);
   };
 
   const handleDownload = () => {
-    if (transaction)
-      navigate(`/transfer/invoice/${transaction.transaction_id}`);
+    if (activeTransaction)
+      navigate(`/transfer/invoice/${activeTransaction.transaction_id}`);
   };
 
   const formatHour = (date: string) => {
@@ -37,7 +28,7 @@ function TransactionData({
 
   return (
     <>
-      {transaction && (
+      {activeTransaction && (
         <div className="sticky top-[20px] flex w-full flex-col items-center gap-5">
           <div className="flex h-max items-center justify-center rounded-[20px] bg-white px-[30px] py-[60px] shadow-[0_4px_5px_5px_#EAF6FF] xl:px-5 xl:py-[45px] sm:px-[15px] sm:py-[30px]">
             <div className="flex flex-col items-center gap-y-5">
@@ -54,11 +45,11 @@ function TransactionData({
                 </span>
                 <div className="flex items-center gap-x-2">
                   <span className="text-sm-body text-dark-grey">
-                    {formatDate(transaction.transaction_date)}
+                    {formatDate(activeTransaction.transaction_date)}
                   </span>
                   <div className="h-2.5 w-2.5 rounded-[5px] bg-dot-grey"></div>
                   <span className="text-sm-body text-dark-grey">
-                    {formatHour(transaction.transaction_date)}
+                    {formatHour(activeTransaction.transaction_date)}
                   </span>
                 </div>
               </div>
@@ -66,29 +57,29 @@ function TransactionData({
               <div className="grid w-full grid-cols-[auto_auto] gap-x-[7.5px] gap-y-[15px] px-[10px] text-xl-body sm:gap-x-[2.5px] sm:text-md-body">
                 <span className="text-muted-black">Rekening Sumber</span>
                 <span className="text-dark-grey">
-                  {transaction.from.account_number}
+                  {activeTransaction.from.account_number}
                 </span>
                 <span className="text-muted-black">Rekening Tujuan</span>
                 <span className="text-dark-grey">
-                  {transaction.to.account_number}
+                  {activeTransaction.to.account_number}
                 </span>
                 <span className="text-muted-black">Nama penerima</span>
                 <span className="text-dark-grey">
-                  {transaction.to.owner_name}
+                  {activeTransaction.to.owner_name}
                 </span>
                 <span className="text-muted-black">Nominal Transfer </span>
                 <span className="text-dark-grey">
-                  {formatRupiah(transaction.amount)}
+                  {formatRupiah(activeTransaction.amount)}
                 </span>
                 <span className="text-muted-black">Biaya Admin</span>
                 <span className="text-dark-grey">
-                  {formatRupiah(transaction.admin_fee)}
+                  {formatRupiah(activeTransaction.admin_fee)}
                 </span>
                 <span className="text-muted-black">Catatan</span>
-                <span className="text-dark-grey">{transaction.note}</span>
+                <span className="text-dark-grey">{activeTransaction.note}</span>
                 <span className="font-bold text-muted-black">Total</span>
                 <span className="font-bold text-dark-grey">
-                  {formatRupiah(transaction.total)}
+                  {formatRupiah(activeTransaction.total)}
                 </span>
               </div>
             </div>
