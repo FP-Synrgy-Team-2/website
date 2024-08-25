@@ -30,8 +30,12 @@ function FilterModal() {
     setEndDate: setEndDateGlobal,
   } = useTransactions();
 
-  const [startDate, setStartDate] = useState<Date | null>(startDateGlobal);
-  const [endDate, setEndDate] = useState<Date | null>(endDateGlobal);
+  const [startDate, setStartDate] = useState<Date | null>(
+    startDateGlobal?.getTime() === 0 ? new Date() : startDateGlobal
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    endDateGlobal?.getTime() === 0 ? new Date() : endDateGlobal
+  );
 
   const handleApplyFilter = () => {
     setShowModal(false);
@@ -72,6 +76,7 @@ function FilterModal() {
   ) {
     let transactions: null | TransactionProps[] = null;
     setIsLoading(true);
+
     api
       .post(
         `/api/transactions/history/${userId}`,

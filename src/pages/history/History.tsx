@@ -20,6 +20,8 @@ function HistoryPage() {
     setActiveTransaction,
     isLoading,
     setShowModal,
+    startDate,
+    endDate,
   } = useTransactions();
   const { token, userId, api } = useAuth();
 
@@ -82,11 +84,13 @@ function HistoryPage() {
   };
 
   useEffect(() => {
-    const startDate = new Date(0).toISOString();
-    const endDate = new Date().toISOString();
-    getTransactions(userId, startDate, endDate);
+    console.log(startDate);
+    if (startDate && endDate) {
+      getTransactions(userId, startDate.toISOString(), endDate.toISOString());
+    }
     fetchData();
-  }, [token]);
+  }, [token, userId, startDate, endDate]);
+
   return isLoading ? (
     <div className="absolute bottom-0 left-0 right-0 top-0">
       <Loading size="5vw" bgSize="100vh" />
@@ -158,10 +162,7 @@ function HistoryPage() {
           </div>
           {activeTransaction && (
             <div className="w-full lg:hidden">
-              <TransactionData
-                transaction={activeTransaction}
-                setActiveTransaction={setActiveTransaction}
-              />
+              <TransactionData />
             </div>
           )}
         </div>
@@ -169,10 +170,7 @@ function HistoryPage() {
       </section>
       {activeTransaction && (
         <div className="fixed bottom-0 left-0 right-0 top-0 hidden items-center bg-white lg:flex">
-          <TransactionData
-            transaction={activeTransaction}
-            setActiveTransaction={setActiveTransaction}
-          />
+          <TransactionData />
         </div>
       )}
     </div>

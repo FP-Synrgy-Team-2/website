@@ -47,7 +47,7 @@ export const TransactionsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [accountData, setAccountData] = useState<AccountData | null>(null);
   const [activeTransaction, setActiveTransaction] =
     useState<TransactionProps | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(new Date(0));
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
