@@ -14,7 +14,6 @@ import { formatDateAPI } from '@/utils/formatter';
 
 function HistoryPage() {
   const {
-    transactions,
     setTransactions,
     accountData,
     setAccountData,
@@ -39,12 +38,6 @@ function HistoryPage() {
       else setScreenIsLarge(false);
     });
   }, []);
-
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    const transaction = e.currentTarget.getAttribute('data-transaction');
-    const parsedTransaction = transaction ? JSON.parse(transaction) : null;
-    setActiveTransaction(parsedTransaction);
-  };
 
   const handleRemoveFilter = () => {
     setStartDate(new Date(0));
@@ -189,11 +182,7 @@ function HistoryPage() {
                 : 'flex w-1/2 flex-col gap-y-[30px]'
             }
           >
-            <TransactionsList
-              handleClick={handleClick}
-              transactions={transactions}
-              activeTransaction={activeTransaction}
-            />
+            <TransactionsList />
           </div>
           {activeTransaction && (
             <div className="w-full lg:hidden">

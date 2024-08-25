@@ -1,11 +1,6 @@
 import { TransactionProps } from '@/types/transaction';
 import { formatRupiah } from '@/utils/formatter';
-
-interface TransactionListProps {
-  transactions: TransactionProps[] | null;
-  handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  activeTransaction: TransactionProps | null;
-}
+import { useTransactions } from '@/contexts/TransactionContext';
 
 const returnLocalDateAndTime = (transactionDate: string) => {
   const dateObj = new Date(transactionDate);
@@ -16,11 +11,14 @@ const returnLocalDateAndTime = (transactionDate: string) => {
   return { localDate, localTime };
 };
 
-function TransactionsList({
-  transactions,
-  handleClick,
-  activeTransaction,
-}: TransactionListProps) {
+function TransactionsList() {
+  const { activeTransaction, transactions, setActiveTransaction } =
+    useTransactions();
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    const transaction = e.currentTarget.getAttribute('data-transaction');
+    const parsedTransaction = transaction ? JSON.parse(transaction) : null;
+    setActiveTransaction(parsedTransaction);
+  };
   if (transactions) {
     return transactions.map((transaction: TransactionProps, index: number) => (
       <div
@@ -28,8 +26,12 @@ function TransactionsList({
         data-transaction={JSON.stringify(transaction)}
         key={`transaction-${index}`}
         className={`flex cursor-pointer flex-col rounded-[10px] border border-black border-opacity-40 px-[11px] py-2 ${activeTransaction?.transaction_id === transaction.transaction_id ? 'bg-primary-light-blue' : ''} `}
+        tabIndex={1}
       >
-        <div className="flex gap-x-2.5">
+        <div className="sr-only">
+          Tekan enter untuk melihat detail transaksi
+        </div>
+        <div className="not-sr-only flex gap-x-2.5">
           <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[15px] bg-primary-light-blue xl:h-5 xl:w-5">
             <img src="/images/icons/arrow-up-down.svg" alt="" />
           </div>
@@ -38,7 +40,7 @@ function TransactionsList({
           </span>
         </div>
 
-        <div className="grid grid-cols-3 justify-between gap-x-[5px] text-xl-body xl:text-md-body sm:grid-cols-1">
+        <div className="not-sr-only grid grid-cols-3 justify-between gap-x-[5px] text-xl-body xl:text-md-body sm:grid-cols-1">
           <span>
             BCA -{' '}
             {transaction.type === 'Pengeluaran'

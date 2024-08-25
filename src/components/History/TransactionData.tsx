@@ -40,10 +40,13 @@ function TransactionData() {
                     className="w-[22.5px]"
                   />
                 </div>
-                <span className="text-center text-xl-body font-bold">
+                <span
+                  tabIndex={2}
+                  className="text-center text-xl-body font-bold"
+                >
                   Transaksi Berhasil
                 </span>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2" tabIndex={2}>
                   <span className="text-sm-body text-dark-grey">
                     {formatDate(activeTransaction.transaction_date)}
                   </span>
@@ -55,30 +58,46 @@ function TransactionData() {
               </div>
               <div className="h-0 w-full rounded-[3px] border-[3px] border-neutral-03 border-opacity-30"></div>
               <div className="grid w-full grid-cols-[auto_auto] gap-x-[7.5px] gap-y-[15px] px-[10px] text-xl-body sm:gap-x-[2.5px] sm:text-md-body">
-                <span className="text-muted-black">Rekening Sumber</span>
-                <span className="text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Rekening Sumber
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
                   {activeTransaction.from.account_number}
                 </span>
-                <span className="text-muted-black">Rekening Tujuan</span>
-                <span className="text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Rekening Tujuan
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
                   {activeTransaction.to.account_number}
                 </span>
-                <span className="text-muted-black">Nama penerima</span>
-                <span className="text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Nama penerima
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
                   {activeTransaction.to.owner_name}
                 </span>
-                <span className="text-muted-black">Nominal Transfer </span>
-                <span className="text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Nominal Transfer{' '}
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
                   {formatRupiah(activeTransaction.amount)}
                 </span>
-                <span className="text-muted-black">Biaya Admin</span>
-                <span className="text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Biaya Admin
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
                   {formatRupiah(activeTransaction.admin_fee)}
                 </span>
-                <span className="text-muted-black">Catatan</span>
-                <span className="text-dark-grey">{activeTransaction.note}</span>
-                <span className="font-bold text-muted-black">Total</span>
-                <span className="font-bold text-dark-grey">
+                <span tabIndex={2} className="text-muted-black">
+                  Catatan
+                </span>
+                <span tabIndex={2} className="text-dark-grey">
+                  {activeTransaction.note}
+                </span>
+                <span tabIndex={2} className="font-bold text-muted-black">
+                  Total
+                </span>
+                <span tabIndex={2} className="font-bold text-dark-grey">
                   {formatRupiah(activeTransaction.total)}
                 </span>
               </div>
@@ -86,17 +105,21 @@ function TransactionData() {
           </div>
           <div className="flex justify-center gap-x-4">
             <ButtonSecondary
+              tabIndex={2}
               onClick={handleClose}
               className="hidden bg-white lg:flex"
             >
               Tutup
             </ButtonSecondary>
             <ButtonPrimary
+              tabIndex={2}
               className="flex items-center gap-5 rounded-[10px]"
               onClick={handleDownload}
             >
               <img src="/images/icons/download.svg" alt="" />
-              <span>Unduh</span>
+              <span>
+                Unduh <span className="sr-only">invoice</span>{' '}
+              </span>
             </ButtonPrimary>
           </div>
         </div>
