@@ -26,7 +26,17 @@ export const camelToSnake = <R>(obj: { [key: string]: any }): R => {
 
 export const formatDate = (date: string | Date | null): string => {
   if (date === null) return '';
-  const formattedDate = new Date(date);
+  let d;
+  if (typeof date == 'string') {
+    d = new Date(date);
+  } else {
+    d = date;
+  }
+
+  if (isNaN(d.getTime())) {
+    return '';
+  }
+  const formattedDate = new Date(d);
   return formattedDate.toLocaleDateString('id-ID', {
     year: 'numeric',
     month: 'long',
@@ -35,9 +45,17 @@ export const formatDate = (date: string | Date | null): string => {
 };
 
 export const formatDateAPI = (date: string | Date | null): string => {
-  if (date === null) return '';
+  if (date == null) return '';
+  let d;
+  if (typeof date == 'string') {
+    d = new Date(date);
+  } else {
+    d = date;
+  }
 
-  const d = new Date(date);
+  if (isNaN(d.getTime())) {
+    return '';
+  }
 
   // Get year, month, and day
   const year = d.getFullYear();
