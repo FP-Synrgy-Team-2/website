@@ -97,6 +97,7 @@ function HistoryPage() {
   };
 
   useEffect(() => {
+    setActiveTransaction(null);
     if (startDate && endDate) {
       const startDateString = formatDateAPI(startDate);
       const endDateString = formatDateAPI(endDate);
