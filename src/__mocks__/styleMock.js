@@ -1,2 +1,2 @@
-const type = {};
-export default type;
+// eslint-disable-next-line no-undef
+module.exports = {};
