@@ -82,7 +82,7 @@ const PinInput: FC<PinInputProps> = ({
 
     validate();
     inputRefs.current[0]?.focus();
-  }, []);
+  }, [axios, data.fromAccount, data.toAccount, navigate, token]);
 
   const handleKeyDown = (
     event: KeyboardEvent<HTMLInputElement>,
@@ -157,7 +157,7 @@ const PinInput: FC<PinInputProps> = ({
           <div
             className={cn(
               style,
-              'fixed inset-0 flex items-center justify-center sm:mx-4'
+              'fixed inset-0 flex items-center justify-center'
             )}
           >
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">

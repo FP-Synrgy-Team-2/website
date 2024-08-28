@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 type MutationRecordType = {
   bankName: string;
@@ -42,4 +42,4 @@ const MutationRecord: FC<MutationRecordType> = ({
   );
 };
 
-export default MutationRecord;
+export default memo(MutationRecord);

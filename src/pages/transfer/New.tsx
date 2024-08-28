@@ -94,16 +94,16 @@ function TransferForm() {
   };
 
   return (
-    <div id="transfer-new">
+    <div id="transfer-new" className="md:mx-[5%]">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-      <div className="flex w-[30.75rem] flex-col sm:w-full sm:px-4">
+      <div className="flex w-[30.75rem] flex-col md:w-full">
         <section>
           <h2 tabIndex={0}>{'Rekening Sumber'}</h2>
           <AccountCard pushAccountFn={setBankAccount} />
         </section>
         <Form<FormData>
-          className="flex w-[30.75rem] flex-col sm:w-full"
+          className="flex w-[30.75rem] flex-col md:w-full"
           onSubmit={onSubmit}
           methods={methods}
           id="new-input-form"

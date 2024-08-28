@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react';
+import { FC, memo, useRef } from 'react';
 
 type DashboardCardProps = {
   text: string;
@@ -49,4 +49,4 @@ const DashboardCard: FC<DashboardCardProps> = ({
   );
 };
 
-export default DashboardCard;
+export default memo(DashboardCard);

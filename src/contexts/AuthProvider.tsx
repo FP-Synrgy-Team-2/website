@@ -109,21 +109,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [api, setToken, setAuthResErrors, setLoading]);
+  }, [api, setToken, setAuthResErrors, setLoading, userId]);
 
   useEffect(() => {
     if (!token) refreshToken();
-
-    // commented out as access token refreshing is auto-handled by axios interceptor, look at Api class for details
-    // const intervalId = setInterval(
-    //   () => {
-    //     refreshToken();
-    //   },
-    //   9 * 60 * 1000
-    // );
-
-    // return () => clearInterval(intervalId);
-  }, [refreshToken]);
+  }, [refreshToken, token]);
 
   const login = async (
     body: {

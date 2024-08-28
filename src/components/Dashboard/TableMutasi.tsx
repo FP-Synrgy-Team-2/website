@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from 'react';
+import { useEffect, useState, FC, memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import MutationRecord from './MutationRecord';
 import useAuth from '@/hooks/useAuth';
@@ -39,44 +39,47 @@ const TableMutasi: FC = () => {
   );
   const MAX_TRANSACTIONS = 4;
 
-  async function getTransactions(
-    userId: string | null,
-    startDate: string | null,
-    endDate: string | null
-  ) {
-    let transactions: null | TransactionProps[] = null;
-    api
-      .post(
-        `/api/transactions/history/${userId}`,
-        {
-          start_date: startDate,
-          end_date: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+  const getTransactions = useCallback(
+    async (
+      userId: string | null,
+      startDate: string | null,
+      endDate: string | null
+    ) => {
+      let transactions: null | TransactionProps[] = null;
+      api
+        .post(
+          `/api/transactions/history/${userId}`,
+          {
+            start_date: startDate,
+            end_date: endDate,
           },
-        }
-      )
-      .then((res) => {
-        transactions = res.data.data;
-        if (transactions && Array.isArray(transactions)) {
-          if (transactions.length <= MAX_TRANSACTIONS)
-            setTransactions(transactions);
-          else setTransactions(transactions.splice(0, MAX_TRANSACTIONS));
-        } else setTransactions(null);
-      })
-      .catch((err) => console.log(err));
-  }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          transactions = res.data.data;
+          if (transactions && Array.isArray(transactions)) {
+            if (transactions.length <= MAX_TRANSACTIONS)
+              setTransactions(transactions);
+            else setTransactions(transactions.splice(0, MAX_TRANSACTIONS));
+          } else setTransactions(null);
+        })
+        .catch((err) => console.log(err));
+    },
+    [setTransactions, token, api]
+  );
 
   useEffect(() => {
     const startDate = new Date(0).toISOString();
     const endDate = new Date().toISOString();
     getTransactions(userId, startDate, endDate);
-  }, [token, userId]);
+  }, [token, userId, getTransactions]);
 
   return (
-    <section className="flex w-182.5 flex-col gap-2.5 sm:w-85">
+    <section className="flex max-w-[45rem] grow flex-col gap-2.5 sm:w-full">
       <div className="flex items-center justify-between">
         <h2
           className="text-xl-body uppercase"
@@ -96,7 +99,11 @@ const TableMutasi: FC = () => {
         </Link>
       </div>
       {(transactions?.length ?? 0) > 0 ? (
-        <ul id="mutation-table" aria-label="daftar mutasi rekening terakhir">
+        <ul
+          id="mutation-table"
+          aria-label="daftar mutasi rekening terakhir"
+          className="flex flex-col gap-5 rounded-xl border border-grey border-opacity-20 px-[10%] pb-5 pt-12 lg:px-[5%] sm:gap-2"
+        >
           <TransactionsList transactions={transactions} />
         </ul>
       ) : (
@@ -106,4 +113,4 @@ const TableMutasi: FC = () => {
   );
 };
 
-export default TableMutasi;
+export default memo(TableMutasi);

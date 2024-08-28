@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { NavbarLogo } from '@/components';
 import useAuth from '@/hooks/useAuth';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 interface NavbarType {
   name: string;
   icon: string;
@@ -38,9 +38,9 @@ function Sidebar() {
   return (
     <>
       <div
-        className={`fixed flex h-full w-1/6 flex-col pb-16 pe-6 transition-transform ease-in-out sm:top-0 sm:z-50 sm:w-52 sm:bg-white ${isOpen ? 'sm:translate-x-0' : 'sm:-translate-x-full'}`}
+        className={`flex h-full max-w-[200px] flex-col px-3 pb-16 pt-4 shadow-md transition-transform ease-in-out md:fixed md:top-0 md:z-50 md:w-52 md:bg-white ${isOpen ? 'md:translate-x-0' : 'md:-translate-x-full'}`}
       >
-        <div className="ms-3 sm:flex sm:justify-center">
+        <div className="ms-3 md:flex md:justify-center">
           <NavbarLogo />
         </div>
 
@@ -52,7 +52,7 @@ function Sidebar() {
               <Link
                 to={item.link}
                 key={index}
-                className={`sidebar-item body-md flex items-center gap-5 rounded-md p-3 ${
+                className={`sidebar-item flex items-center gap-[10%] rounded-md p-3 ${
                   isActive
                     ? 'bg-primary-blue text-white'
                     : 'hover:bg-primary-dark-blue hover:text-white'
@@ -64,14 +64,14 @@ function Sidebar() {
                   src={item.icon}
                   className={`${isActive ? 'img-white' : ''}`}
                 />
-                <span className="body-md">{item.name}</span>
+                <span>{item.name}</span>
               </Link>
             );
           })}
 
           <button
             onClick={logout}
-            className={`sidebar-item body-md mt-auto flex items-center gap-5 rounded-md p-3 hover:bg-danger hover:text-white sm:mt-0`}
+            className={`sidebar-item body-md mt-auto flex items-center gap-5 rounded-md p-3 hover:bg-danger hover:text-white md:mt-0`}
             aria-label="Keluar"
           >
             <img src="/images/icons/arrow-right.svg" alt="Logo Keluar" />
@@ -81,7 +81,7 @@ function Sidebar() {
       </div>
 
       <button
-        className={`fixed bottom-10 left-5 z-50 hidden h-12.5 w-12.5 rounded-full bg-primary-blue font-bold transition-transform duration-300 sm:block ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+        className={`fixed bottom-10 left-5 z-50 hidden h-12.5 w-12.5 rounded-full bg-primary-blue font-bold transition-transform duration-300 md:block ${isOpen ? 'rotate-180' : 'rotate-0'}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center justify-center">
@@ -100,4 +100,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default memo(Sidebar);

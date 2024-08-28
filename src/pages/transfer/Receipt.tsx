@@ -82,7 +82,7 @@ const Receipt: FC = () => {
   return (
     <>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <div className="w-[638px] sm:mx-4 sm:w-auto">
+      <div className="w-[638px] md:mx-[5%] sm:w-auto">
         {data ? (
           <div className="rounded-[20px] border border-grey p-8 shadow-2xl sm:p-4">
             <div className="my-3 flex flex-col items-center p-3">

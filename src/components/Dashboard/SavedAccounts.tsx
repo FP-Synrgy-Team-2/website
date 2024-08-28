@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import SavedAccountCard from './SavedAccountCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -27,7 +27,11 @@ const SavedAccounts = () => {
             snakeToCamelCase<SavedAccount>(account as { [key: string]: string })
           )
         );
-      if (!accounts.length) setFetchResult('Belum ada rekening yang tersimpan');
+      if (res.data.data.length > 0)
+        setFetchResult(
+          `Terdapat ${res.data.data.length} rekening yang tersimpan`
+        );
+      else setFetchResult('Belum ada rekening yang tersimpan');
 
       setIsErrorFetcing(false);
     } catch (err) {
@@ -37,15 +41,23 @@ const SavedAccounts = () => {
     } finally {
       setIsFetching(false);
     }
-  }, [setAccounts, setIsFetching, setIsErrorFetcing, userId, setFetchResult]);
+  }, [
+    setAccounts,
+    setIsFetching,
+    setIsErrorFetcing,
+    userId,
+    setFetchResult,
+    axios,
+    token,
+  ]);
 
   useEffect(() => {
-    fetchAccounts().finally(() => console.log(isErrorFetching, fetchResult));
+    fetchAccounts();
   }, [fetchAccounts]);
 
   return (
     <section
-      className="mt-2.5 flex flex-col gap-4.5 sm:mx-4 sm:mt-0"
+      className="flex max-h-[29rem] max-w-[13.75rem] flex-col gap-4.5 lg:max-w-[6.25rem] sm:w-full sm:max-w-full"
       id="saved-accounts"
       tabIndex={0}
       aria-labelledby="saved-account-list"
@@ -55,7 +67,7 @@ const SavedAccounts = () => {
         className={
           isErrorFetching || accounts.length === 0
             ? 'flex items-center text-lg'
-            : 'no-scrollbar flex h-full snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll sm:grid sm:max-h-60 sm:w-screen sm:grid-flow-col sm:justify-start sm:gap-x-4 sm:overflow-x-scroll'
+            : 'no-scrollbar flex snap-y snap-mandatory flex-wrap justify-between gap-y-5 overflow-y-scroll sm:max-h-60 sm:flex-nowrap sm:justify-start sm:gap-x-2 sm:overflow-x-scroll'
         }
         role={isErrorFetching ? 'alert' : 'list'}
         id="saved-account-list"
@@ -107,4 +119,4 @@ const SavedAccounts = () => {
   );
 };
 
-export default SavedAccounts;
+export default memo(SavedAccounts);

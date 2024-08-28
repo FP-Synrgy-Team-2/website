@@ -39,7 +39,7 @@ const CardSaldo: FC<CardSaldoProps> = ({ accountData }) => {
 
   return (
     <div
-      className="h-50.25 w-96 rounded-[20px] bg-primary-blue sm:h-50.75 sm:w-85"
+      className="max-h-[12.5rem] min-w-[13rem] grow rounded-[20px] bg-primary-blue sm:h-[12.5rem] sm:w-full"
       aria-label="Informasi saldo"
     >
       <div className="mx-auto flex h-full w-9/12 flex-col justify-center gap-7">

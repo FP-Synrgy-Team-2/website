@@ -12,7 +12,7 @@ const Breadcrumbs: FC<BreadCrumbProps> = ({ breadcrumbs, style }) => {
     <div
       className={cn(
         style,
-        'mb-10 text-md-display font-normal capitalize sm:mx-4 sm:mb-4 sm:text-sm-display'
+        'mb-10 text-md-display font-normal capitalize sm:mb-4 sm:text-md-display'
       )}
     >
       {breadcrumbs.map((breadcrumb, index) => (

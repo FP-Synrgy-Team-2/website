@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler, Validate } from 'react-hook-form';
 import { BankAccount, SavedAccount } from '@/types';
@@ -78,7 +78,7 @@ function Saved() {
       setRecipientAccountStatus('error');
       console.error(err);
     }
-  }, [navigate, setRecipientAccountStatus, account]);
+  }, [navigate, setRecipientAccountStatus, account, axios]);
 
   useEffect(() => {
     fetchRecipientAccountStatus();
@@ -109,10 +109,10 @@ function Saved() {
   };
 
   return (
-    <div>
+    <div className="md:mx-[5%]">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-      <div className="mt-3 flex w-1/2 flex-col">
+      <div className="mt-3 flex w-1/2 flex-col md:w-full">
         <section
           className="flex flex-col gap-[1.125rem]"
           aria-labelledby="saved-account-to"
@@ -253,4 +253,4 @@ function Saved() {
   );
 }
 
-export default Saved;
+export default memo(Saved);

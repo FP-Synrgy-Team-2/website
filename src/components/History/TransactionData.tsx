@@ -1,7 +1,7 @@
 import { ButtonPrimary, ButtonSecondary } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { formatRupiah } from '@/utils/formatter';
-import { useTransactions } from '@/contexts/TransactionContext';
+import { useTransactions } from '@/hooks/useTransactions';
 
 function TransactionData() {
   const navigate = useNavigate();

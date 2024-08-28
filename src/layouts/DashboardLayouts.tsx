@@ -4,10 +4,10 @@ import { Sidebar } from '@/components';
 function DashboardLayouts() {
   return (
     <div className="flex w-screen">
-      <aside className="container h-screen basis-1/6 px-3 pt-5 sm:basis-0 sm:px-0">
+      <aside className="h-screen max-w-[200px] grow pt-5 md:max-w-[0px] md:px-0">
         <Sidebar />
       </aside>
-      <main className="container relative min-h-screen basis-5/6 bg-body-white ps-12 pt-8 text-md-body sm:basis-full sm:ps-0">
+      <main className="relative ms-[3%] min-h-[100dvh] grow bg-body-white pt-8 text-md-body md:ms-[5%] sm:ms-[0px]">
         <Outlet />
       </main>
     </div>

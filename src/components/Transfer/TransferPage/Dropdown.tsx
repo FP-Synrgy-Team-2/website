@@ -44,7 +44,7 @@ const Dropdown: FC<DropdownProps> = ({ style }) => {
 
   useEffect(() => {
     fetchSavedAccounts();
-  }, []);
+  }, [fetchSavedAccounts]);
 
   if (isFetchFailed)
     return (

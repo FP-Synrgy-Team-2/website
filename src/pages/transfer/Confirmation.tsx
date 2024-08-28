@@ -80,9 +80,9 @@ function Confirmation() {
   };
 
   return (
-    <>
+    <div className="md:mx-[5%]">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <section className="w-1/2 sm:mx-4 sm:w-auto">
+      <section className="w-1/2 md:w-auto">
         <h2 className="flex h-[76px] flex-row rounded-[10px] bg-primary-light-blue p-3">
           <div className="flex basis-1/2 items-center gap-2">
             <span className="inline-flex size-11 items-center justify-center rounded-full bg-primary-blue font-bold text-white">
@@ -107,7 +107,7 @@ function Confirmation() {
         </h2>
 
         <table
-          className="mt-[1.625rem] w-full table-fixed text-left"
+          className="mt-[1.625rem] w-full text-left"
           aria-labelledby="detail-transaction"
         >
           <caption
@@ -140,9 +140,9 @@ function Confirmation() {
             ].map((r, i) => (
               <tr
                 key={i}
-                className="text-left sm:flex sm:items-center sm:justify-start"
+                className="text-left md:flex md:items-center md:justify-start"
               >
-                <th className="w-[16.375rem] font-normal sm:w-40">{r[0]}</th>
+                <th className="w-[16.375rem] font-normal md:w-40">{r[0]}</th>
                 <td className="text-dark-grey">{r[1]}</td>
               </tr>
             ))}
@@ -193,7 +193,7 @@ function Confirmation() {
           }}
         />
       )}
-    </>
+    </div>
   );
 }
 

@@ -42,7 +42,15 @@ const AccountCard: FC<AccountCardProps> = ({ pushAccountFn }) => {
     } finally {
       setIsFetching(false);
     }
-  }, [setIsFetching, api, token, setAccount, setIsFetchFailed]);
+  }, [
+    setIsFetching,
+    api,
+    token,
+    setAccount,
+    setIsFetchFailed,
+    pushAccountFn,
+    userId,
+  ]);
 
   useEffect(() => {
     fetchAccount();

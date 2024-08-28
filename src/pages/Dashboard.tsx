@@ -23,25 +23,23 @@ function Dashboard() {
       }
     };
     fetchData();
-  }, [token]);
+  }, [token, api, userId]);
 
   return (
-    <main
+    <div
       id="dashboard-main"
-      className="gap-21.5 sm:gap-0"
+      className="flex h-full flex-col gap-21.5 bg-contain bg-right-bottom bg-no-repeat sm:gap-5 sm:px-0"
       style={{ backgroundImage: `url('/images/icons/dashboard.svg')` }}
     >
-      <div className="flex w-265 justify-between sm:w-screen sm:flex-col-reverse sm:items-center sm:gap-4">
+      <div className="me-[3%] flex max-w-[61rem] justify-between gap-[3%] md:me-[5%] sm:w-screen sm:flex-col-reverse sm:items-center sm:gap-5 sm:px-5">
         {accountData && <CardSaldo accountData={accountData} />}
         <Banner />
       </div>
-      <div className="flex w-265 justify-between sm:w-screen sm:flex-col sm:items-center sm:gap-1">
+      <div className="me-[3%] flex max-w-[61rem] justify-between gap-[3%] md:me-[5%] sm:w-screen sm:flex-col-reverse sm:items-center sm:gap-5 sm:px-5">
         <TableMutasi />
-        <div className="sm:item-start sm:order-first sm:flex sm:w-full sm:p-5">
-          <SavedAccounts />
-        </div>
+        <SavedAccounts />
       </div>
-    </main>
+    </div>
   );
 }
 

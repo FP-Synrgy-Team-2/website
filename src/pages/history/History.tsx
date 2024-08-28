@@ -1,16 +1,14 @@
 import useAuth from '@/hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { TransactionData, TransactionsList } from '@/components';
 import { TransactionProps } from '@/types/transaction';
 import FilterModal from '@/components/History/FilterModal';
 import Loading from '@/components/General/Loading';
-import {
-  TransactionsProvider,
-  useTransactions,
-} from '@/contexts/TransactionContext';
+import { TransactionsProvider } from '@/contexts/TransactionContext';
 import { Button } from '@/components';
 import { formatDateAPI } from '@/utils/formatter';
+import { useTransactions } from '@/hooks/useTransactions';
 
 function HistoryPage() {
   const {
@@ -44,41 +42,44 @@ function HistoryPage() {
     setEndDate(new Date());
   };
 
-  async function getTransactions(
-    userId: string | null,
-    startDate: string | null,
-    endDate: string | null
-  ) {
-    setIsLoading(true);
-    let transactions: null | TransactionProps[] = null;
-    api
-      .post(
-        `/api/transactions/history/${userId}`,
-        {
-          start_date: startDate,
-          end_date: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+  const getTransactions = useCallback(
+    async (
+      userId: string | null,
+      startDate: string | null,
+      endDate: string | null
+    ) => {
+      setIsLoading(true);
+      let transactions: null | TransactionProps[] = null;
+      api
+        .post(
+          `/api/transactions/history/${userId}`,
+          {
+            start_date: startDate,
+            end_date: endDate,
           },
-        }
-      )
-      .then((res) => {
-        transactions = res.data.data;
-        if (transactions) {
-          setTransactions(transactions);
-        } else setTransactions(null);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.data.code === 404) setTransactions(null);
-        setIsLoading(false);
-      });
-  }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          transactions = res.data.data;
+          if (transactions) {
+            setTransactions(transactions);
+          } else setTransactions(null);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.data.code === 404) setTransactions(null);
+          setIsLoading(false);
+        });
+    },
+    [api, setTransactions, setIsLoading, token]
+  );
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await api.get(`/api/bank-accounts/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -87,7 +88,7 @@ function HistoryPage() {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
-  };
+  }, [api, setAccountData, token, userId]);
 
   useEffect(() => {
     setActiveTransaction(null);
@@ -98,7 +99,15 @@ function HistoryPage() {
       getTransactions(userId, startDateString, endDateString);
     }
     fetchData();
-  }, [token, userId, startDate, endDate]);
+  }, [
+    token,
+    userId,
+    startDate,
+    endDate,
+    fetchData,
+    getTransactions,
+    setActiveTransaction,
+  ]);
 
   return isLoading ? (
     <div className="absolute bottom-0 left-0 right-0 top-0">

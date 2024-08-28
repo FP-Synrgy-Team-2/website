@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import DashboardCard from './DashboardCard';
 import { useNavigate } from 'react-router-dom';
 import { SavedAccount } from '@/types';
@@ -38,4 +38,4 @@ const SavedAccountCard: FC<SavedAccountCardProps> = ({
   );
 };
 
-export default SavedAccountCard;
+export default memo(SavedAccountCard);

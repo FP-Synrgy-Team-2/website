@@ -1,8 +1,8 @@
-import { useTransactions } from '@/contexts/TransactionContext';
 import Calendar, { CalendarProps } from 'react-calendar';
 import { ButtonPrimary } from '@/components';
 import { useState, Dispatch, SetStateAction, MouseEvent } from 'react';
 import { formatDate } from '@/utils/formatter';
+import { useTransactions } from '@/hooks/useTransactions';
 
 type Value = CalendarProps['value'];
 

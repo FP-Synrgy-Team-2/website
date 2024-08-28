@@ -2,7 +2,6 @@ import {
   FC,
   ReactNode,
   createContext,
-  useContext,
   useState,
   Dispatch,
   SetStateAction,
@@ -10,7 +9,7 @@ import {
 import { TransactionProps } from '@/types/transaction';
 import { AccountData } from '@/types/accounts';
 
-interface TransactionsContextProps {
+export interface TransactionsContextProps {
   transactions: TransactionProps[] | null;
   setTransactions: Dispatch<SetStateAction<TransactionProps[] | null>>;
   accountData: AccountData | null;
@@ -27,19 +26,9 @@ interface TransactionsContextProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const TransactionsContext = createContext<TransactionsContextProps | undefined>(
-  undefined
-);
-
-export const useTransactions = () => {
-  const context = useContext(TransactionsContext);
-  if (!context) {
-    throw new Error(
-      'useTransactions must be used within a TransactionsProvider'
-    );
-  }
-  return context;
-};
+export const TransactionsContext = createContext<
+  TransactionsContextProps | undefined
+>(undefined);
 
 export const TransactionsProvider: FC<{ children: ReactNode }> = ({
   children,
